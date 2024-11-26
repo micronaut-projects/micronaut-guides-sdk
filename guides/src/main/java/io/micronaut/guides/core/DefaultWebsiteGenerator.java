@@ -62,6 +62,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final JsonFeedConfiguration jsonFeedConfiguration;
     private final GuidesConfiguration guidesConfiguration;
     private final GuidePageGenerator guidePageGenerator;
+    private final GuideContextProvider guideContextProvider;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     DefaultWebsiteGenerator(GuideParser guideParser,
@@ -77,7 +78,8 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                             GuideProjectZipper guideProjectZipper,
                             RssFeedConfiguration rssFeedConfiguration,
                             JsonFeedConfiguration jsonFeedConfiguration,
-                            GuidesConfiguration guidesConfiguration, GuidePageGenerator guidePageGenerator) {
+                            GuidesConfiguration guidesConfiguration, GuidePageGenerator guidePageGenerator,
+                            GuideContextProvider guideContextProvider) {
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
         this.jsonFeedGenerator = jsonFeedGenerator;
@@ -93,6 +95,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.jsonFeedConfiguration = jsonFeedConfiguration;
         this.guidesConfiguration = guidesConfiguration;
         this.guidePageGenerator = guidePageGenerator;
+        this.guideContextProvider = guideContextProvider;
     }
 
     @Override
@@ -106,6 +109,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         }
         List<Guide> guides = guideParser.parseGuidesMetadata(guidesInputDirectory);
         for (Guide guide : guides) {
+            guideContextProvider.setGuide(guide);
             File guideOutput = new File(outputDirectory, guide.slug());
             guideOutput.mkdir();
             guideProjectGenerator.generate(guideOutput, guide);
@@ -128,6 +132,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
             List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
             String asciidoc = readFile(asciidocFile);
             for (GuidesOption guidesOption : guideOptions) {
+                guideContextProvider.setOption(guidesOption);
                 String name = MacroUtils.getSourceDir(guide.slug(), guidesOption);
 
                 // Zip creation
@@ -136,11 +141,11 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                 guideProjectZipper.zipDirectory(folderFile.getAbsolutePath(), zipFile.getAbsolutePath());
 
                 // Macro substitution
-                String optionAsciidoc = macroSubstitution.substitute(asciidoc, guide, guidesOption);
+                //                String optionAsciidoc = macroSubstitution.substitute(asciidoc, guide, guidesOption);
 
                 // HTML rendering
 
-                String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, outputDirectory.getAbsolutePath(), new File(guideOutput, name).getAbsolutePath());
+                String optionHtml = asciidocConverter.convert(asciidoc, inputDirectory, outputDirectory.getAbsolutePath(), new File(guideOutput, name).getAbsolutePath());
 
                 String tocHtml = extractToc(optionHtml);
 

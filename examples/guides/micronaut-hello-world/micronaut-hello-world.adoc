@@ -1,10 +1,14 @@
 common:example.adoc[]
 
+== Prova
+
 * link:@sourceDir@.zip[Download] and unzip the source
 
-callout:example.adoc[]
-callout:example.adoc[]
+// callout:example.adoc[]
+// callout:example.adoc[]
+//
+// source:HelloWorldController[]
+//
+// test:HelloWorldControllerTest[]
 
-source:HelloWorldController[]
-
-test:HelloWorldControllerTest[]
+Test diffLink:default[] inline
