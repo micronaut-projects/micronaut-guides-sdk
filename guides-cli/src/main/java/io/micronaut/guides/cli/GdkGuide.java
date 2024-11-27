@@ -11,7 +11,6 @@ import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.starter.api.TestFramework;
 import io.micronaut.starter.options.BuildTool;
 import io.micronaut.starter.options.Language;
-import jakarta.inject.Inject;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -51,7 +50,6 @@ public class GdkGuide extends Guide {
      * @param apps               Applications created for the guide
      * @param skipCodeSamples    Set it to true to not generate code samples for the guide
      */
-    @Inject
     public GdkGuide(String title,
                     String intro,
                     List<String> authors,
