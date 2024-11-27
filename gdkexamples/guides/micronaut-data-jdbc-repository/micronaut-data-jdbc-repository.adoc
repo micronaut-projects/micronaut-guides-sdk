@@ -10,7 +10,7 @@ include::asciidoc/commons/prerequisites.adoc[]
 
 include::asciidoc/commons/download.adoc[]
 
-include::source:micronaut-data-jdbc-repository/micronaut-data-jdbc-repository-gradle-java/src/main/java/com/example/domain/Genre[]
+source::micronaut-data-jdbc-repository/micronaut-data-jdbc-repository-gradle-java/src/main/java/com/example/domain/Genre[]
 
 download:[]
 

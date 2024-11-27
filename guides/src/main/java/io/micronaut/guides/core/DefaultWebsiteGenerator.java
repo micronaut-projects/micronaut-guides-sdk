@@ -142,7 +142,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                 guideProjectZipper.zipDirectory(folderFile.getAbsolutePath(), zipFile.getAbsolutePath());
 
                 // Macro substitution
-                //                String optionAsciidoc = macroSubstitution.substitute(asciidoc, guide, guidesOption);
+                // String optionAsciidoc = macroSubstitution.substitute(asciidoc, guide, guidesOption);
 
                 // HTML rendering
 

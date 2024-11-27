@@ -47,7 +47,7 @@ public class BuildDiffLinkMacroProcessor extends InlineMacroProcessor {
     private static Set<String> features(App app, Map<String, Object> attributes, GuidesOption option) {
         Set<String> features = new HashSet<>();
         if (app != null) {
-            features.addAll(GuideUtils.getAppVisibleFeatures(app, option.getLanguage()));
+            features.addAll(app.visibleFeatures(option.getLanguage()));
         }
         attributes.entrySet().stream()
                 .filter(attribute -> attribute.getKey().equals(ATTRIBUTE_FEATURES))
@@ -63,8 +63,8 @@ public class BuildDiffLinkMacroProcessor extends InlineMacroProcessor {
 
     private URI buildDiffLink(String target, Guide guide, GuidesOption option, Map<String, Object> attributes) {
         String appName = target;
-        App app = guideContextProvider.getGuide().apps().stream()
-                .filter(a -> a.name().equals(target))
+        App app = guideContextProvider.getGuide().getApps().stream()
+                .filter(a -> a.getName().equals(target))
                 .findFirst()
                 .orElse(null);
         Set<String> features = features(app, attributes, option);
@@ -73,7 +73,7 @@ public class BuildDiffLinkMacroProcessor extends InlineMacroProcessor {
                 .queryParam(QUERY_PARAM_BUILD, option.getBuildTool().name())
                 .queryParam(QUERY_PARAM_TEST, option.getTestFramework().name())
                 .queryParam(QUERY_PARAM_NAME, appName.equals(guidesConfiguration.getDefaultAppName()) ? "micronautguide" : appName)
-                .queryParam(QUERY_PARAM_TYPE, app != null ? app.applicationType().name() : ApplicationType.DEFAULT.name())
+                .queryParam(QUERY_PARAM_TYPE, app != null ? app.getApplicationType().name() : ApplicationType.DEFAULT.name())
                 .queryParam(QUERY_PARAM_PACKAGE, guidesConfiguration.getPackageName())
                 .queryParam(QUERY_PARAM_ACTIVITY, "diff");
         features.forEach(f -> uriBuilder.queryParam(QUERY_PARAM_FEATURES, f));
