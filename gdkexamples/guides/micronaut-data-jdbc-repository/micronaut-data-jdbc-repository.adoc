@@ -59,8 +59,6 @@ features-listing:default[]
 
 Let's examine the project more closely.
 
-source:Genre[]
-
 include::asciidoc/commons/configure-datasources.adoc[]
 
 If you deploy to, for example, Oracle MySQL Database, substitute the `driver-class-name` value with the Oracle Database Server (see link:micronaut-mysql-database-oci.md[Create and Connect a Micronaut Application to the Oracle Cloud Infrastructure MySQL HeatWave Service]).
