@@ -18,7 +18,7 @@ package io.micronaut.guides.core.asciidoc;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.guides.core.asciidoc.extensions.BuildDiffLinkMacroProcessor;
-import io.micronaut.guides.core.asciidoc.extensions.SourceMacroProcessor;
+import io.micronaut.guides.core.asciidoc.extensions.CustomIncludeProcessor;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -38,7 +38,7 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
 
     Asciidoctor asciidoctor;
 
-    DefaultAsciidocConverter(AsciidocConfiguration asciidocConfiguration, BuildDiffLinkMacroProcessor buildDiffLinkMacroProcessor, SourceMacroProcessor sourceMacroProcessor) {
+    DefaultAsciidocConverter(AsciidocConfiguration asciidocConfiguration, BuildDiffLinkMacroProcessor buildDiffLinkMacroProcessor, CustomIncludeProcessor customIncludeProcessor) {
         attributesBuilder = Attributes.builder()
                 .sourceHighlighter(asciidocConfiguration.getSourceHighlighter())
                 .tableOfContents(asciidocConfiguration.getToc())
@@ -60,7 +60,7 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
 
         asciidoctor = Asciidoctor.Factory.create();
         asciidoctor.javaExtensionRegistry().inlineMacro(buildDiffLinkMacroProcessor);
-        asciidoctor.javaExtensionRegistry().blockMacro(sourceMacroProcessor);
+        asciidoctor.javaExtensionRegistry().includeProcessor(customIncludeProcessor);
     }
 
     @Override
