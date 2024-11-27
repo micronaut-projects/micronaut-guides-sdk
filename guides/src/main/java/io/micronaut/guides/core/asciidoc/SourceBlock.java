@@ -136,7 +136,8 @@ public class SourceBlock {
         @Nullable
         private String language;
 
-        @Nullable String content;
+        @Nullable
+        private String content;
 
         /**
          * Sets the title of the source block.

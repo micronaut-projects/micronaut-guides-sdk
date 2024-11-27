@@ -95,15 +95,15 @@ public class Guide {
 
     @JsonPropertyDescription("The guide supported languages")
     @Nullable
-    private List<Language> languages = List.of(Language.JAVA, Language.GROOVY, Language.KOTLIN);
+    private List<Language> languages;
 
     @JsonPropertyDescription("List of tags added to the guide. Features are added automatically as tags. No need to repeat them here")
     @Nullable
-    private List<String> tags = new ArrayList<>();
+    private List<String> tags;
 
     @JsonPropertyDescription("By default the code in the guide is generated for Gradle and Maven. If a guide is specific only for a build tool, define it here")
     @Nullable
-    private List<BuildTool> buildTools = List.of(BuildTool.GRADLE, BuildTool.MAVEN);
+    private List<BuildTool> buildTools;
 
     @JsonPropertyDescription("The guide's test framework. By default Java and Kotlin applications are tested with JUnit5 and Groovy applications with Spock")
     @Nullable
@@ -111,7 +111,7 @@ public class Guide {
 
     @JsonPropertyDescription("List of additional files with a relative path to include in the generated zip file for the guide")
     @Nullable
-    private List<String> zipIncludes = new ArrayList<>();
+    private List<String> zipIncludes;
 
     @JsonPropertyDescription("The guide's slug. If not specified, the guides folder is used")
     @Nullable
@@ -128,7 +128,7 @@ public class Guide {
 
     @JsonPropertyDescription("The guide's environment variables")
     @Nullable
-    private Map<String, String> env = new HashMap<>();
+    private Map<String, String> env;
 
     @JsonPropertyDescription("Applications created for the guide")
     @NotEmpty
@@ -177,7 +177,7 @@ public class Guide {
      * @return The list of authors.
      */
     public @NotEmpty @NonNull List<String> getAuthors() {
-        return authors;
+        return authors != null ? authors : Collections.emptyList();
     }
 
     /**
@@ -195,7 +195,7 @@ public class Guide {
      * @return The list of categories.
      */
     public @NotEmpty @NonNull List<String> getCategories() {
-        return categories;
+        return categories != null ? categories : Collections.emptyList();
     }
 
     /**
@@ -339,7 +339,9 @@ public class Guide {
      * @return The list of supported languages, or null if not specified.
      */
     public @Nullable List<Language> getLanguages() {
-        return languages;
+        return languages == null
+                ? List.of(Language.JAVA, Language.GROOVY, Language.KOTLIN)
+                : languages;
     }
 
     /**
@@ -397,7 +399,9 @@ public class Guide {
      * @return The list of build tools, or null if not specified.
      */
     public @Nullable List<BuildTool> getBuildTools() {
-        return buildTools;
+        return buildTools == null
+                ? List.of(BuildTool.GRADLE, BuildTool.MAVEN)
+                : buildTools;
     }
 
     /**
@@ -433,7 +437,7 @@ public class Guide {
      * @return The list of additional files, or null if not specified.
      */
     public @Nullable List<String> getZipIncludes() {
-        return zipIncludes;
+        return zipIncludes != null ? zipIncludes : Collections.emptyList();
     }
 
     /**
@@ -506,7 +510,7 @@ public class Guide {
      * @return The map of environment variables, or null if not specified.
      */
     public @Nullable Map<String, String> getEnv() {
-        return env;
+        return env == null ? Collections.emptyMap() : env;
     }
 
     /**
@@ -523,7 +527,9 @@ public class Guide {
      *
      * @return The list of applications.
      */
-    public @NotEmpty @NonNull List<? extends App> getApps() {
+    @NotEmpty
+    @NonNull
+    public List<? extends App> getApps() {
         return apps;
     }
 
