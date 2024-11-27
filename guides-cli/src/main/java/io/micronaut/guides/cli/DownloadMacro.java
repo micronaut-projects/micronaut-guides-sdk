@@ -1,7 +1,10 @@
 package io.micronaut.guides.cli;
 
 import io.micronaut.core.io.ResourceLoader;
-import io.micronaut.guides.core.*;
+import io.micronaut.guides.core.Guide;
+import io.micronaut.guides.core.GuidesConfiguration;
+import io.micronaut.guides.core.GuidesOption;
+import io.micronaut.guides.core.GuidesTemplatesConfiguration;
 import io.micronaut.guides.core.asciidoc.AsciidocMacro;
 import io.micronaut.guides.core.html.HtmlUtils;
 import io.micronaut.http.uri.UriBuilder;
@@ -43,7 +46,7 @@ class DownloadMacro extends GradleMavenTabs {
         String downloadTitle = capitalizeWords(guide.getSlug().replace("-", " "));
         String relativePathToMavenDownload = UriBuilder.of(BASE_DOWNLOAD_URL)
                 .path(guidesConfiguration.getVersion())
-                .path(guidesConfiguration.getVersion() + "_" + guide.getSlug() + "_gradle_java_example.zip")
+                .path(guidesConfiguration.getVersion() + "_" + guide.getSlug() + "_maven_java_example.zip")
                 .toString();
         String mavenTitle = "Maven " + downloadTitle + " Example";
         return "<a href=\"" + relativePathToMavenDownload + " \"> " + mavenTitle + " <img class=\"download-img-guides\" src=\"https://graal.cloud/gdk/resources/img/gdk_modules/download-archive.png\" alt=\"Download completed example\"></a>";
