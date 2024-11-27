@@ -1,4 +1,4 @@
-The GDK Launcher created the sample domain entity in the _{{ include.parentDir }}src/main/java/com/example/domain/Genre.java_ file:
+The GDK Launcher created the sample domain entity in the _src/main/java/com/example/domain/Genre.java_ file:
 
 [source,java]
 ----
