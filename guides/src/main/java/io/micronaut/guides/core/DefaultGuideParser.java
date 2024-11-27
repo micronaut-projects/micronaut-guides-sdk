@@ -40,10 +40,9 @@ import java.util.Set;
 @Singleton
 public class DefaultGuideParser implements GuideParser {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGuideParser.class);
-
-    private final JsonSchema jsonSchema;
-    private final JsonMapper jsonMapper;
-    private final GuideMerger guideMerger;
+    protected final JsonSchema jsonSchema;
+    protected final JsonMapper jsonMapper;
+    protected final GuideMerger guideMerger;
 
     /**
      * Constructs a new DefaultGuideParser.
@@ -52,7 +51,9 @@ public class DefaultGuideParser implements GuideParser {
      * @param jsonMapper         the JSON mapper
      * @param guideMerger        the guide merger
      */
-    public DefaultGuideParser(JsonSchemaProvider jsonSchemaProvider, JsonMapper jsonMapper, GuideMerger guideMerger) {
+    public DefaultGuideParser(JsonSchemaProvider jsonSchemaProvider,
+                              JsonMapper jsonMapper,
+                              GuideMerger guideMerger) {
         this.jsonSchema = jsonSchemaProvider.getSchema();
         this.jsonMapper = jsonMapper;
         this.guideMerger = guideMerger;
@@ -78,7 +79,8 @@ public class DefaultGuideParser implements GuideParser {
 
     @Override
     @NonNull
-    public Optional<? extends Guide> parseGuideMetadata(@NonNull @NotNull File guidesDir, @NonNull @NotNull String metadataConfigName) {
+    public Optional<? extends Guide> parseGuideMetadata(@NonNull @NotNull File guidesDir,
+                                                        @NonNull @NotNull String metadataConfigName) {
         File configFile = new File(guidesDir, metadataConfigName);
         if (!configFile.exists()) {
             LOG.warn("metadata file not found for {}", guidesDir.getName());
@@ -93,6 +95,17 @@ public class DefaultGuideParser implements GuideParser {
             return Optional.empty();
         }
 
+        return readGuide(guidesDir, content, configFile);
+    }
+
+    /**
+     *
+     * @param guidesDir Guides directory
+     * @param content Metadata content
+     * @param configFile Configuration file
+     * @return Guide
+     */
+    protected Optional<? extends Guide> readGuide(File guidesDir, String content, File configFile) {
         Guide guide;
         try {
             guide = jsonMapper.readValue(content, Guide.class);
