@@ -114,11 +114,11 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
 
             // Test script generation
             String testScript = testScriptGenerator.generateTestScript(new ArrayList<>(List.of(guide)));
-            saveToFile(testScript, guideOutput, FILENAME_TEST_SH);
+            saveToFile(testScript, guideOutput, FILENAME_TEST_SH, true);
 
             // Native Test script generation
             String nativeTestScript = testScriptGenerator.generateNativeTestScript(new ArrayList<>(List.of(guide)));
-            saveToFile(nativeTestScript, guideOutput, FILENAME_NATIVE_TEST_SH);
+            saveToFile(nativeTestScript, guideOutput, FILENAME_NATIVE_TEST_SH, true);
 
             File asciidocFile = new File(guideInputDirectory, guide.getSlug() + ".adoc");
             if (!asciidocFile.exists()) {
@@ -212,8 +212,15 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     }
 
     private void saveToFile(String content, File outputDirectory, String filename) throws IOException {
+        saveToFile(content, outputDirectory, filename, false);
+    }
+
+    private void saveToFile(String content, File outputDirectory, String filename, boolean executable) throws IOException {
         Path filePath = Paths.get(outputDirectory.getAbsolutePath(), filename);
         Files.write(filePath, content.getBytes());
+        if (executable) {
+            filePath.toFile().setExecutable(true);
+        }
     }
 
     private static String readFile(File file) throws IOException {
