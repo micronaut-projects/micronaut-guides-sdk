@@ -42,10 +42,10 @@ public record Attribute(String key, List<String> values) {
         List<Attribute> result = new ArrayList<>();
         String[] arr = str.split(ATTRIBUTE_SEPARATOR);
         for (String attributeString : arr) {
-            String[] attributeComponents = attributeString.split(KEY_VALUE_SEPARATOR);
-            if (attributeComponents.length == 2) {
-                String key = attributeComponents[0].trim();
-                String value = attributeComponents[1].trim();
+            int index = attributeString.indexOf(KEY_VALUE_SEPARATOR);
+            if (index != -1) {
+                String key = attributeString.substring(0 , index);
+                String value = attributeString.substring(index + KEY_VALUE_SEPARATOR.length());
                 String[] values = value.split(VALUE_SEPARATOR);
                 result.add(new Attribute(key, List.of(values)));
             }

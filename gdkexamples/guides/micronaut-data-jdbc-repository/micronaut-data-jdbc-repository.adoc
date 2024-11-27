@@ -95,14 +95,9 @@ include::asciidoc/commons/graalvm-prereq.adoc[]
 
 To generate a native executable, use the following command:
 
-// TODO: command to build the native executable
+gradle-maven-command:[gradle=./gradlew nativeCompile,maven=./mvnw package -Dpackaging=native-image]
 
 Before running this native executable, you need to start and then connect to a MySQL database.
-
-== Set the environment variables
-
-include::asciidoc/commons/set-env-vars.adoc[]
-
 
 == Connect to a MySQL Database
 
@@ -120,16 +115,14 @@ Save one genre and your `genre` database table will now contain an entry:
 
 [source,bash]
 ----
-curl -X "POST" "http://localhost:8080/genres" \
-        -H 'Content-Type: application/json; charset=utf-8' \
-        -d '{ "name": "music" }'
+include::{guidesourcedir}/test_app.sh[tag=add-genre]
 ----
 
 Access the `genres` endpoint exposed by the application:
 
 [source,bash]
 ----
-curl localhost:8080/genres/list
+include::{guidesourcedir}/test_app.sh[tag=get-genres]
 ----
 
 When you run the application, Micronaut Test Resources do not start a MySQL container because you have provided values for `datasources.default.*` properties

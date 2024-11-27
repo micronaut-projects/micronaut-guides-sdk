@@ -16,4 +16,12 @@ class AttributeTest {
         ), Attribute.of("tag=main,indent=0"));
     }
 
+    @Test
+    void testAttributeParsingWithMultipleEquals() {
+        assertEquals(List.of(
+                new Attribute("gradle", List.of("./gradlew nativeCompile")),
+                new Attribute("maven", List.of("./mvnw package -Dpackaging=native-image"))
+        ), Attribute.of("gradle=./gradlew nativeCompile,maven=./mvnw package -Dpackaging=native-image"));
+    }
+
 }
