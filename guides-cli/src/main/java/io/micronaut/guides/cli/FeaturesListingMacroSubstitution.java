@@ -13,6 +13,7 @@ import io.micronaut.starter.util.NameUtils;
 import jakarta.inject.Singleton;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static io.micronaut.guides.core.MacroUtils.findMacroLines;
@@ -59,10 +60,11 @@ public class FeaturesListingMacroSubstitution implements MacroSubstitution {
                     app.getFeatures() != null ? app.getFeatures() : Collections.emptyList(),
                     ConsoleOutput.NOOP
             );
-
+            List<String> features = generatorContext.getFeatures();
+            Collections.sort(features);
             String asciidoc = SourceBlock.builder()
                     .language(LANGUAGE_BASH)
-                    .content("features: " + generatorContext.getFeatures().toString())
+                    .content("features: " + features.toString())
                     .build()
                     .toString();
             str = str.replace(line, asciidoc);
