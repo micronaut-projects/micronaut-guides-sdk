@@ -1,4 +1,4 @@
-A repository interface defines the operations to access the database. Micronaut Data implements the interface at compilation time. A sample repository interface was created for you in src/main/java/com/example/repository/GenreRepository.java_
+A repository interface defines the operations to access the database. Micronaut Data implements the interface at compilation time. A sample repository interface was created for you in _src/main/java/com/example/repository/GenreRepository.java_
 
 [source,java]
 ----

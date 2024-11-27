@@ -79,6 +79,7 @@ include::asciidoc/commons/genre-service.adoc[]
 
 === Tests
 
+:cloud:
 include::asciidoc/commons/genre-controller-test.adoc[]
 
 == Test the Application

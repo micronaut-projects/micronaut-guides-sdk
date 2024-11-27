@@ -1,4 +1,4 @@
-The GDK Launcher wrote tests for you, in {% if include.cloud != "" %}_{{ include.cloud }}/src{% else %}_src{% endif %}/test/java/com/example/GenreControllerTest.java_, to verify the CRUD operations:
+The GDK Launcher wrote tests for you, in _{cloud}/test/java/com/example/GenreControllerTest.java_, to verify the CRUD operations:
 
 [source,java]
 ----
