@@ -9,6 +9,7 @@ import jakarta.inject.Singleton;
 public class DefaultGuideContextProvider implements GuideContextProvider {
     private Guide guide;
     private GuidesOption option;
+    private String baseDir;
 
     /**
      * Gets the guide.
@@ -30,6 +31,11 @@ public class DefaultGuideContextProvider implements GuideContextProvider {
         return option;
     }
 
+    @Override
+    public String getBaseDir() {
+        return baseDir;
+    }
+
     /**
      * Sets the guide.
      *
@@ -48,5 +54,10 @@ public class DefaultGuideContextProvider implements GuideContextProvider {
     @Override
     public void setOption(GuidesOption option) {
         this.option = option;
+    }
+
+    @Override
+    public void setBaseDir(String baseDir) {
+        this.baseDir = baseDir;
     }
 }

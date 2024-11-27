@@ -32,6 +32,7 @@ public class BuildDiffLinkMacroProcessor extends InlineMacroProcessor {
     BuildDiffLinkMacroProcessor(GuideContextProvider guideContextProvider, GuidesConfiguration guidesConfiguration) {
         this.guideContextProvider = guideContextProvider;
         this.guidesConfiguration = guidesConfiguration;
+
     }
 
     @Override

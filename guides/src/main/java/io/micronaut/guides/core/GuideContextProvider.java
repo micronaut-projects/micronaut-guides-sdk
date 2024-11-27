@@ -20,6 +20,13 @@ public interface GuideContextProvider {
     GuidesOption getOption();
 
     /**
+     * Gets the working directory.
+     *
+     * @return The working directory.
+     */
+    String getBaseDir();
+
+    /**
      * Sets the guide.
      *
      * @param guide The guide to set.
@@ -32,4 +39,11 @@ public interface GuideContextProvider {
      * @param option The guide option to set.
      */
     void setOption(GuidesOption option);
+
+    /**
+     * Sets the working directory.
+     *
+     * @param workingDir The working directory to set.
+     */
+    void setBaseDir(String workingDir);
 }

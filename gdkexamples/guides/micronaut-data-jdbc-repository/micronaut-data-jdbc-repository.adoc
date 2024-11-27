@@ -10,6 +10,8 @@ include::asciidoc/commons/prerequisites.adoc[]
 
 include::asciidoc/commons/download.adoc[]
 
+include::source:micronaut-data-jdbc-repository/micronaut-data-jdbc-repository-gradle-java/src/main/java/com/example/domain/Genre[]
+
 download:[]
 
 include::asciidoc/commons/dev-env-note.adoc[]
@@ -55,6 +57,8 @@ features: [app-name, data, data-jdbc, flyway, gdk-bom, gdk-database, gdk-license
 ----
 
 Let's examine the project more closely.
+
+source:Genre[]
 
 include::asciidoc/commons/configure-datasources.adoc[]
 

@@ -133,6 +133,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
             String asciidoc = readFile(asciidocFile);
             for (GuidesOption guidesOption : guideOptions) {
                 guideContextProvider.setOption(guidesOption);
+                guideContextProvider.setBaseDir(outputDirectory.getAbsolutePath());
                 String name = MacroUtils.getSourceDir(guide.slug(), guidesOption);
 
                 // Zip creation
