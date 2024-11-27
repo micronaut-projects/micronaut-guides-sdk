@@ -67,7 +67,7 @@ public class JdkLowerThanMacroExclusion extends MacroExclusion {
     protected boolean shouldExclude(List<String> params, GuidesOption option, Guide guide) {
         if (StringUtils.isNotEmpty(params.get(0))) {
             Integer minJdk = Integer.valueOf(params.get(0));
-            return (guide.minimumJavaVersion() != null ? guide.minimumJavaVersion() : guidesConfiguration.getDefaultMinJdk()) < minJdk;
+            return (guide.getMinimumJavaVersion() != null ? guide.getMinimumJavaVersion() : guidesConfiguration.getDefaultMinJdk()) < minJdk;
         }
         return false;
     }

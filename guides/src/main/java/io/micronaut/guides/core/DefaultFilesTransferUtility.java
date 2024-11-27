@@ -149,21 +149,21 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
     public void transferFiles(@NotNull @NonNull File inputDirectory, @NotNull @NonNull File outputDirectory, @NotNull @NonNull Guide guide) throws IOException {
         List<GuidesOption> guidesOptionList = GuideGenerationUtils.guidesOptions(guide, LOG);
         for (GuidesOption guidesOption : guidesOptionList) {
-            for (App app : guide.apps()) {
-                String appName = app.name().equals(guidesConfiguration.getDefaultAppName()) ? EMPTY_STRING : app.name();
-                String folder = MacroUtils.getSourceDir(guide.slug(), guidesOption);
+            for (App app : guide.getApps()) {
+                String appName = app.getName().equals(guidesConfiguration.getDefaultAppName()) ? EMPTY_STRING : app.getName();
+                String folder = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
                 Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName);
                 File destination = destinationPath.toFile();
 
-                if (guide.base() != null) {
-                    File baseDir = new File(inputDirectory.getParentFile(), guide.base());
+                if (guide.getBase() != null) {
+                    File baseDir = new File(inputDirectory.getParentFile(), guide.getBase());
                     copyGuideSourceFiles(baseDir, destinationPath, appName, guidesOption.getLanguage().toString(), true);
                 }
 
                 copyGuideSourceFiles(inputDirectory, destinationPath, appName, guidesOption.getLanguage().toString(), false);
 
-                if (app.excludeSource() != null) {
-                    for (String mainSource : app.excludeSource()) {
+                if (app.getExcludeSource() != null) {
+                    for (String mainSource : app.getExcludeSource()) {
                         File f = fileToDelete(destination, GuideGenerationUtils.mainPath(appName, mainSource, guidesOption, guidesConfiguration));
                         if (f.exists()) {
                             f.delete();
@@ -175,8 +175,8 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                     }
                 }
 
-                if (app.excludeTest() != null) {
-                    for (String testSource : app.excludeTest()) {
+                if (app.getExcludeTest() != null) {
+                    for (String testSource : app.getExcludeTest()) {
                         File f = fileToDelete(destination, GuideGenerationUtils.testPath(appName, testSource, guidesOption, guidesConfiguration));
                         if (f.exists()) {
                             f.delete();
@@ -188,9 +188,9 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                     }
                 }
 
-                if (guide.zipIncludes() != null) {
+                if (guide.getZipIncludes() != null) {
                     File destinationRoot = new File(outputDirectory.getAbsolutePath(), folder);
-                    for (String zipInclude : guide.zipIncludes()) {
+                    for (String zipInclude : guide.getZipIncludes()) {
                         copyFile(inputDirectory, destinationRoot, zipInclude);
                     }
                 }

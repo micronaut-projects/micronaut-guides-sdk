@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @MicronautTest(startApplication = false)
 class RssFeedGenerationTest {
@@ -22,14 +22,17 @@ class RssFeedGenerationTest {
     @Inject
     RssFeedGenerator rssFeedGenerator;
 
-    private List<Guide> guides;
+    @Inject
+    GuideMerger guideMerger;
+
+    private List<? extends Guide> guides;
 
     @BeforeEach
     public void setup() {
         File file = new File("src/test/resources/guides");
-        GuideParser guideParser = new DefaultGuideParser(jsonSchemaProvider, jsonMapper);
-        this.guides = guideParser.parseGuidesMetadata(file,"metadata.json")
-                .stream().filter(Guide::publish).toList();
+        GuideParser guideParser = new DefaultGuideParser(jsonSchemaProvider, jsonMapper, guideMerger);
+        this.guides = guideParser.parseGuidesMetadata(file, "metadata.json")
+                .stream().filter(Guide::isPublish).toList();
     }
 
     @Test

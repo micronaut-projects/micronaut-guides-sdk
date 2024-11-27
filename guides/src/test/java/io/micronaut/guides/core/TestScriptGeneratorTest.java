@@ -28,7 +28,8 @@ public class TestScriptGeneratorTest {
 
     @Test
     void supportsNativeTestAllConditions() {
-        App app = new App("springboot", null, null, null, null, null, null, null, null, null, null, null, false);
+        App app = new App();
+        app.setName("springboot");
         GuidesOption guidesOption = new GuidesOption(GRADLE, Language.JAVA, TestFramework.JUNIT);
 
         boolean result = testScriptGenerator.supportsNativeTest(app, guidesOption);
@@ -38,7 +39,9 @@ public class TestScriptGeneratorTest {
 
     @Test
     void supportsNativeTestNotMicronaut() {
-        App app = new App("app", null, null, "Spring", null, null, null, null, null, null, null, null, false);
+        App app = new App();
+        app.setName("app");
+        app.setFramework("Spring");
         GuidesOption guidesOption = new GuidesOption(GRADLE, Language.JAVA, TestFramework.JUNIT);
 
         boolean result = testScriptGenerator.supportsNativeTest(app, guidesOption);
@@ -48,7 +51,9 @@ public class TestScriptGeneratorTest {
 
     @Test
     void supportsNativeTestNotGradle() {
-        App app = new App("springboot", null, null, "Micronaut", null, null, null, null, null, null, null, null, false);
+        App app = new App();
+        app.setName("springboot");
+        app.setFramework("Micronaut");
         GuidesOption guidesOption = new GuidesOption(MAVEN, Language.JAVA, TestFramework.JUNIT);
 
         boolean result = testScriptGenerator.supportsNativeTest(app, guidesOption);
@@ -58,7 +63,9 @@ public class TestScriptGeneratorTest {
 
     @Test
     void supportsNativeTestNotLanguage() {
-        App app = new App("springboot", null, null, "Micronaut", null, null, null, null, null, null, null, null, false);
+        App app = new App();
+        app.setName("springboot");
+        app.setFramework("Micronaut");
         GuidesOption guidesOption = new GuidesOption(GRADLE, Language.GROOVY, TestFramework.JUNIT);
 
         boolean result = testScriptGenerator.supportsNativeTest(app, guidesOption);
@@ -68,7 +75,9 @@ public class TestScriptGeneratorTest {
 
     @Test
     void supportsNativeTestNotJUnit() {
-        App app = new App("springboot", null, null, "Micronaut", null, null, null, null, null, null, null, null, false);
+        App app = new App();
+        app.setName("springboot");
+        app.setFramework("Micronaut");
         GuidesOption guidesOption = new GuidesOption(GRADLE, Language.JAVA, TestFramework.SPOCK);
 
         boolean result = testScriptGenerator.supportsNativeTest(app, guidesOption);
@@ -78,22 +87,24 @@ public class TestScriptGeneratorTest {
 
     @Test
     void supportsNativeTestNullFramework() {
-        App app = new App("springboot", null, null, null, null, null, null, null, null, null, null, null, false);
-
+        App app = new App();
+        app.setName("springboot");
         assertTrue(testScriptGenerator.isMicronautFramework(app));
     }
 
     @Test
     void supportsNativeTestIsMicronaut() {
-        App app = new App("springboot", null, null, "Micronaut", null, null, null, null, null, null, null, null, false);
-
+        App app = new App();
+        app.setName("springboot");
+        app.setFramework("Micronaut");
         assertTrue(testScriptGenerator.isMicronautFramework(app));
     }
 
     @Test
     void supportsNativeTestIsNotMicronaut() {
-        App app = new App("app", null, null, "Spring", null, null, null, null, null, null, null, null, false);
-
+        App app = new App();
+        app.setName("app");
+        app.setFramework("Spring");
         assertFalse(testScriptGenerator.isMicronautFramework(app));
     }
 
@@ -106,7 +117,7 @@ public class TestScriptGeneratorTest {
     void testGenerate() {
         String path = "src/test/resources/guides";
         File file = new File(path);
-        List<Guide> metadatas = guideParser.parseGuidesMetadata(file, "metadata.json");
+        List<? extends Guide> metadatas = guideParser.parseGuidesMetadata(file, "metadata.json");
 
         File expectedFile = new File(resourceLoader.getResource("classpath:expected_test_script.sh").orElseThrow().getFile());
         String expected = TestUtils.readFile(expectedFile);
@@ -120,7 +131,7 @@ public class TestScriptGeneratorTest {
     void testGenerateNative() {
         String path = "src/test/resources/guides";
         File file = new File(path);
-        List<Guide> metadatas = guideParser.parseGuidesMetadata(file, "metadata.json");
+        List<? extends Guide> metadatas = guideParser.parseGuidesMetadata(file, "metadata.json");
 
         File expectedFile = new File(resourceLoader.getResource("classpath:expected_test_script_native.sh").orElseThrow().getFile());
         String expected = TestUtils.readFile(expectedFile);

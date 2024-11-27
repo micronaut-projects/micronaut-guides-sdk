@@ -38,13 +38,13 @@ public class CliMacroSubstitution extends PlaceholderWithTargetMacroSubstitution
      * @return the CLI command
      */
     private static String cliCommandForApp(App app) {
-        return switch (app.applicationType()) {
+        return switch (app.getApplicationType()) {
             case CLI -> CLI_CLI;
             case FUNCTION -> CLI_FUNCTION;
             case GRPC -> CLI_GRPC;
             case MESSAGING -> CLI_MESSAGING;
             case DEFAULT -> CLI_DEFAULT;
-            default -> throw new IllegalArgumentException("Unknown application type: " + app.applicationType());
+            default -> throw new IllegalArgumentException("Unknown application type: " + app.getApplicationType());
         };
     }
 
@@ -69,14 +69,14 @@ public class CliMacroSubstitution extends PlaceholderWithTargetMacroSubstitution
      */
     @Override
     protected String getSubstitution(Guide guide, GuidesOption option, String appName) {
-        App app = guide.apps().stream()
-                .filter(a -> a.name().equals(appName))
+        App app = guide.getApps().stream()
+                .filter(a -> a.getName().equals(appName))
                 .findFirst()
                 .orElse(null);
         if (app != null) {
             return cliCommandForApp(app);
         } else {
-            throw new ConfigurationException("No CLI command found for app: " + app + " -- should be one of " + guide.apps().stream().map(el -> "@" + el + ":cli-command@").collect(Collectors.joining(", ")));
+            throw new ConfigurationException("No CLI command found for app: " + app + " -- should be one of " + guide.getApps().stream().map(el -> "@" + el + ":cli-command@").collect(Collectors.joining(", ")));
         }
     }
 }

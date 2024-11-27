@@ -63,16 +63,15 @@ public class DefaultIndexGenerator implements IndexGenerator {
 
     @Override
     @NonNull
-    public String renderIndex(@NonNull @NotNull List<Guide> guides) {
+    public String renderIndex(@NonNull @NotNull List<? extends Guide> guides) {
         return guideHtml.replace("{content}", guidesContent(guides));
     }
 
     /**
-     *
      * @param guides Guides
      * @return HTML content for the guides list
      */
-    protected String guidesContent(@NonNull List<Guide> guides) {
+    protected String guidesContent(@NonNull List<? extends Guide> guides) {
         StringBuilder sb = new StringBuilder();
         sb.append("<ul>");
         for (Guide guide : guides) {
@@ -84,14 +83,13 @@ public class DefaultIndexGenerator implements IndexGenerator {
     }
 
     /**
-     *
      * @param guide Guide
      * @return HTML content for an individual guide
      */
     protected String guideContent(@NonNull Guide guide) {
         StringBuilder sb = new StringBuilder();
-        String href = guide.slug() + ".html";
-        String title = guide.title();
+        String href = guide.getSlug() + ".html";
+        String title = guide.getTitle();
         sb.append("<li>");
         sb.append("<a href=\"");
         sb.append(href);

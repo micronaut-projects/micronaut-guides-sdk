@@ -25,7 +25,7 @@ import java.util.Optional;
  * @param target     the target of the macro
  * @param attributes the list of attributes associated with the macro
  */
-public record AsciidocMacro(String name, String target, List<Attribute> attributes) {
+public record AsciidocMacro(String name, String target, List<Attribute> attributes, String raw) {
     public static final String MACRO_NAME_SEPARATOR = ":";
     public static final String ATTRIBUTE_SEPARATOR = ",";
     private static final String MACRO_OPEN_BRACKET = "[";
@@ -45,7 +45,7 @@ public record AsciidocMacro(String name, String target, List<Attribute> attribut
             String target = str.substring((name + MACRO_NAME_SEPARATOR).length(), bracketIndex);
             String attributeLine = str.substring(bracketIndex + 1, closingBracketIndex);
             List<Attribute> attributes = Attribute.of(attributeLine);
-            return Optional.of(new AsciidocMacro(name, target, attributes));
+            return Optional.of(new AsciidocMacro(name, target, attributes, str));
         }
         return Optional.empty();
     }

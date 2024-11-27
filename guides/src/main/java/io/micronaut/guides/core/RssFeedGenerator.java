@@ -30,5 +30,5 @@ public interface RssFeedGenerator {
      * @return the generated RSS feed as a string
      */
     @NonNull
-    String rssFeed(@NonNull List<Guide> metadatas);
+    String rssFeed(@NonNull List<? extends Guide> metadatas);
 }

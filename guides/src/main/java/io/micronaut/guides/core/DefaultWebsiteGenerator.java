@@ -107,13 +107,13 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         if (!guidesInputDirectory.isDirectory()) {
             throw new ConfigurationException("Guides path " + guidesInputDirectory.getAbsolutePath() + " is not a directory");
         }
-        List<Guide> guides = guideParser.parseGuidesMetadata(guidesInputDirectory);
+        List<? extends Guide> guides = guideParser.parseGuidesMetadata(guidesInputDirectory);
         for (Guide guide : guides) {
+            File guideOutput = new File(outputDirectory, guide.getSlug());
             guideContextProvider.setGuide(guide);
-            File guideOutput = new File(outputDirectory, guide.slug());
             guideOutput.mkdir();
             guideProjectGenerator.generate(guideOutput, guide);
-            File guideInputDirectory = new File(guidesInputDirectory, guide.slug());
+            File guideInputDirectory = new File(guidesInputDirectory, guide.getSlug());
             filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide);
 
             // Test script generation
@@ -124,9 +124,9 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
             String nativeTestScript = testScriptGenerator.generateNativeTestScript(new ArrayList<>(List.of(guide)));
             saveToFile(nativeTestScript, guideOutput, FILENAME_NATIVE_TEST_SH);
 
-            File asciidocFile = new File(guideInputDirectory, guide.slug() + ".adoc");
+            File asciidocFile = new File(guideInputDirectory, guide.getSlug() + ".adoc");
             if (!asciidocFile.exists()) {
-                throw new ConfigurationException("asciidoc file not found for " + guide.slug());
+                throw new ConfigurationException("asciidoc file not found for " + guide.getSlug());
             }
 
             List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
@@ -134,7 +134,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
             for (GuidesOption guidesOption : guideOptions) {
                 guideContextProvider.setOption(guidesOption);
                 guideContextProvider.setBaseDir(outputDirectory.getAbsolutePath());
-                String name = MacroUtils.getSourceDir(guide.slug(), guidesOption);
+                String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
 
                 // Zip creation
                 File zipFile = new File(outputDirectory, name + ".zip");
@@ -153,14 +153,14 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                 String guideOptionHtmlFileName = name + ".html";
                 optionHtml = optionHtml.replace(tocHtml + "\n", "");
                 optionHtml = guidePageGenerator.render(tocHtml, optionHtml);
-                optionHtml = optionHtml.replace("{title}", guide.title());
-                optionHtml = optionHtml.replace("{section}", guide.categories().get(0));
-                optionHtml = optionHtml.replace("{section-link}", "https://graal.cloud/gdk/docs/gdk-modules/" + guide.categories().get(0).toLowerCase() + "/");
+                optionHtml = optionHtml.replace("{title}", guide.getTitle());
+                optionHtml = optionHtml.replace("{section}", guide.getCategories().get(0));
+                optionHtml = optionHtml.replace("{section-link}", "https://graal.cloud/gdk/docs/gdk-modules/" + guide.getCategories().get(0).toLowerCase() + "/");
                 saveToFile(optionHtml, outputDirectory, guideOptionHtmlFileName);
             }
 
             String guideMatrixHtml = guideMatrixGenerator.renderIndex(guide);
-            saveToFile(guideMatrixHtml, outputDirectory, guide.slug() + ".html");
+            saveToFile(guideMatrixHtml, outputDirectory, guide.getSlug() + ".html");
         }
 
         String indexHtml = indexGenerator.renderIndex(guides);
@@ -181,11 +181,15 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         int startIndex = html.indexOf(openDivPattern + " " + idAttribute);
         if (startIndex == -1) {
             startIndex = html.indexOf(openDivPattern + " id='toc'");
-            if (startIndex == -1) return null;
+            if (startIndex == -1) {
+                return null;
+            }
         }
 
         int openingTagEnd = html.indexOf(">", startIndex);
-        if (openingTagEnd == -1) return null;
+        if (openingTagEnd == -1) {
+            return null;
+        }
 
         int nestedDivCount = 0;
         int currentIndex = openingTagEnd + 1;
@@ -194,7 +198,9 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
             int nextOpenDiv = html.indexOf(openDivPattern, currentIndex);
             int nextCloseDiv = html.indexOf(closeDivPattern, currentIndex);
 
-            if (nextCloseDiv == -1) return null;
+            if (nextCloseDiv == -1) {
+                return null;
+            }
 
             if (nextOpenDiv != -1 && nextOpenDiv < nextCloseDiv) {
                 nestedDivCount++;

@@ -33,5 +33,5 @@ public interface IndexGenerator {
      * @return the rendered index as a string
      */
     @NonNull
-    String renderIndex(@NonNull @NotNull List<Guide> guides);
+    String renderIndex(@NonNull @NotNull List<? extends Guide> guides);
 }

@@ -55,19 +55,19 @@ public class PlaceholderMacroSubstitution implements MacroSubstitution {
     @Override
     public String substitute(String str, Guide guide, GuidesOption option) {
 
-        str = str.replace("{githubSlug}", guide.slug());
+        str = str.replace("{githubSlug}", guide.getSlug());
         str = str.replace("@language@", StringUtils.capitalize(option.getLanguage().toString()));
-        str = str.replace("@guideTitle@", guide.title());
-        str = str.replace("@guideIntro@", guide.intro());
+        str = str.replace("@guideTitle@", guide.getTitle());
+        str = str.replace("@guideIntro@", guide.getIntro());
         str = str.replace("@micronaut@", String.valueOf(guidesConfiguration.getVersion()));
         str = str.replace("@lang@", option.getLanguage().toString());
         str = str.replace("@build@", option.getBuildTool().toString());
         str = str.replace("@testFramework@", option.getTestFramework().toString());
-        str = str.replace("@authors@", String.join(", ", guide.authors()));
+        str = str.replace("@authors@", String.join(", ", guide.getAuthors()));
         str = str.replace("@languageextension@", option.getLanguage().getExtension());
         str = str.replace("@testsuffix@", option.getTestFramework() == SPOCK ? "Spec" : "Test");
-        str = str.replace("@sourceDir@", MacroUtils.getSourceDir(guide.slug(), option));
-        str = str.replace("@minJdk@", String.valueOf(guide.minimumJavaVersion() != null ? guide.minimumJavaVersion() : guidesConfiguration.getDefaultMinJdk()));
+        str = str.replace("@sourceDir@", MacroUtils.getSourceDir(guide.getSlug(), option));
+        str = str.replace("@minJdk@", String.valueOf(guide.getMinimumJavaVersion() != null ? guide.getMinimumJavaVersion() : guidesConfiguration.getDefaultMinJdk()));
         str = str.replace("@api@", guidesConfiguration.getApiUrl());
 
         for (Map.Entry<String, Coordinate> entry : coordinatesProvider.getCoordinates().entrySet()) {

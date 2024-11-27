@@ -122,14 +122,14 @@ public final class GuideGenerationUtils {
     @NonNull
     public static List<GuidesOption> guidesOptions(@NonNull Guide guideMetadata,
                                                    @NonNull Logger logger) {
-        List<BuildTool> buildTools = guideMetadata.buildTools();
-        List<Language> languages = guideMetadata.languages();
-        TestFramework testFramework = guideMetadata.testFramework();
+        List<BuildTool> buildTools = guideMetadata.getBuildTools();
+        List<Language> languages = guideMetadata.getLanguages();
+        TestFramework testFramework = guideMetadata.getTestFramework();
         List<GuidesOption> guidesOptionList = new ArrayList<>();
 
         for (BuildTool buildTool : buildTools) {
             for (Language language : Language.values()) {
-                if (GuideUtils.shouldSkip(guideMetadata, buildTool)) {
+                if (guideMetadata.shouldSkip(buildTool)) {
                     logger.info("Skipping index guide for {} and {}", buildTool, language);
                     continue;
                 }
@@ -198,8 +198,8 @@ public final class GuideGenerationUtils {
      */
     public static JdkVersion resolveJdkVersion(GuidesConfiguration guidesConfiguration, @NotNull @NonNull Guide guide) {
         JdkVersion javaVersion = GuideGenerationUtils.resolveJdkVersion(guidesConfiguration);
-        if (guide.minimumJavaVersion() != null) {
-            JdkVersion minimumJavaVersion = JdkVersion.valueOf(guide.minimumJavaVersion());
+        if (guide.getMinimumJavaVersion() != null) {
+            JdkVersion minimumJavaVersion = JdkVersion.valueOf(guide.getMinimumJavaVersion());
             if (minimumJavaVersion.majorVersion() > javaVersion.majorVersion()) {
                 return minimumJavaVersion;
             }
@@ -216,8 +216,8 @@ public final class GuideGenerationUtils {
      */
     static boolean skipBecauseOfJavaVersion(Guide metadata, GuidesConfiguration guidesConfiguration) {
         int jdkVersion = resolveJdkVersion(guidesConfiguration).majorVersion();
-        return (metadata.minimumJavaVersion() != null && jdkVersion < metadata.minimumJavaVersion()) ||
-                (metadata.maximumJavaVersion() != null && jdkVersion > metadata.maximumJavaVersion());
+        return (metadata.getMinimumJavaVersion() != null && jdkVersion < metadata.getMinimumJavaVersion()) ||
+                (metadata.getMaximumJavaVersion() != null && jdkVersion > metadata.getMaximumJavaVersion());
     }
 
     /**
@@ -240,18 +240,18 @@ public final class GuideGenerationUtils {
      */
     public static boolean process(Guide metadata, boolean checkJdk, GuidesConfiguration guidesConfiguration) {
 
-        if (!metadata.publish()) {
+        if (!metadata.isPublish()) {
             return false;
         }
 
-        boolean processGuide = singleGuide(guidesConfiguration) == null || singleGuide(guidesConfiguration).equals(metadata.slug());
+        boolean processGuide = singleGuide(guidesConfiguration) == null || singleGuide(guidesConfiguration).equals(metadata.getSlug());
         if (!processGuide) {
             return false;
         }
 
         if (checkJdk && skipBecauseOfJavaVersion(metadata, guidesConfiguration)) {
-            System.out.println("Not processing " + metadata.slug() + ", JDK not between " +
-                    metadata.minimumJavaVersion() + " and " + metadata.maximumJavaVersion());
+            System.out.println("Not processing " + metadata.getSlug() + ", JDK not between " +
+                    metadata.getMinimumJavaVersion() + " and " + metadata.getMaximumJavaVersion());
             return false;
         }
 

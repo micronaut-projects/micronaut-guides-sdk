@@ -38,8 +38,8 @@ public interface GuideParser {
      * @return a list of parsed guide metadata
      */
     @NonNull
-    List<Guide> parseGuidesMetadata(@NonNull @NotNull File guidesDir,
-                                    @NonNull @NotNull String metadataConfigName);
+    List<? extends Guide> parseGuidesMetadata(@NonNull @NotNull File guidesDir,
+                                              @NonNull @NotNull String metadataConfigName);
 
     /**
      * Parses the metadata for a single guide in the specified directory.
@@ -48,7 +48,7 @@ public interface GuideParser {
      * @return an optional containing the parsed guide metadata, or empty if not found
      */
     @NonNull
-    default List<Guide> parseGuidesMetadata(@NonNull @NotNull File guidesDir) {
+    default List<? extends Guide> parseGuidesMetadata(@NonNull @NotNull File guidesDir) {
         return parseGuidesMetadata(guidesDir, DEFAULT_METADATA_NAME);
     }
 
@@ -60,6 +60,6 @@ public interface GuideParser {
      * @return an optional containing the parsed guide metadata, or empty if not found
      */
     @NonNull
-    Optional<Guide> parseGuideMetadata(@NonNull @NotNull File guidesDir,
-                                       @NonNull @NotNull String metadataConfigName);
+    Optional<? extends Guide> parseGuideMetadata(@NonNull @NotNull File guidesDir,
+                                                 @NonNull @NotNull String metadataConfigName);
 }

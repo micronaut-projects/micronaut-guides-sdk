@@ -19,10 +19,7 @@ import com.networknt.schema.InputFormat;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.ValidationMessage;
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.core.type.Argument;
 import io.micronaut.json.JsonMapper;
-import io.micronaut.starter.options.BuildTool;
-import io.micronaut.starter.options.Language;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -30,38 +27,41 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
-
-import static io.micronaut.guides.core.GuideUtils.mergeMetadataList;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Class that provides methods to parse guide metadata.
  */
 @Singleton
 public class DefaultGuideParser implements GuideParser {
-    public static final String SPOTLESS = "spotless";
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGuideParser.class);
-
-    private final JsonSchema jsonSchema;
-    private final JsonMapper jsonMapper;
+    protected final JsonSchema jsonSchema;
+    protected final JsonMapper jsonMapper;
+    protected final GuideMerger guideMerger;
 
     /**
      * Constructs a new DefaultGuideParser.
      *
      * @param jsonSchemaProvider the JSON schema provider
      * @param jsonMapper         the JSON mapper
+     * @param guideMerger        the guide merger
      */
-    public DefaultGuideParser(JsonSchemaProvider jsonSchemaProvider, JsonMapper jsonMapper) {
+    public DefaultGuideParser(JsonSchemaProvider jsonSchemaProvider,
+                              JsonMapper jsonMapper,
+                              GuideMerger guideMerger) {
         this.jsonSchema = jsonSchemaProvider.getSchema();
         this.jsonMapper = jsonMapper;
+        this.guideMerger = guideMerger;
     }
 
     @Override
     @NonNull
-    public List<Guide> parseGuidesMetadata(@NonNull @NotNull File guidesDir, @NonNull @NotNull String metadataConfigName) {
+    public List<? extends Guide> parseGuidesMetadata(@NonNull @NotNull File guidesDir, @NonNull @NotNull String metadataConfigName) {
         List<Guide> metadatas = new ArrayList<>();
 
         File[] dirs = guidesDir.listFiles(File::isDirectory);
@@ -72,14 +72,15 @@ public class DefaultGuideParser implements GuideParser {
             parseGuideMetadata(dir, metadataConfigName).ifPresent(metadatas::add);
         }
 
-        mergeMetadataList(metadatas);
+        guideMerger.mergeGuides(metadatas);
 
         return metadatas;
     }
 
     @Override
     @NonNull
-    public Optional<Guide> parseGuideMetadata(@NonNull @NotNull File guidesDir, @NonNull @NotNull String metadataConfigName) {
+    public Optional<? extends Guide> parseGuideMetadata(@NonNull @NotNull File guidesDir,
+                                                        @NonNull @NotNull String metadataConfigName) {
         File configFile = new File(guidesDir, metadataConfigName);
         if (!configFile.exists()) {
             LOG.warn("metadata file not found for {}", guidesDir.getName());
@@ -94,83 +95,36 @@ public class DefaultGuideParser implements GuideParser {
             return Optional.empty();
         }
 
-        Map<String, Object> config;
+        return readGuide(guidesDir, content, configFile);
+    }
+
+    /**
+     *
+     * @param guidesDir Guides directory
+     * @param content Metadata content
+     * @param configFile Configuration file
+     * @return Guide
+     */
+    protected Optional<? extends Guide> readGuide(File guidesDir, String content, File configFile) {
+        Guide guide;
         try {
-            config = jsonMapper.readValue(content, Argument.mapOf(String.class, Object.class));
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-        boolean publish = config.get("publish") == null || (Boolean) config.get("publish");
+            guide = jsonMapper.readValue(content, Guide.class);
+            if (guide.isPublish()) {
+                Set<ValidationMessage> assertions = jsonSchema.validate(content, InputFormat.JSON);
 
-        if (publish) {
-            Set<ValidationMessage> assertions = jsonSchema.validate(content, InputFormat.JSON);
-
-            if (!assertions.isEmpty()) {
-                LOG.trace("Guide metadata {} does not validate the JSON Schema. Skipping guide.", configFile);
-                return Optional.empty();
+                if (!assertions.isEmpty()) {
+                    LOG.trace("Guide metadata {} does not validate the JSON Schema. Skipping guide.", configFile);
+                    return Optional.empty();
+                }
             }
-        }
-
-        Guide raw;
-        try {
-            raw = jsonMapper.readValue(content, Guide.class);
         } catch (IOException e) {
             LOG.trace("Error parsing guide metadata {}. Skipping guide.", configFile, e);
             return Optional.empty();
         }
 
-        List<App> apps = new LinkedList<>();
+        guide.setSlug(guidesDir.getName());
+        guide.setAsciidoctor(guide.isPublish() ? guidesDir.getName() + ".adoc" : null);
 
-        for (App app : raw.apps()) {
-            apps.add(new App(
-                    app.name(),
-                    app.packageName(),
-                    app.applicationType(),
-                    app.framework(),
-                    app.features() != null ? app.features() : new ArrayList<>(),
-                    app.invisibleFeatures() != null ? app.invisibleFeatures() : new ArrayList<>(),
-                    app.kotlinFeatures() != null ? app.kotlinFeatures() : new ArrayList<>(),
-                    app.javaFeatures() != null ? app.javaFeatures() : new ArrayList<>(),
-                    app.groovyFeatures() != null ? app.groovyFeatures() : new ArrayList<>(),
-                    app.testFramework(),
-                    app.excludeTest(),
-                    app.excludeSource(),
-                    app.validateLicense() && hasSpotless(app.features(), app.invisibleFeatures(), app.kotlinFeatures(), app.javaFeatures(), app.groovyFeatures())
-            ));
-        }
-
-        return Optional.of(new Guide(
-                raw.title(),
-                raw.intro(),
-                raw.authors(),
-                raw.categories(),
-                publish ? raw.publicationDate() : null,
-                raw.minimumJavaVersion(),
-                raw.maximumJavaVersion(),
-                raw.cloud(),
-                raw.skipGradleTests(),
-                raw.skipMavenTests(),
-                publish ? guidesDir.getName() + ".adoc" : null,
-                raw.languages() != null ? raw.languages() : List.of(Language.JAVA, Language.GROOVY, Language.KOTLIN),
-                raw.tags() != null ? raw.tags() : Collections.emptyList(),
-                raw.buildTools() != null ? raw.buildTools() : List.of(BuildTool.GRADLE, BuildTool.MAVEN),
-                raw.testFramework(),
-                raw.zipIncludes() != null ? raw.zipIncludes() : new ArrayList<>(),
-                guidesDir.getName(),
-                publish,
-                raw.base(),
-                raw.env() != null ? raw.env() : new HashMap<>(),
-                apps
-        ));
-    }
-
-    @SafeVarargs
-    private boolean hasSpotless(List<String>... featureLists) {
-        for (List<String> features : featureLists) {
-            if (features != null && features.contains(SPOTLESS)) {
-                return true;
-            }
-        }
-        return false;
+        return Optional.of(guide);
     }
 }

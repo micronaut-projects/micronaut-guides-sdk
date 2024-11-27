@@ -33,5 +33,5 @@ public interface JsonFeedGenerator {
      * @throws IOException if an I/O error occurs during the generation of the JSON feed
      */
     @NonNull
-    String jsonFeedString(@NonNull List<Guide> metadatas) throws IOException;
+    String jsonFeedString(@NonNull List<? extends Guide> metadatas) throws IOException;
 }

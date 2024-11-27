@@ -44,6 +44,6 @@ public class FeaturesMacroSubstitution extends PlaceholderWithTargetMacroSubstit
      */
     @Override
     protected String getSubstitution(Guide guide, GuidesOption option, String appName) {
-        return String.join(AsciidocMacro.ATTRIBUTE_SEPARATOR, GuideUtils.getAppVisibleFeatures(app(guide, appName), option.getLanguage()));
+        return String.join(AsciidocMacro.ATTRIBUTE_SEPARATOR, app(guide, appName).visibleFeatures(option.getLanguage()));
     }
 }

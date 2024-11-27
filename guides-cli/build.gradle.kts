@@ -13,10 +13,12 @@ repositories {
 dependencies {
     annotationProcessor("info.picocli:picocli-codegen")
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    annotationProcessor(mnJsonSchema.micronaut.json.schema.processor)
     implementation("info.picocli:picocli")
     implementation(projects.guides)
     implementation("io.micronaut.picocli:micronaut-picocli")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
+    compileOnly(mnJsonSchema.micronaut.json.schema.annotations)
     runtimeOnly("ch.qos.logback:logback-classic")
 }
 

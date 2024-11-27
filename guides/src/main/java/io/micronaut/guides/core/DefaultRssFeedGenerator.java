@@ -51,7 +51,7 @@ public class DefaultRssFeedGenerator implements RssFeedGenerator {
      * @return the generated RSS feed as a string
      */
     @NonNull
-    public String rssFeed(@NonNull List<Guide> metadatas) {
+    public String rssFeed(@NonNull List<? extends Guide> metadatas) {
         RssChannel.Builder rssBuilder = rssBuilder();
         for (Guide metadata : metadatas) {
             rssBuilder.item(rssFeedElement(metadata));
@@ -72,15 +72,15 @@ public class DefaultRssFeedGenerator implements RssFeedGenerator {
 
     private RssItem rssFeedElement(Guide metadata) {
         RssItem.Builder rssItemBuilder = RssItem.builder()
-                .guid(metadata.slug())
-                .title(metadata.title())
-                .description(metadata.intro())
-                .pubDate(ZonedDateTime.of(metadata.publicationDate(), LocalTime.of(0, 0), ZoneOffset.UTC))
-                .link(guidesConfiguration.getHomePageUrl() + metadata.slug());
-        for (String author : metadata.authors()) {
+                .guid(metadata.getSlug())
+                .title(metadata.getTitle())
+                .description(metadata.getIntro())
+                .pubDate(ZonedDateTime.of(metadata.getPublicationDate(), LocalTime.of(0, 0), ZoneOffset.UTC))
+                .link(guidesConfiguration.getHomePageUrl() + metadata.getSlug());
+        for (String author : metadata.getAuthors()) {
             rssItemBuilder.author(author);
         }
-        rssItemBuilder.category(GuideUtils.getTags(metadata));
+        rssItemBuilder.category(metadata.getTags());
         return rssItemBuilder.build();
     }
 }

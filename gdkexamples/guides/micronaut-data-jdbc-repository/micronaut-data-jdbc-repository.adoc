@@ -48,13 +48,12 @@ Create an application using the GDK Launcher.
 
 Alternatively, use the link:/gdk/get-started/using-gdk-cli/[GDK CLI] as follows:
 
+create-app:default[]
+
 If you enable sample code generation, the GDK Launcher creates the main controller, repository interface, entity, service classes, and tests for you.
 In the _micronaut-cli.yml_ file you can find all features packaged with the application:
 
-[source,yml]
-----
-features: [app-name, data, data-jdbc, flyway, gdk-bom, gdk-database, gdk-license, gdk-platform-independent, graalvm, http-client-test, java, java-application, jdbc-hikari, junit, logback, maven, maven-enforcer-plugin, micronaut-aot, mysql, netty-server, properties, readme, serialization-jackson, shade, test-resources, validation]
-----
+features-listing:default[]
 
 Let's examine the project more closely.
 
@@ -84,6 +83,7 @@ include::asciidoc/commons/genre-service.adoc[]
 
 === Tests
 
+:cloud:
 include::asciidoc/commons/genre-controller-test.adoc[]
 
 == Test the Application
@@ -100,19 +100,17 @@ include::asciidoc/commons/graalvm-prereq.adoc[]
 
 To generate a native executable, use the following command:
 
-// TODO: command to build the native executable
+gradle-maven-command:[gradle=./gradlew nativeCompile,maven=./mvnw package -Dpackaging=native-image]
 
 Before running this native executable, you need to start and then connect to a MySQL database.
-
-== Set the environment variables
-
-include::asciidoc/commons/set-env-vars.adoc[]
-
 
 == Connect to a MySQL Database
 
 include::asciidoc/commons/connect-mysql-db.adoc[]
 
+environment-vars:[DATASOURCES_DEFAULT_URL=jdbc:mysql://localhost:3306/db,DATASOURCES_DEFAULT_USERNAME=sherlock,DATASOURCES_DEFAULT_PASSWORD=elementary]
+
+The Micronaut framework populates the properties `datasources.default.url`, `datasources.default.username` and `datasources.default.password` with those environment variables' values. Learn more about https://micronaut-projects.github.io/micronaut-sql/latest/guide/#jdbc-connection-pools[JDBC Connection Pools].
 
 == Run the Application
 
@@ -122,16 +120,14 @@ Save one genre and your `genre` database table will now contain an entry:
 
 [source,bash]
 ----
-curl -X "POST" "http://localhost:8080/genres" \
-        -H 'Content-Type: application/json; charset=utf-8' \
-        -d '{ "name": "music" }'
+include::{guidesourcedir}/test_app.sh[tag=add-genre]
 ----
 
 Access the `genres` endpoint exposed by the application:
 
 [source,bash]
 ----
-curl localhost:8080/genres/list
+include::{guidesourcedir}/test_app.sh[tag=get-genres]
 ----
 
 When you run the application, Micronaut Test Resources do not start a MySQL container because you have provided values for `datasources.default.*` properties

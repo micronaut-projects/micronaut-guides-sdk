@@ -61,7 +61,7 @@ public interface TestScriptGenerator {
      */
     @NonNull
     @NotNull
-    String generateNativeTestScript(@NonNull @NotNull List<Guide> metadatas);
+    String generateNativeTestScript(@NonNull @NotNull List<? extends Guide> metadatas);
 
     /**
      * Generates a script for running tests for the given guides.
@@ -71,6 +71,6 @@ public interface TestScriptGenerator {
      */
     @NonNull
     @NotNull
-    String generateTestScript(@NonNull @NotNull List<Guide> metadatas);
+    String generateTestScript(@NonNull @NotNull List<? extends Guide> metadatas);
 
 }

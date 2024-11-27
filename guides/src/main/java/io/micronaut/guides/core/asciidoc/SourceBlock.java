@@ -16,6 +16,7 @@
 package io.micronaut.guides.core.asciidoc;
 
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.core.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,15 +38,23 @@ public class SourceBlock {
     @Nullable
     private final String language;
 
+    @Nullable
+    private final String content;
+
     /**
      * Constructs a new SourceBlock.
      *
      * @param title             the title of the source block
+     * @param content the content of the source block
      * @param includeDirectives the list of include directives
      * @param language          the language of the source block
      */
-    public SourceBlock(String title, List<IncludeDirective> includeDirectives, String language) {
+    public SourceBlock(String title,
+                       String content,
+                       List<IncludeDirective> includeDirectives,
+                       String language) {
         this.title = title;
+        this.content = content;
         this.includeDirectives = includeDirectives;
         this.language = language;
     }
@@ -93,9 +102,14 @@ public class SourceBlock {
             lines.add("." + getTitle());
         }
         lines.add(SEPARATOR);
-        getIncludeDirectives().stream()
-                .map(IncludeDirective::toString)
-                .forEach(lines::add);
+        if (StringUtils.isNotEmpty(content)) {
+            lines.add(content);
+        }
+        if (getIncludeDirectives() != null) {
+            getIncludeDirectives().stream()
+                    .map(IncludeDirective::toString)
+                    .forEach(lines::add);
+        }
         lines.add(SEPARATOR);
         return String.join("\n", lines);
     }
@@ -122,6 +136,9 @@ public class SourceBlock {
         @Nullable
         private String language;
 
+        @Nullable
+        private String content;
+
         /**
          * Sets the title of the source block.
          *
@@ -130,6 +147,17 @@ public class SourceBlock {
          */
         public Builder title(@Nullable String title) {
             this.title = title;
+            return this;
+        }
+
+        /**
+         * Sets the content of the source block.
+         *
+         * @param content source block content
+         * @return the builder instance
+         */
+        public Builder content(@Nullable String content) {
+            this.content = content;
             return this;
         }
 
@@ -175,7 +203,7 @@ public class SourceBlock {
          * @return the built SourceBlock instance
          */
         public SourceBlock build() {
-            return new SourceBlock(title, includeDirectives, language);
+            return new SourceBlock(title, content, includeDirectives, language);
         }
     }
 }

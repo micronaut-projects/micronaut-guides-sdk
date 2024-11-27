@@ -23,7 +23,6 @@ import java.io.File;
  * AsciidocConfiguration is an interface that defines the configuration properties for Asciidoc processing.
  */
 public interface AsciidocConfiguration {
-
     /**
      * Returns the source highlighter.
      *

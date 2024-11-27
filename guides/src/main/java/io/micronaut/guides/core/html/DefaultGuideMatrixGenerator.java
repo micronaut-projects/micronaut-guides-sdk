@@ -38,11 +38,11 @@ class DefaultGuideMatrixGenerator implements GuideMatrixGenerator {
         List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
         sb.append("<!DOCTYPE html><html><head></head><body>");
         sb.append("<h1>");
-        sb.append(guide.title());
+        sb.append(guide.getTitle());
         sb.append("</h1>");
         sb.append("<ul>");
         for (GuidesOption guideOption : guideOptions) {
-            String href = guide.slug() + "-" + guideOption.getBuildTool() + "-" + guideOption.getLanguage() + ".html";
+            String href = guide.getSlug() + "-" + guideOption.getBuildTool() + "-" + guideOption.getLanguage() + ".html";
             String title = guideOption.getBuildTool() + " " + guideOption.getLanguage();
             sb.append("<li>");
             sb.append("<a href=\"");

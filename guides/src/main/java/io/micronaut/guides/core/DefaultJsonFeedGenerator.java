@@ -57,7 +57,7 @@ public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
      * @param metadatas the list of guide metadata
      * @return the generated JsonFeed
      */
-    public JsonFeed jsonFeed(List<Guide> metadatas) {
+    public JsonFeed jsonFeed(List<? extends Guide> metadatas) {
         JsonFeed.Builder jsonFeedBuilder = jsonFeedBuilder();
         for (Guide metadata : metadatas) {
             jsonFeedBuilder.item(jsonFeedItem(metadata));
@@ -74,7 +74,7 @@ public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
      */
     @Override
     @NonNull
-    public String jsonFeedString(@NonNull List<Guide> metadatas) throws IOException {
+    public String jsonFeedString(@NonNull List<? extends Guide> metadatas) throws IOException {
         JsonFeed jsonFeed = jsonFeed(metadatas);
         return jsonMapper.writeValueAsString(jsonFeed);
     }
@@ -89,16 +89,16 @@ public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
 
     private JsonFeedItem jsonFeedItem(Guide metadata) {
         JsonFeedItem.Builder jsonFeedItemBuilder = JsonFeedItem.builder()
-                .id(metadata.slug())
-                .title(metadata.title())
-                .contentText(metadata.intro())
+                .id(metadata.getSlug())
+                .title(metadata.getTitle())
+                .contentText(metadata.getIntro())
                 .language(RssLanguage.LANG_ENGLISH)
-                .datePublished(ZonedDateTime.of(metadata.publicationDate(), LocalTime.of(0, 0), ZoneOffset.UTC))
-                .url(guidesConfiguration.getHomePageUrl() + metadata.slug());
-        for (String author : metadata.authors()) {
+                .datePublished(ZonedDateTime.of(metadata.getPublicationDate(), LocalTime.of(0, 0), ZoneOffset.UTC))
+                .url(guidesConfiguration.getHomePageUrl() + metadata.getSlug());
+        for (String author : metadata.getAuthors()) {
             jsonFeedItemBuilder.author(JsonFeedAuthor.builder().name(author).build());
         }
-        for (String t : GuideUtils.getTags(metadata)) {
+        for (String t : metadata.getTags()) {
             jsonFeedItemBuilder.tag(t);
         }
         return jsonFeedItemBuilder.build();

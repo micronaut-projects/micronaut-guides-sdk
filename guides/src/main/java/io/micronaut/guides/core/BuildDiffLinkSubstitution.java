@@ -67,7 +67,7 @@ public class BuildDiffLinkSubstitution implements MacroSubstitution {
     private static Set<String> features(App app, AsciidocMacro asciidocMacro, GuidesOption option) {
         Set<String> features = new HashSet<>();
         if (app != null) {
-            features.addAll(GuideUtils.getAppVisibleFeatures(app, option.getLanguage()));
+            features.addAll(app.visibleFeatures(option.getLanguage()));
         }
         asciidocMacro.attributes().stream()
                 .filter(attribute -> attribute.key().equals(ATTRIBUTE_FEATURES))
@@ -120,7 +120,7 @@ public class BuildDiffLinkSubstitution implements MacroSubstitution {
                 .queryParam(QUERY_PARAM_BUILD, option.getBuildTool().name())
                 .queryParam(QUERY_PARAM_TEST, option.getTestFramework().name())
                 .queryParam(QUERY_PARAM_NAME, appName.equals(guidesConfiguration.getDefaultAppName()) ? "micronautguide" : appName)
-                .queryParam(QUERY_PARAM_TYPE, app != null ? app.applicationType().name() : ApplicationType.DEFAULT.name())
+                .queryParam(QUERY_PARAM_TYPE, app != null ? app.getApplicationType().name() : ApplicationType.DEFAULT.name())
                 .queryParam(QUERY_PARAM_PACKAGE, guidesConfiguration.getPackageName())
                 .queryParam(QUERY_PARAM_ACTIVITY, "diff");
         features.forEach(f -> uriBuilder.queryParam(QUERY_PARAM_FEATURES, f));

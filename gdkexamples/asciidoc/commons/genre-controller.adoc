@@ -1,6 +1,6 @@
-Hibernate Validator is a reference implementation of the Validation API. Micronaut [has built-in support for validation of beans](https://docs.micronaut.io/latest/guide/#beanValidation){:target="_blank"} that use `jakarta.validation` annotations. The necessary dependencies are included by default when creating a project.
+Hibernate Validator is a reference implementation of the Validation API. Micronaut https://docs.micronaut.io/latest/guide/#beanValidation[has built-in support for validation of beans] that use `jakarta.validation` annotations. The necessary dependencies are included by default when creating a project.
 
-The GDK Launcher created the main controller that exposes a resource with the common CRUD operations for you in _{{ include.parentDir }}src/main/java/com/example/controller/GenreController.java_:
+The GDK Launcher created the main controller that exposes a resource with the common CRUD operations for you in _src/main/java/com/example/controller/GenreController.java_:
 
 [source,java]
 ----
@@ -8,7 +8,7 @@ include::{guidesourcedir}/src/main/java/com/example/controller/GenreController.j
 ----
 
 <1> It is critical that any blocking I/O operations (such as fetching the data from the database) are offloaded to a separate thread pool that does not block the event loop.
-<2> The class is defined as a controller with the [`@Controller`](https://docs.micronaut.io/latest/api/io/micronaut/http/annotation/Controller.html){:target="_blank"} annotation mapped to the path `/genres`.
+<2> The class is defined as a controller with the https://docs.micronaut.io/latest/api/io/micronaut/http/annotation/Controller.html)[`@Controller`] annotation mapped to the path `/genres`.
 <3> Uses constructor injection to inject a bean of type `GenreRepository`.
 <4> Maps a `GET` request to `/genres/{id}`, which attempts to show a genre. This illustrates the use of a URL path variable (`id`).
 <5> Maps a `PUT` request to `/genres/{id}/{name}`, which attempts to update a genre. This illustrates the use of URL path variables (`id` and `name`).

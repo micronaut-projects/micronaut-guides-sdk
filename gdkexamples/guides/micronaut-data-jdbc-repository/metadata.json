@@ -14,12 +14,18 @@
   "publicationDate": "2024-11-19",
   "zipIncludes": [
     "create_resources.sh",
-    "settings.sh"
+    "settings.sh",
+    "test_app.sh"
   ],
   "apps": [
     {
       "name": "default",
-      "features": []
+      "features": [
+        "graalvm"
+      ],
+      "services": [
+        "database"
+      ]
     }
   ]
 }

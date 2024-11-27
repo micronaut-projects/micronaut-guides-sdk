@@ -1,6 +1,6 @@
 A service contains business logic and facilitates communication between the controller and the repository. The domain is used to communicate between the controller and service layers.
 
-The GDK Launcher created a sample service class, _{{ include.parentDir }}src/main/java/com/example/service/GenreService.java_, for you:
+The GDK Launcher created a sample service class, _src/main/java/com/example/service/GenreService.java_, for you:
 
 [source,java]
 ----

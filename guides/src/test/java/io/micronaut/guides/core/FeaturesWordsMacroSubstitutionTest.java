@@ -22,45 +22,23 @@ public class FeaturesWordsMacroSubstitutionTest {
 
     @Test
     void testSubstitute(){
-        App app = new App(
-                "cli",
-                "example.micronaut",
-                ApplicationType.CLI,
-                "Micronaut",
-                List.of("yaml","mqtt"),
-                List.of(),
-                List.of(),
-                List.of(),
-                List.of(),
-                null,
-                null,
-                null,
-                true
-        );
-
-        Guide guide = new Guide(
-                "1. Testing Serialization - Spring Boot vs Micronaut Framework - Building a Rest API",
-                "This guide compares how to test serialization and deserialization with Micronaut Framework and Spring Boot.",
-                List.of("Sergio del Amo"),
-                List.of("Boot to Micronaut Building a REST API"),
-                LocalDate.of(2024,4,24),
-                null,
-                null,
-                null,
-                false,
-                false,
-                "building-a-rest-api-spring-boot-vs-micronaut-data.adoc",
-                List.of(Language.JAVA),
-                List.of("spring-boot"),
-                List.of(BuildTool.GRADLE),
-                TestFramework.JUNIT,
-                List.of(),
-                "building-a-rest-api-spring-boot-vs-micronaut-data",
-                true,
-                null,
-                Map.of(),
-                List.of(app)
-        );
+        App app = new App();
+        app.setName("cli");
+        app.setPackageName("example.micronaut");
+        app.setApplicationType(ApplicationType.CLI);
+        app.setFramework("Micronaut");
+        app.setFeatures(List.of("yaml","mqtt"));
+        Guide guide = new Guide();
+        guide.setTitle("1. Testing Serialization - Spring Boot vs Micronaut Framework - Building a Rest API");
+        guide.setIntro("This guide compares how to test serialization and deserialization with Micronaut Framework and Spring Boot.");
+        guide.setAuthors(List.of("Sergio del Amo"));
+        guide.setCategories(List.of("Boot to Micronaut Building a REST API"));
+        guide.setPublicationDate(LocalDate.of(2024,4,24));
+        guide.setSlug("building-a-rest-api-spring-boot-vs-micronaut-data.adoc");
+        guide.setLanguages(List.of(Language.JAVA));
+        guide.setBuildTools(List.of(BuildTool.GRADLE));
+        guide.setTestFramework(TestFramework.JUNIT);
+        guide.setApps(List.of(app));
         String str = """
                 Rename this `micronautguide` directory to `cli`.
                 

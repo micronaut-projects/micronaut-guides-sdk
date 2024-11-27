@@ -1,0 +1,30 @@
+{
+  "title": "Create and Connect a Micronaut Application to a MySQL Database",
+  "intro": "This guide describes how to create a database application using the Graal Development Kit for Micronaut (GDK). The application presents REST endpoints and stores data in a MySQL database using Micronaut® Data.",
+  "authors": [
+    "Sergio del Amo"
+  ],
+  "tags": [],
+  "categories": [
+    "Database"
+  ],
+  "languages": [
+    "java"
+  ],
+  "publicationDate": "2024-11-19",
+  "zipIncludes": [
+    "create_resources.sh",
+    "settings.sh"
+  ],
+  "apps": [
+    {
+      "name": "default",
+      "features": [
+        "graalvm"
+      ],
+      "services": [
+        "database"
+      ]
+    }
+  ]
+}

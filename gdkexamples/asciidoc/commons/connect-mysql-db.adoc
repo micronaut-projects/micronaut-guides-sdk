@@ -14,5 +14,3 @@ Note: If you are using macOS on Apple Silicon (M1, M1 Pro), Docker might fail to
 ____
 
 Define the database driver URL, username, and password via environment variables:
-
-The Micronaut framework populates the properties `datasources.default.url`, `datasources.default.username` and `datasources.default.password` with those environment variables' values. Learn more about https://micronaut-projects.github.io/micronaut-sql/latest/guide/#jdbc-connection-pools[JDBC Connection Pools].

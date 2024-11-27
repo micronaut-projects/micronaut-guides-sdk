@@ -46,8 +46,10 @@ class GuideGenerationUtilsTest {
 
     @Test
     void testGuidesOptions() {
-        Guide guideMetadata = new Guide(null,null, null, null, null, null, null, null,false,false,null, List.of(Language.JAVA, Language.KOTLIN),null, List.of(BuildTool.GRADLE, BuildTool.MAVEN), TestFramework.JUNIT,null,null,true,null,null,null);
-
+        Guide guideMetadata = new Guide();
+        guideMetadata.setLanguages(List.of(Language.JAVA, Language.KOTLIN));
+        guideMetadata.setBuildTools(List.of(BuildTool.GRADLE, BuildTool.MAVEN));
+        guideMetadata.setTestFramework(TestFramework.JUNIT);
         List<GuidesOption> result = GuideGenerationUtils.guidesOptions(guideMetadata, LOG);
 
         assertEquals(4, result.size());
