@@ -40,6 +40,7 @@ import java.util.Set;
 @Singleton
 public class DefaultGuideParser implements GuideParser {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGuideParser.class);
+    protected final GuidesConfiguration guidesConfiguration;
     protected final JsonSchema jsonSchema;
     protected final JsonMapper jsonMapper;
     protected final GuideMerger guideMerger;
@@ -51,10 +52,12 @@ public class DefaultGuideParser implements GuideParser {
      * @param jsonMapper         the JSON mapper
      * @param guideMerger        the guide merger
      */
-    public DefaultGuideParser(JsonSchemaProvider jsonSchemaProvider,
+    public DefaultGuideParser(GuidesConfiguration guidesConfiguration,
+                              JsonSchemaProvider jsonSchemaProvider,
                               JsonMapper jsonMapper,
                               GuideMerger guideMerger) {
-        this.jsonSchema = jsonSchemaProvider.getSchema();
+        this.guidesConfiguration = guidesConfiguration;
+        this.jsonSchema = guidesConfiguration.isValidateMetadata() ? jsonSchemaProvider.getSchema() : null;
         this.jsonMapper = jsonMapper;
         this.guideMerger = guideMerger;
     }
@@ -109,7 +112,7 @@ public class DefaultGuideParser implements GuideParser {
         Guide guide;
         try {
             guide = jsonMapper.readValue(content, Guide.class);
-            if (guide.isPublish()) {
+            if (guide.isPublish() && jsonSchema != null) {
                 Set<ValidationMessage> assertions = jsonSchema.validate(content, InputFormat.JSON);
 
                 if (!assertions.isEmpty()) {

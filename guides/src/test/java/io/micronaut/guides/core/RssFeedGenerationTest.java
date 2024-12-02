@@ -23,6 +23,9 @@ class RssFeedGenerationTest {
     RssFeedGenerator rssFeedGenerator;
 
     @Inject
+    GuidesConfiguration guidesConfiguration;
+
+    @Inject
     GuideMerger guideMerger;
 
     private List<? extends Guide> guides;
@@ -30,7 +33,7 @@ class RssFeedGenerationTest {
     @BeforeEach
     public void setup() {
         File file = new File("src/test/resources/guides");
-        GuideParser guideParser = new DefaultGuideParser(jsonSchemaProvider, jsonMapper, guideMerger);
+        GuideParser guideParser = new DefaultGuideParser(guidesConfiguration, jsonSchemaProvider, jsonMapper, guideMerger);
         this.guides = guideParser.parseGuidesMetadata(file, "metadata.json")
                 .stream().filter(Guide::isPublish).toList();
     }

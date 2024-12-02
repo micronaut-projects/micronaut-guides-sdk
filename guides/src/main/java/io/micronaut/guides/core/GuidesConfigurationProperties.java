@@ -46,6 +46,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private static final String ENV_GITHUB_WORKFLOW = "GITHUB_WORKFLOW";
     private static final String SYS_PROP_MICRONAUT_GUIDE = "micronaut.guide";
     private static final String DEFAULT_GUIDES_DIR = "guides";
+    private final boolean DEFAULT_VALIDATE_METADATA = true;
 
     private String guidesDir = DEFAULT_GUIDES_DIR;
     private String title = "Micronaut Guides";
@@ -60,6 +61,20 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private String envGithubWorkflow = ENV_GITHUB_WORKFLOW;
     private String sysPropMicronautGuide = SYS_PROP_MICRONAUT_GUIDE;
     private String version = DEFAULT_VERSION;
+    private boolean validateMetadata = DEFAULT_VALIDATE_METADATA;
+
+    public void setValidateMetadata(boolean validateMetadata) {
+        this.validateMetadata = validateMetadata;
+    }
+
+    /**
+     *
+     * @return Whether the Guide metadata should be validated against the JSON Schema
+     */
+    @Override
+    public boolean isValidateMetadata() {
+        return validateMetadata;
+    }
 
     /**
      * Gets the JDK versions supported by GraalVM.
