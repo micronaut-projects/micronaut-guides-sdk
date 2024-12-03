@@ -1,0 +1,61 @@
+# Setting up Your Desktop
+
+= {doctitle}
+
+++++
+<div class="toc-floating">
+    <div class="toc-bullets">
+              <li class="toc-bullets-main toc-bullets-highlight">
+              <a href="/gdk/get-started/setting-up-desktop/" class="_icon-book activeMenuItem">
+                Setting up Your Desktop
+              </a>
+            </li>
+              <li class="toc-bullets-sub">
+                <a href="/gdk/get-started/installing-gdk-cli/">
+                  Installing the GDK CLI
+                </a>
+              </li>
+              <li class="toc-bullets-sub">
+                <a href="/gdk/vscode-tools/graal-development-kit-extension-pack/">
+                  Graal Development Kit for Micronaut Extension Pack
+                </a>
+              </li>
+              <li class="toc-bullets-main">
+              <a href="/gdk/get-started/using-gdk-launcher/" class="_icon-book">
+                Using the GDK Launcher
+              </a>
+            </li>
+              <li class="toc-bullets-main">
+              <a href="/gdk/get-started/using-gdk-cli/" class="_icon-book">
+                Using the GDK CLI
+              </a>
+            </li>
+    </div>
+</div>
+++++
+
+This guide describes how to set up your desktop development environment.
+
+## GraalVM Native Image
+
+* To install GraalVM Native Image, see https://www.graalvm.org/downloads/)[Download GraalVM].
+* To start using GraalVM Native Image, see https://www.graalvm.org/latest/reference-manual/native-image/guides/)[Native Image User Guides]
+
+> Note: If you are using Apple XCode 14.2 or later on AMD64 architecture, you may find that your native executable will not run when using GraalVM Enterprise Edition. This is a https://github.com/oracle/graal/issues/5778[known issue], for which we are currently investigating a resolution. In the meantime, as a workaround, download an earlier version of XCode from Apple.
+
+## Graal Development Kit for Micronaut Command Line Interface (CLI)
+
+* To install the Graal Development Kit for Micronaut (GDK) CLI, see https://graal.cloud/gdk/get-started/installing-gdk-cli/)[Installing the GDK CLI].
+* To start using the GDK CLI, see https://graal.cloud/gdk/get-started/using-gdk-cli[Using the GDK CLI]
+
+## Graal Development Kit for Micronaut Extension Pack for Visual Studio Code
+
+* To install the _Graal Development Kit for Micronaut_ Extension Pack in Visual Studio Code (VS Code), see https://graal.cloud/gdk/vscode-tools/graal-development-kit-extension-pack/)[Installing the Graal Development Kit for Micronaut Extension Pack]
+* To start using Graal Cloud Native Tools in VS Code, see https://graal.cloud/gdk/vscode-tools/using-gdk-vscode-tools/)[Using the Graal Development Kit for Micronaut Launcher and OCI DevOps Tools in VS Code](.
+
+## GDK Launcher
+
+* To start using the GDK Launcher, see https://graal.cloud/gdk/get-started/using-gdk-launcher/)[Using the GDK Launcher].
+
+### Related Documentation
+* https://graal.cloud/gdk/get-started/setting-up-cloud-accounts/)[Setting up Your Cloud Accounts].

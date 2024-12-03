@@ -40,6 +40,9 @@ public class IndexGeneratorReplacement extends DefaultIndexGenerator {
     protected String guidesContent(List<? extends Guide> guides) {
         StringBuilder sb = new StringBuilder();
         for (Guide guide : guides) {
+            if (guide.getApps().isEmpty()) {
+                continue;
+            }
             sb.append(guideContent(guide));
         }
         return sb.toString();

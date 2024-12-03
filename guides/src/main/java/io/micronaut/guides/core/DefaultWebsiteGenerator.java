@@ -22,6 +22,9 @@ import io.micronaut.guides.core.asciidoc.AsciidocConverter;
 import io.micronaut.guides.core.html.GuideMatrixGenerator;
 import io.micronaut.guides.core.html.GuidePageGenerator;
 import io.micronaut.guides.core.html.IndexGenerator;
+import io.micronaut.starter.api.TestFramework;
+import io.micronaut.starter.options.BuildTool;
+import io.micronaut.starter.options.Language;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -106,55 +109,46 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         }
         List<? extends Guide> guides = guideParser.parseGuidesMetadata(guidesInputDirectory);
         for (Guide guide : guides) {
-            File guideOutput = new File(outputDirectory, guide.getSlug());
-            guideOutput.mkdir();
-            guideProjectGenerator.generate(guideOutput, guide);
             File guideInputDirectory = new File(guidesInputDirectory, guide.getSlug());
-            filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide);
-
-            // Test script generation
-            String testScript = testScriptGenerator.generateTestScript(new ArrayList<>(List.of(guide)));
-            saveToFile(testScript, guideOutput, FILENAME_TEST_SH, true);
-
-            // Native Test script generation
-            String nativeTestScript = testScriptGenerator.generateNativeTestScript(new ArrayList<>(List.of(guide)));
-            saveToFile(nativeTestScript, guideOutput, FILENAME_NATIVE_TEST_SH, true);
-
             File asciidocFile = new File(guideInputDirectory, guide.getSlug() + ".adoc");
             if (!asciidocFile.exists()) {
                 throw new ConfigurationException("asciidoc file not found for " + guide.getSlug());
             }
 
-            List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
             String asciidoc = readFile(asciidocFile);
-            for (GuidesOption guidesOption : guideOptions) {
-                String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
 
-                // Zip creation
-                File zipFile = new File(outputDirectory, name + ".zip");
-                File folderFile = new File(guideOutput, name);
-                guideProjectZipper.zipDirectory(folderFile.getAbsolutePath(), zipFile.getAbsolutePath());
+            if (guide.getApps().isEmpty()) {
+                renderHtml(asciidoc, guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT), inputDirectory, outputDirectory, guide.getSlug(), guideInputDirectory);
+            } else {
+                File guideOutput = new File(outputDirectory, guide.getSlug());
+                guideOutput.mkdir();
+                guideProjectGenerator.generate(guideOutput, guide);
+                filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide);
 
-                // Macro substitution
-                String optionAsciidoc = macroSubstitution.substitute(asciidoc, guide, guidesOption);
+                // Test script generation
+                String testScript = testScriptGenerator.generateTestScript(new ArrayList<>(List.of(guide)));
+                saveToFile(testScript, guideOutput, FILENAME_TEST_SH, true);
 
-                // HTML rendering
+                // Native Test script generation
+                String nativeTestScript = testScriptGenerator.generateNativeTestScript(new ArrayList<>(List.of(guide)));
+                saveToFile(nativeTestScript, guideOutput, FILENAME_NATIVE_TEST_SH, true);
 
-                String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, outputDirectory.getAbsolutePath(), new File(guideOutput, name).getAbsolutePath());
+                List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
+                for (GuidesOption guidesOption : guideOptions) {
+                    String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
 
-                String tocHtml = extractToc(optionHtml);
+                    // Zip creation
+                    File zipFile = new File(outputDirectory, name + ".zip");
+                    File folderFile = new File(guideOutput, name);
+                    guideProjectZipper.zipDirectory(folderFile.getAbsolutePath(), zipFile.getAbsolutePath());
 
-                String guideOptionHtmlFileName = name + ".html";
-                optionHtml = optionHtml.replace(tocHtml + "\n", "");
-                optionHtml = guidePageGenerator.render(tocHtml, optionHtml);
-                optionHtml = optionHtml.replace("{title}", guide.getTitle());
-                optionHtml = optionHtml.replace("{section}", guide.getCategories().get(0));
-                optionHtml = optionHtml.replace("{section-link}", "https://graal.cloud/gdk/docs/gdk-modules/" + guide.getCategories().get(0).toLowerCase() + "/");
-                saveToFile(optionHtml, outputDirectory, guideOptionHtmlFileName);
+                    renderHtml(asciidoc, guide, guidesOption, inputDirectory, outputDirectory, name, guideOutput);
+                }
+
+                String guideMatrixHtml = guideMatrixGenerator.renderIndex(guide);
+                saveToFile(guideMatrixHtml, outputDirectory, guide.getSlug() + ".html");
+
             }
-
-            String guideMatrixHtml = guideMatrixGenerator.renderIndex(guide);
-            saveToFile(guideMatrixHtml, outputDirectory, guide.getSlug() + ".html");
         }
 
         String indexHtml = indexGenerator.renderIndex(guides);
@@ -167,48 +161,112 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         saveToFile(json, outputDirectory, jsonFeedConfiguration.getFilename());
     }
 
-    private String extractToc(String html) {
+    private void renderHtml(String asciidoc, Guide guide, GuidesOption option, File inputDirectory, File outputDirectory, String name, File guideOutput) throws IOException {
+        // Macro substitution
+        String optionAsciidoc = macroSubstitution.substitute(asciidoc, guide, option);
+
+        // HTML rendering
+
+        String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, outputDirectory.getAbsolutePath(), new File(guideOutput, name).getAbsolutePath());
+
+        List<String> extractedToc = extractToc(optionHtml);
+        String tocHtml;
+
+        if (extractedToc.isEmpty()) {
+            tocHtml = "";
+        } else {
+            tocHtml = extractedToc.get(0);
+            for (String toc : extractedToc) {
+                optionHtml = optionHtml.replace(toc + "\n", "");
+            }
+        }
+
+        String guideOptionHtmlFileName = name + ".html";
+        optionHtml = guidePageGenerator.render(tocHtml, optionHtml);
+        optionHtml = optionHtml.replace("{title}", guide.getTitle());
+        if (guide.getCategories().isEmpty()) {
+            optionHtml = optionHtml.replace("{section}", "");
+            optionHtml = optionHtml.replace("{section-link}", "");
+
+        } else {
+            optionHtml = optionHtml.replace("{section}", guide.getCategories().get(0));
+            optionHtml = optionHtml.replace("{section-link}", "https://graal.cloud/gdk/docs/gdk-modules/" + guide.getCategories().get(0).toLowerCase() + "/");
+        }
+        saveToFile(optionHtml, outputDirectory, guideOptionHtmlFileName);
+    }
+
+    private List<String> extractToc(String html) {
+        List<String> tocDivs = new ArrayList<>();
         String openDivPattern = "<div";
         String closeDivPattern = "</div>";
+        String classAttribute = "class=\"toc-floating\"";
         String idAttribute = "id=\"toc\"";
 
-        int startIndex = html.indexOf(openDivPattern + " " + idAttribute);
+        int startIndex = html.indexOf(openDivPattern + " " + classAttribute);
+        if (startIndex != -1) {
+            int openingTagEnd = html.indexOf(">", startIndex);
+            if (openingTagEnd != -1) {
+                int nestedDivCount = 0;
+                int currentIndex = openingTagEnd + 1;
+
+                while (currentIndex < html.length()) {
+                    int nextOpenDiv = html.indexOf(openDivPattern, currentIndex);
+                    int nextCloseDiv = html.indexOf(closeDivPattern, currentIndex);
+
+                    if (nextCloseDiv == -1) {
+                        break;
+                    }
+
+                    if (nextOpenDiv != -1 && nextOpenDiv < nextCloseDiv) {
+                        nestedDivCount++;
+                        currentIndex = nextOpenDiv + openDivPattern.length();
+                    } else {
+                        if (nestedDivCount == 0) {
+                            tocDivs.add(html.substring(startIndex, nextCloseDiv + closeDivPattern.length()));
+                            break;
+                        }
+                        nestedDivCount--;
+                        currentIndex = nextCloseDiv + closeDivPattern.length();
+                    }
+                }
+            }
+        }
+
+        startIndex = html.indexOf(openDivPattern + " " + idAttribute);
         if (startIndex == -1) {
             startIndex = html.indexOf(openDivPattern + " id='toc'");
-            if (startIndex == -1) {
-                return null;
-            }
         }
 
-        int openingTagEnd = html.indexOf(">", startIndex);
-        if (openingTagEnd == -1) {
-            return null;
-        }
+        if (startIndex != -1) {
+            int openingTagEnd = html.indexOf(">", startIndex);
+            if (openingTagEnd != -1) {
+                int nestedDivCount = 0;
+                int currentIndex = openingTagEnd + 1;
 
-        int nestedDivCount = 0;
-        int currentIndex = openingTagEnd + 1;
+                while (currentIndex < html.length()) {
+                    int nextOpenDiv = html.indexOf(openDivPattern, currentIndex);
+                    int nextCloseDiv = html.indexOf(closeDivPattern, currentIndex);
 
-        while (currentIndex < html.length()) {
-            int nextOpenDiv = html.indexOf(openDivPattern, currentIndex);
-            int nextCloseDiv = html.indexOf(closeDivPattern, currentIndex);
+                    if (nextCloseDiv == -1) {
+                        break;
+                    }
 
-            if (nextCloseDiv == -1) {
-                return null;
-            }
-
-            if (nextOpenDiv != -1 && nextOpenDiv < nextCloseDiv) {
-                nestedDivCount++;
-                currentIndex = nextOpenDiv + openDivPattern.length();
-            } else {
-                if (nestedDivCount == 0) {
-                    return html.substring(startIndex, nextCloseDiv + closeDivPattern.length());
+                    if (nextOpenDiv != -1 && nextOpenDiv < nextCloseDiv) {
+                        nestedDivCount++;
+                        currentIndex = nextOpenDiv + openDivPattern.length();
+                    } else {
+                        if (nestedDivCount == 0) {
+                            tocDivs.add(html.substring(startIndex, nextCloseDiv + closeDivPattern.length()));
+                            break;
+                        }
+                        nestedDivCount--;
+                        currentIndex = nextCloseDiv + closeDivPattern.length();
+                    }
                 }
-                nestedDivCount--;
-                currentIndex = nextCloseDiv + closeDivPattern.length();
             }
         }
 
-        return null;
+        return tocDivs;
     }
 
     private void saveToFile(String content, File outputDirectory, String filename) throws IOException {
