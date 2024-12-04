@@ -117,7 +117,7 @@ public class Guide {
     @Nullable
     private String slug;
 
-    @JsonPropertyDescription("The guide's folder. If not specified, it is the same as the slug")
+    @JsonPropertyDescription("The guide's folder.")
     @Nullable
     private String folder;
 
