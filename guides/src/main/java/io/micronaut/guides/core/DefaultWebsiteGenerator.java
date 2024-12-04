@@ -22,6 +22,7 @@ import io.micronaut.guides.core.asciidoc.AsciidocConverter;
 import io.micronaut.guides.core.html.GuideMatrixGenerator;
 import io.micronaut.guides.core.html.GuidePageGenerator;
 import io.micronaut.guides.core.html.IndexGenerator;
+import io.micronaut.guides.core.html.ModuleIndexGenerator;
 import io.micronaut.starter.api.TestFramework;
 import io.micronaut.starter.options.BuildTool;
 import io.micronaut.starter.options.Language;
@@ -49,6 +50,8 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     private static final String FILENAME_TEST_SH = "test.sh";
     private static final String FILENAME_NATIVE_TEST_SH = "native-test.sh";
     private static final String FILENAME_INDEX_HTML = "index.html";
+    private static final String FILENAME_MODULE_INDEX_HTML = "module_index.html";
+
 
     private final GuideParser guideParser;
     private final GuideProjectGenerator guideProjectGenerator;
@@ -65,6 +68,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final JsonFeedConfiguration jsonFeedConfiguration;
     private final GuidesConfiguration guidesConfiguration;
     private final GuidePageGenerator guidePageGenerator;
+    private final ModuleIndexGenerator moduleIndexGenerator;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     DefaultWebsiteGenerator(GuideParser guideParser,
@@ -80,7 +84,9 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                             GuideProjectZipper guideProjectZipper,
                             RssFeedConfiguration rssFeedConfiguration,
                             JsonFeedConfiguration jsonFeedConfiguration,
-                            GuidesConfiguration guidesConfiguration, GuidePageGenerator guidePageGenerator) {
+                            GuidesConfiguration guidesConfiguration,
+                            GuidePageGenerator guidePageGenerator,
+                            ModuleIndexGenerator moduleIndexGenerator) {
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
         this.jsonFeedGenerator = jsonFeedGenerator;
@@ -96,6 +102,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.jsonFeedConfiguration = jsonFeedConfiguration;
         this.guidesConfiguration = guidesConfiguration;
         this.guidePageGenerator = guidePageGenerator;
+        this.moduleIndexGenerator = moduleIndexGenerator;
     }
 
     @Override
@@ -153,6 +160,9 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
 
         String indexHtml = indexGenerator.renderIndex(guides);
         saveToFile(indexHtml, outputDirectory, FILENAME_INDEX_HTML);
+
+        String moduleIndexHtml = moduleIndexGenerator.renderIndex(guides);
+        saveToFile(moduleIndexHtml, outputDirectory, FILENAME_MODULE_INDEX_HTML);
 
         String rss = rssFeedGenerator.rssFeed(guides);
         saveToFile(rss, outputDirectory, rssFeedConfiguration.getFilename());
