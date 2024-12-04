@@ -26,10 +26,10 @@ public interface GuidePageGenerator {
     /**
      * Renders a full HTML Page.
      *
-     * @param toc Table Of Contents HTML
+     * @param toc  Table Of Contents HTML
      * @param html the guide content in HTML
      * @return the rendered index as a string
      */
     @NonNull
-    String render(@NonNull @NotBlank String toc, @NonNull @NotBlank String html);
+    String render(@NonNull String toc, @NonNull @NotBlank String html);
 }
