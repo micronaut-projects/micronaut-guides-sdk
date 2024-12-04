@@ -102,9 +102,8 @@ public class DefaultGuideParser implements GuideParser {
     }
 
     /**
-     *
-     * @param guidesDir Guides directory
-     * @param content Metadata content
+     * @param guidesDir  Guides directory
+     * @param content    Metadata content
      * @param configFile Configuration file
      * @return Guide
      */
@@ -125,8 +124,13 @@ public class DefaultGuideParser implements GuideParser {
             return Optional.empty();
         }
 
-        guide.setSlug(guidesDir.getName());
-        guide.setAsciidoctor(guide.isPublish() ? guidesDir.getName() + ".adoc" : null);
+        guide.setFolder(guidesDir.getName());
+        if (guide.getSlug() == null) {
+            guide.setSlug(guidesDir.getName());
+        }
+        if (guide.getAsciidoctor() == null) {
+            guide.setAsciidoctor(guide.isPublish() ? guide.getSlug() + ".adoc" : null);
+        }
 
         return Optional.of(guide);
     }

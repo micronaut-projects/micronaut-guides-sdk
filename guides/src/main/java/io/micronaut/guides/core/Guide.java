@@ -117,6 +117,10 @@ public class Guide {
     @Nullable
     private String slug;
 
+    @JsonPropertyDescription("The guide's folder. If not specified, it is the same as the slug")
+    @Nullable
+    private String folder;
+
     @JsonPropertyDescription("Whether the guide should be published, it defaults to true. You can set it to false for draft or base guides")
     @Nullable
     @JsonProperty(defaultValue = StringUtils.TRUE)
@@ -465,6 +469,24 @@ public class Guide {
      */
     public void setSlug(@Nullable String slug) {
         this.slug = slug;
+    }
+
+    /**
+     * Sets the slug for the guide.
+     *
+     * @param folder The folder to set.
+     */
+    public void setFolder(@Nullable String folder) {
+        this.folder = folder;
+    }
+
+    /**
+     * Gets the folder for the guide.
+     *
+     * @return The folder, or null if not specified.
+     */
+    public @Nullable String getFolder() {
+        return folder;
     }
 
     /**

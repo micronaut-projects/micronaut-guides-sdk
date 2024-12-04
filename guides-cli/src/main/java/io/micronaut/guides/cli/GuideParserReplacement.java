@@ -1,5 +1,7 @@
 package io.micronaut.guides.cli;
 
+import com.networknt.schema.InputFormat;
+import com.networknt.schema.ValidationMessage;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.guides.core.*;
 import io.micronaut.json.JsonMapper;
@@ -11,8 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
-import com.networknt.schema.InputFormat;
-import com.networknt.schema.ValidationMessage;
 
 @Singleton
 @Replaces(GuideParser.class)
@@ -50,8 +50,13 @@ public class GuideParserReplacement extends DefaultGuideParser {
             return Optional.empty();
         }
 
-        guide.setSlug(guidesDir.getName());
-        guide.setAsciidoctor(guide.isPublish() ? guidesDir.getName() + ".adoc" : null);
+        guide.setFolder(guidesDir.getName());
+        if (guide.getSlug() == null) {
+            guide.setSlug(guidesDir.getName());
+        }
+        if (guide.getAsciidoctor() == null) {
+            guide.setAsciidoctor(guide.isPublish() ? guide.getSlug() + ".adoc" : null);
+        }
 
         return Optional.of(guide);
     }
