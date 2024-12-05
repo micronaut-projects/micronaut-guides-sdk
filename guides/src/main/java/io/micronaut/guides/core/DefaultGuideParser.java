@@ -125,7 +125,7 @@ public class DefaultGuideParser implements GuideParser {
             return Optional.empty();
         }
 
-        guide.setFolder(guidesDir.getAbsolutePath());
+        guide.setFolder(guidesDir);
         if (guide.getSlug() == null) {
             guide.setSlug(guidesDir.getName());
         }

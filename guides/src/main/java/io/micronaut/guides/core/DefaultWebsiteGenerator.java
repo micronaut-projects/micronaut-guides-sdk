@@ -109,7 +109,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         }
         List<? extends Guide> guides = guideParser.parseGuidesMetadata(guidesInputDirectory);
         for (Guide guide : guides) {
-            File guideInputDirectory = new File(guide.getFolder());
+            File guideInputDirectory = guide.getFolder();
             File asciidocFile = new File(guideInputDirectory, guide.getAsciidoctor());
             if (!asciidocFile.exists()) {
                 throw new ConfigurationException("asciidoc file not found for " + guide.getSlug());
