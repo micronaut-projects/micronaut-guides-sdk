@@ -15,7 +15,9 @@
  */
 package io.micronaut.guides.core;
 
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.starter.options.JdkVersion;
+import io.micronaut.starter.options.Language;
 
 import java.util.List;
 
@@ -23,6 +25,10 @@ import java.util.List;
  * GuidesConfiguration is an interface that defines the configuration settings for guides.
  */
 public interface GuidesConfiguration {
+
+    @NonNull
+    List<Language> getDefaultLanguages();
+
     /**
      * Returns the guides directory.
      *

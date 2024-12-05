@@ -20,6 +20,7 @@ import com.networknt.schema.JsonSchema;
 import com.networknt.schema.ValidationMessage;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.ArrayUtils;
+import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.json.JsonMapper;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
@@ -136,7 +137,7 @@ public class DefaultGuideParser implements GuideParser {
             LOG.trace("Error parsing guide metadata {}. Skipping guide.", configFile, e);
             return Optional.empty();
         }
-        populateFolderAndSlugAndAsciidoctor(guidesDir, guide);
+        populateGuideDefaultMetadata(guidesDir, guide);
         return Optional.of(guide);
     }
 
@@ -166,7 +167,10 @@ public class DefaultGuideParser implements GuideParser {
      * @param guide Guide
      * @param <T> Guide
      */
-    protected <T extends Guide> void populateFolderAndSlugAndAsciidoctor(File guidesDir, T guide) {
+    protected <T extends Guide> void populateGuideDefaultMetadata(File guidesDir, T guide) {
+        if (CollectionUtils.isEmpty(guide.getLanguages())) {
+            guide.setLanguages(guidesConfiguration.getDefaultLanguages());
+        }
         guide.setFolder(guidesDir);
         if (guide.getSlug() == null) {
             guide.setSlug(guidesDir.getName());

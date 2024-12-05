@@ -365,9 +365,7 @@ public class Guide {
      * @return The list of supported languages, or null if not specified.
      */
     public @Nullable List<Language> getLanguages() {
-        return languages == null
-                ? List.of(Language.JAVA, Language.GROOVY, Language.KOTLIN)
-                : languages;
+        return languages;
     }
 
     /**
