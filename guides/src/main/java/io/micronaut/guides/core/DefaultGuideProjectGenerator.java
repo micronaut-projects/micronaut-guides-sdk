@@ -129,9 +129,8 @@ public class DefaultGuideProjectGenerator implements GuideProjectGenerator {
         // typical guides use 'default' as name, multi-project guides have different modules
         String folder = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
 
-        String appName = app.getName().equals(guidesConfiguration.getDefaultAppName()) ? EMPTY_STRING : app.getName();
-
-        Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName);
+        Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder,
+            guide.getApps().size() > 1 ? app.getName() : EMPTY_STRING);
         File destination = destinationPath.toFile();
         destination.mkdir();
 

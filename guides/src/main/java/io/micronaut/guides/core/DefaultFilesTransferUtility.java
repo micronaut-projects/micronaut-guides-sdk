@@ -167,7 +167,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         List<GuidesOption> guidesOptionList = GuideGenerationUtils.guidesOptions(guide, LOG);
         for (GuidesOption guidesOption : guidesOptionList) {
             for (App app : guide.getApps()) {
-                String appName = StringUtils.isEmpty(app.getName()) || app.getName().equals(guidesConfiguration.getDefaultAppName()) ? EMPTY_STRING : app.getName();
+                String appName = guide.getApps().size() > 1 ? app.getName() : EMPTY_STRING;
                 String folder = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
                 Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName);
                 File destination = destinationPath.toFile();
