@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "uri": "https://micronaut-projects.github.io/micronaut-guides-sdk/guide-metadata.schema.json",
   "type": "object",
-  "required": ["title","intro","authors","categories","publicationDate"],
+  "required": ["title","intro","categories","publicationDate"],
   "properties": {
     "title": {
       "description": "The guide's title",
@@ -63,7 +63,7 @@
       }
     },
     "tags": {
-      "description": "List of tags added to the guide. features are added automatically as tags. No need to repeat them here", 
+      "description": "List of tags added to the guide. features are added automatically as tags. No need to repeat them here",
       "type": "array",
       "items": {
         "type": "string"
