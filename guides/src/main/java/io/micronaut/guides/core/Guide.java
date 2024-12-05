@@ -52,10 +52,6 @@ public class Guide {
     @NotBlank
     private String intro;
 
-    @JsonPropertyDescription("The guide project name")
-    @Nullable
-    private String projectName;
-
     @JsonPropertyDescription("The guide's authors")
     @Nullable
     private List<String> authors;
@@ -158,24 +154,6 @@ public class Guide {
      */
     public void setTitle(@NonNull @NotBlank String title) {
         this.title = title;
-    }
-
-    /**
-     * Gets the projectName of the guide.
-     *
-     * @return The projectName of the guide.
-     */
-    public @Nullable String setProjectName() {
-        return projectName;
-    }
-
-    /**
-     * Sets the projectName of the guide.
-     *
-     * @param projectName The projectName to set.
-     */
-    public void setProjectName(@Nullable String projectName) {
-        this.projectName = projectName;
     }
 
     /**
