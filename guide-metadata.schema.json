@@ -8,6 +8,10 @@
       "description": "The guide's title",
       "type": "string"
     },
+    "projectName": {
+      "description": "Root Project Name in Multi-module tutorials",
+      "type": "string"
+    },
     "authors": {
       "description": "The guide's authors",
       "type": "array",
