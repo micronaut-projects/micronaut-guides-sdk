@@ -21,6 +21,7 @@ import com.networknt.schema.ValidationMessage;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.ArrayUtils;
 import io.micronaut.core.util.CollectionUtils;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.json.JsonMapper;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
@@ -177,6 +178,11 @@ public class DefaultGuideParser implements GuideParser {
         }
         if (guide.getAsciidoctor() == null) {
             guide.setAsciidoctor(guide.isPublish() ? guide.getSlug() + ".adoc" : null);
+        }
+        for (App app : guide.getApps()) {
+            if (StringUtils.isEmpty(app.getName())) {
+                app.setName(guidesConfiguration.getDefaultAppName());
+            }
         }
     }
 }
