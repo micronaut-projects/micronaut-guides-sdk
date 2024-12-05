@@ -48,6 +48,7 @@ public class DefaultGuideParser implements GuideParser {
     /**
      * Constructs a new DefaultGuideParser.
      *
+     * @param guidesConfiguration Guides Configuration
      * @param jsonSchemaProvider the JSON schema provider
      * @param jsonMapper         the JSON mapper
      * @param guideMerger        the guide merger

@@ -24,8 +24,12 @@ import java.util.Optional;
  * @param name       the name of the macro
  * @param target     the target of the macro
  * @param attributes the list of attributes associated with the macro
+ * @param raw Raw String
  */
 public record AsciidocMacro(String name, String target, List<Attribute> attributes, String raw) {
+    /**
+     * Asciidoc Macro Separator.
+     */
     public static final String MACRO_NAME_SEPARATOR = ":";
     public static final String ATTRIBUTE_SEPARATOR = ",";
     private static final String MACRO_OPEN_BRACKET = "[";
