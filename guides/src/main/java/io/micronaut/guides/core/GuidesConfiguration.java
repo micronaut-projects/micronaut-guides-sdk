@@ -25,7 +25,6 @@ import java.util.List;
  * GuidesConfiguration is an interface that defines the configuration settings for guides.
  */
 public interface GuidesConfiguration {
-
     @NonNull
     List<Language> getDefaultLanguages();
 
@@ -153,4 +152,7 @@ public interface GuidesConfiguration {
      * @return Whether the Guide metadata should be validated against the JSON Schema
      */
     boolean isValidateMetadata();
+
+    @NonNull
+    List<String> getZipIncludesExtensions();
 }

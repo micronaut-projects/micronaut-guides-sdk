@@ -18,6 +18,8 @@ package io.micronaut.guides.core;
 import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.util.ArrayUtils;
+import io.micronaut.core.util.StringUtils;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -29,7 +31,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static io.micronaut.core.util.StringUtils.EMPTY_STRING;
@@ -127,6 +131,19 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      */
     private static void copyFile(File inputDir, File destinationRoot, String filePath) throws IOException {
         File sourceFile = new File(inputDir, filePath);
+        copyFile(inputDir, destinationRoot, sourceFile);
+    }
+
+    /**
+     * Copies a file from the input directory to the destination root.
+     *
+     * @param inputDir        the input directory
+     * @param destinationRoot the destination root
+     * @param sourceFile sourceFile
+     * @throws IOException if an I/O error occurs during file copy
+     */
+    private static void copyFile(File inputDir, File destinationRoot, File sourceFile) throws IOException {
+        String filePath = sourceFile.getAbsolutePath().substring(inputDir.getAbsolutePath().length());
         File destinationFile = new File(destinationRoot, filePath);
 
         File destinationFileDir = destinationFile.getParentFile();
@@ -150,7 +167,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         List<GuidesOption> guidesOptionList = GuideGenerationUtils.guidesOptions(guide, LOG);
         for (GuidesOption guidesOption : guidesOptionList) {
             for (App app : guide.getApps()) {
-                String appName = app.getName().equals(guidesConfiguration.getDefaultAppName()) ? EMPTY_STRING : app.getName();
+                String appName = StringUtils.isEmpty(app.getName()) || app.getName().equals(guidesConfiguration.getDefaultAppName()) ? EMPTY_STRING : app.getName();
                 String folder = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
                 Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName);
                 File destination = destinationPath.toFile();
@@ -187,16 +204,34 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                         }
                     }
                 }
-
+                File destinationRoot = new File(outputDirectory.getAbsolutePath(), folder);
                 if (guide.getZipIncludes() != null) {
-                    File destinationRoot = new File(outputDirectory.getAbsolutePath(), folder);
                     for (String zipInclude : guide.getZipIncludes()) {
                         copyFile(inputDirectory, destinationRoot, zipInclude);
                     }
                 }
+                for (File f : walkZipIncludeExtensions(inputDirectory)) {
+                    copyFile(inputDirectory, destinationRoot, f);
+                }
                 addLicenses(new File(outputDirectory.getAbsolutePath(), folder));
             }
         }
+    }
+
+    private List<File> walkZipIncludeExtensions(File dir) {
+        List<File> result = new ArrayList<>();
+        File[] list = dir.listFiles();
+        if (ArrayUtils.isEmpty(list)) {
+            return Collections.emptyList();
+        }
+        for (File f : list) {
+            if (f.isDirectory()) {
+                result.addAll(walkZipIncludeExtensions(f));
+            } else if (guidesConfiguration.getZipIncludesExtensions().stream().anyMatch(ext -> f.getName().endsWith(ext))) {
+                result.add(f);
+            }
+        }
+        return result;
     }
 
     /**

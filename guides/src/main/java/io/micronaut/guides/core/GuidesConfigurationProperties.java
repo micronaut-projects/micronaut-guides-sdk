@@ -48,6 +48,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private static final String SYS_PROP_MICRONAUT_GUIDE = "micronaut.guide";
     private static final String DEFAULT_GUIDES_DIR = "guides";
     private static final List<Language> JAVA_KOTLIN_GROOVY = List.of(Language.JAVA, Language.GROOVY, Language.KOTLIN);
+    private static final List<String> DEFAULT_ZIP_INCLUDES_EXTENSIONS = List.of(".sh", ".bat");
     private final boolean DEFAULT_VALIDATE_METADATA = true;
     private String guidesDir = DEFAULT_GUIDES_DIR;
     private String title = "Micronaut Guides";
@@ -64,6 +65,21 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private String version = DEFAULT_VERSION;
     private boolean validateMetadata = DEFAULT_VALIDATE_METADATA;
     private List<Language> defaultLanguages = JAVA_KOTLIN_GROOVY;
+
+    private List<String> zipIncludesExtensions = DEFAULT_ZIP_INCLUDES_EXTENSIONS;
+
+    /**
+     *
+     * @param zipIncludesExtensions File extensions to be zip included by default
+     */
+    public void setZipIncludesExtensions(List<String> zipIncludesExtensions) {
+        this.zipIncludesExtensions = zipIncludesExtensions;
+    }
+
+    @Override
+    public List<String> getZipIncludesExtensions() {
+        return zipIncludesExtensions;
+    }
 
     /**
      *
