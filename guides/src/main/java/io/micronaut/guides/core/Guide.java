@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.util.StringUtils;
-import io.micronaut.jsonschema.JsonSchema;
 import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.starter.api.TestFramework;
 import io.micronaut.starter.options.BuildTool;
@@ -40,7 +39,6 @@ import static io.micronaut.guides.core.GuideUtils.addAllSafe;
  * Represents a guide metadata.
  **/
 @Serdeable
-@JsonSchema
 public class Guide {
     @JsonPropertyDescription("The guide's title")
     @NonNull

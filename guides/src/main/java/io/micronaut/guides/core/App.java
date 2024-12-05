@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.util.StringUtils;
-import io.micronaut.jsonschema.JsonSchema;
 import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.starter.api.TestFramework;
 import io.micronaut.starter.application.ApplicationType;
@@ -37,7 +36,6 @@ import static io.micronaut.guides.core.GuideUtils.addAllSafe;
  * Represents an application metadata.
  */
 @Serdeable
-@JsonSchema
 public class App {
     public static final String SPOTLESS = "spotless";
 
