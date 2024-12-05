@@ -57,8 +57,7 @@ public class Guide {
     private String projectName;
 
     @JsonPropertyDescription("The guide's authors")
-    @NotEmpty
-    @NonNull
+    @Nullable
     private List<String> authors;
 
     @JsonPropertyDescription("The guide's categories")
@@ -202,7 +201,8 @@ public class Guide {
      *
      * @return The list of authors.
      */
-    public @NotEmpty @NonNull List<String> getAuthors() {
+    @Nullable
+    public List<String> getAuthors() {
         return authors != null ? authors : Collections.emptyList();
     }
 
@@ -211,7 +211,7 @@ public class Guide {
      *
      * @param authors The list of authors to set.
      */
-    public void setAuthors(@NotEmpty @NonNull List<String> authors) {
+    public void setAuthors(@Nullable List<String> authors) {
         this.authors = authors;
     }
 
