@@ -19,6 +19,7 @@ import com.networknt.schema.InputFormat;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.ValidationMessage;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.util.ArrayUtils;
 import io.micronaut.json.JsonMapper;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
@@ -29,10 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Class that provides methods to parse guide metadata.
@@ -68,10 +66,11 @@ public class DefaultGuideParser implements GuideParser {
     public List<? extends Guide> parseGuidesMetadata(@NonNull @NotNull File guidesDir, @NonNull @NotNull String metadataConfigName) {
         List<Guide> metadatas = new ArrayList<>();
 
-        File[] dirs = guidesDir.listFiles(File::isDirectory);
-        if (dirs == null) {
+        List<File> dirs = walk(guidesDir.getAbsolutePath());
+        if (dirs.isEmpty()) {
             return metadatas;
         }
+
         for (File dir : dirs) {
             parseGuideMetadata(dir, metadataConfigName).ifPresent(metadatas::add);
         }
@@ -79,6 +78,24 @@ public class DefaultGuideParser implements GuideParser {
         guideMerger.mergeGuides(metadatas);
 
         return metadatas;
+    }
+
+    private List<File> walk(String path) {
+        List<File> result = new ArrayList<>();
+        File root = new File(path);
+        File[] list = root.listFiles();
+        if (ArrayUtils.isEmpty(list)) {
+            return Collections.emptyList();
+        }
+        for (File f : list) {
+            if (f.isDirectory()) {
+                result.addAll(walk(f.getAbsolutePath()));
+                if (new File(f, "metadata.json").exists()) {
+                    result.add(f);
+                }
+            }
+        }
+        return result;
     }
 
     @Override
@@ -112,19 +129,44 @@ public class DefaultGuideParser implements GuideParser {
         Guide guide;
         try {
             guide = jsonMapper.readValue(content, Guide.class);
-            if (guide.isPublish() && jsonSchema != null) {
-                Set<ValidationMessage> assertions = jsonSchema.validate(content, InputFormat.JSON);
-
-                if (!assertions.isEmpty()) {
-                    LOG.trace("Guide metadata {} does not validate the JSON Schema. Skipping guide.", configFile);
-                    return Optional.empty();
-                }
+            if (!validateGuide(guide, content, configFile)) {
+                return Optional.empty();
             }
         } catch (IOException e) {
             LOG.trace("Error parsing guide metadata {}. Skipping guide.", configFile, e);
             return Optional.empty();
         }
+        populateFolderAndSlugAndAsciidoctor(guidesDir, guide);
+        return Optional.of(guide);
+    }
 
+    /**
+     *
+     * @param guide Guide
+     * @param content Metadata content
+     * @param configFile Configuration File
+     * @return Whether the guide metadata validates against the JSON Schema
+     * @param <T> Guide
+     */
+    protected <T extends Guide> boolean validateGuide(T guide, String content, File configFile) {
+        if (guidesConfiguration.isValidateMetadata() && guide.isPublish() && jsonSchema != null) {
+            Set<ValidationMessage> assertions = jsonSchema.validate(content, InputFormat.JSON);
+
+            if (!assertions.isEmpty()) {
+                LOG.trace("Guide metadata {} does not validate the JSON Schema. Skipping guide.", configFile);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @param guidesDir Guide directory
+     * @param guide Guide
+     * @param <T> Guide
+     */
+    protected <T extends Guide> void populateFolderAndSlugAndAsciidoctor(File guidesDir, T guide) {
         guide.setFolder(guidesDir);
         if (guide.getSlug() == null) {
             guide.setSlug(guidesDir.getName());
@@ -132,7 +174,5 @@ public class DefaultGuideParser implements GuideParser {
         if (guide.getAsciidoctor() == null) {
             guide.setAsciidoctor(guide.isPublish() ? guide.getSlug() + ".adoc" : null);
         }
-
-        return Optional.of(guide);
     }
 }
