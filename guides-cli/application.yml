@@ -1,5 +1,0 @@
-asciidoc:
-  source-dir: "build"
-  commons-dir: "examples/asciidoc"
-  base-dir: ".."
-  guides-dir: "examples/guides"

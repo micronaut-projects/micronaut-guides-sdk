@@ -15,6 +15,7 @@
  */
 package io.micronaut.guides.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.micronaut.core.annotation.NonNull;
@@ -28,6 +29,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -118,6 +120,10 @@ public class Guide {
     @JsonPropertyDescription("The guide's slug. If not specified, the guides folder is used")
     @Nullable
     private String slug;
+
+    @JsonIgnore
+    @Nullable
+    private File folder;
 
     @JsonPropertyDescription("Whether the guide should be published, it defaults to true. You can set it to false for draft or base guides")
     @Nullable
@@ -485,6 +491,24 @@ public class Guide {
      */
     public void setSlug(@Nullable String slug) {
         this.slug = slug;
+    }
+
+    /**
+     * Sets the slug for the guide.
+     *
+     * @param folder The folder to set.
+     */
+    public void setFolder(@Nullable File folder) {
+        this.folder = folder;
+    }
+
+    /**
+     * Gets the folder for the guide.
+     *
+     * @return The folder, or null if not specified.
+     */
+    public @Nullable File getFolder() {
+        return folder;
     }
 
     /**
