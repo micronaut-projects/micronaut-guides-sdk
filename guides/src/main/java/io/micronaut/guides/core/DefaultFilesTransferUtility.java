@@ -19,7 +19,6 @@ import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.ArrayUtils;
-import io.micronaut.core.util.StringUtils;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -169,11 +168,14 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
             for (App app : guide.getApps()) {
                 String appName = guide.getApps().size() > 1 ? app.getName() : EMPTY_STRING;
                 String folder = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
-                Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName);
+                String module = guide.getSourceModule() != null ? guide.getSourceModule() : "";
+                Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, module);
                 File destination = destinationPath.toFile();
 
                 if (guide.getBase() != null) {
                     File baseDir = new File(inputDirectory.getParentFile(), guide.getBase());
+                    module = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
+                    destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, module);
                     copyGuideSourceFiles(baseDir, destinationPath, appName, guidesOption.getLanguage().toString(), true);
                 }
 

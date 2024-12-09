@@ -52,6 +52,12 @@ public class Guide {
     @NotBlank
     private String intro;
 
+    @Nullable
+    private String sourceModule;
+
+    @Nullable
+    private String baseSourceModule;
+
     @JsonPropertyDescription("The guide's authors")
     @Nullable
     private List<String> authors;
@@ -585,5 +591,40 @@ public class Guide {
      */
     public Set<String> getFrameworks() {
         return getApps().stream().map(App::getFramework).collect(Collectors.toSet());
+    }
+
+    /**
+     *
+     * @return Base Source Module
+     */
+    @Nullable
+    public String getBaseSourceModule() {
+        return baseSourceModule;
+    }
+
+    /**
+     *
+     * @param baseSourceModule Base Source Module
+     */
+    @Nullable
+    public void setBaseSourceModule(String baseSourceModule) {
+        this.baseSourceModule = baseSourceModule;
+    }
+
+    /**
+     *
+     * @return Source Module
+     */
+    @Nullable
+    public String getSourceModule() {
+        return sourceModule;
+    }
+
+    /**
+     *
+     * @param sourceModule Source Module
+     */
+    public void setSourceModule(@Nullable String sourceModule) {
+        this.sourceModule = sourceModule;
     }
 }
