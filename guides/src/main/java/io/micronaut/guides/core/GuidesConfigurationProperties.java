@@ -65,7 +65,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private String version = DEFAULT_VERSION;
     private boolean validateMetadata = DEFAULT_VALIDATE_METADATA;
     private List<Language> defaultLanguages = JAVA_KOTLIN_GROOVY;
-
+    private String defaultAppName = DEFAULT_APP_NAME;
     private List<String> zipIncludesExtensions = DEFAULT_ZIP_INCLUDES_EXTENSIONS;
 
     /**
@@ -201,6 +201,14 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     @Override
     public String getDefaultAppName() {
         return DEFAULT_APP_NAME;
+    }
+
+    /**
+     *
+     * @param defaultAppName Default App name
+     */
+    public void setDefaultAppName(String defaultAppName) {
+        this.defaultAppName = defaultAppName;
     }
 
     /**
