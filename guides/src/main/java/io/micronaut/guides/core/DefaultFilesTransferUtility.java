@@ -162,7 +162,10 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      * @throws IOException if an I/O error occurs during file transfer
      */
     @Override
-    public void transferFiles(@NotNull @NonNull File inputDirectory, @NotNull @NonNull File outputDirectory, @NotNull @NonNull Guide guide) throws IOException {
+    public void transferFiles(@NotNull @NonNull File inputDirectory,
+                              @NotNull @NonNull File outputDirectory,
+                              @NotNull @NonNull Guide guide,
+                              @NotNull @NonNull List<? extends Guide> guides) throws IOException {
         List<GuidesOption> guidesOptionList = GuideGenerationUtils.guidesOptions(guide, LOG);
         for (GuidesOption guidesOption : guidesOptionList) {
             for (App app : guide.getApps()) {
@@ -173,10 +176,20 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                 File destination = destinationPath.toFile();
 
                 if (guide.getBase() != null) {
-                    File baseDir = new File(inputDirectory.getParentFile(), guide.getBase());
-                    module = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
-                    destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, module);
-                    copyGuideSourceFiles(baseDir, destinationPath, appName, guidesOption.getLanguage().toString(), true);
+                    guides.stream()
+                        .filter(g -> g.getSlug().equals(guide.getBase()))
+                        .findFirst()
+                        .ifPresent(parentGuide -> {
+                            File baseDir = parentGuide.getFolder();
+                            String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
+                            Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
+                            try {
+                                copyGuideSourceFiles(baseDir, baseDestinationPath, appName, guidesOption.getLanguage().toString(), true);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        });
+
                 }
 
                 copyGuideSourceFiles(inputDirectory, destinationPath, appName, guidesOption.getLanguage().toString(), false);

@@ -123,7 +123,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                 File guideOutput = new File(outputDirectory, guide.getSlug());
                 guideOutput.mkdir();
                 guideProjectGenerator.generate(guideOutput, guide);
-                filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide);
+                filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
 
                 // Test script generation
                 String testScript = testScriptGenerator.generateTestScript(new ArrayList<>(List.of(guide)));
