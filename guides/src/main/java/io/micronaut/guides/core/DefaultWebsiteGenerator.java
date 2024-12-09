@@ -109,47 +109,51 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         }
         List<? extends Guide> guides = guideParser.parseGuidesMetadata(guidesInputDirectory);
         for (Guide guide : guides) {
-            File guideInputDirectory = guide.getFolder();
-            File asciidocFile = new File(guideInputDirectory, guide.getAsciidoctor());
-            if (!asciidocFile.exists()) {
-                throw new ConfigurationException("asciidoc file not found for " + guide.getSlug());
-            }
-
-            String asciidoc = readFile(asciidocFile);
-
-            if (guide.getApps().isEmpty()) {
-                renderHtml(asciidoc, guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT), inputDirectory, outputDirectory, guide.getSlug(), guideInputDirectory);
-            } else {
-                File guideOutput = new File(outputDirectory, guide.getSlug());
-                guideOutput.mkdir();
-                guideProjectGenerator.generate(guideOutput, guide);
-                filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
-
-                // Test script generation
-                String testScript = testScriptGenerator.generateTestScript(new ArrayList<>(List.of(guide)));
-                saveToFile(testScript, guideOutput, FILENAME_TEST_SH, true);
-
-                // Native Test script generation
-                String nativeTestScript = testScriptGenerator.generateNativeTestScript(new ArrayList<>(List.of(guide)));
-                saveToFile(nativeTestScript, guideOutput, FILENAME_NATIVE_TEST_SH, true);
-
-                List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
-                for (GuidesOption guidesOption : guideOptions) {
-                    String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
-
-                    // Zip creation
-                    File zipFile = new File(outputDirectory, name + ".zip");
-                    File folderFile = new File(guideOutput, name);
-                    guideProjectZipper.zipDirectory(folderFile.getAbsolutePath(), zipFile.getAbsolutePath());
-
-                    renderHtml(asciidoc, guide, guidesOption, inputDirectory, outputDirectory, name, guideOutput);
+            if (guide.isPublish()) {
+                File guideInputDirectory = guide.getFolder();
+                File asciidocFile = new File(guideInputDirectory, guide.getAsciidoctor());
+                if (!asciidocFile.exists()) {
+                    throw new ConfigurationException("asciidoc file not found for " + guide.getSlug());
                 }
 
-                String guideMatrixHtml = guideMatrixGenerator.renderIndex(guide);
-                saveToFile(guideMatrixHtml, outputDirectory, guide.getSlug() + ".html");
+                String asciidoc = readFile(asciidocFile);
 
+                if (guide.getApps().isEmpty()) {
+                    renderHtml(asciidoc, guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT), inputDirectory, outputDirectory, guide.getSlug(), guideInputDirectory);
+                } else {
+                    File guideOutput = new File(outputDirectory, guide.getSlug());
+                    guideOutput.mkdir();
+                    guideProjectGenerator.generate(guideOutput, guide);
+                    filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
+
+                    // Test script generation
+                    String testScript = testScriptGenerator.generateTestScript(new ArrayList<>(List.of(guide)));
+                    saveToFile(testScript, guideOutput, FILENAME_TEST_SH, true);
+
+                    // Native Test script generation
+                    String nativeTestScript = testScriptGenerator.generateNativeTestScript(new ArrayList<>(List.of(guide)));
+                    saveToFile(nativeTestScript, guideOutput, FILENAME_NATIVE_TEST_SH, true);
+
+                    List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
+                    for (GuidesOption guidesOption : guideOptions) {
+                        String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
+
+                        // Zip creation
+                        File zipFile = new File(outputDirectory, name + ".zip");
+                        File folderFile = new File(guideOutput, name);
+                        guideProjectZipper.zipDirectory(folderFile.getAbsolutePath(), zipFile.getAbsolutePath());
+
+                        renderHtml(asciidoc, guide, guidesOption, inputDirectory, outputDirectory, name, guideOutput);
+                    }
+
+                    String guideMatrixHtml = guideMatrixGenerator.renderIndex(guide);
+                    saveToFile(guideMatrixHtml, outputDirectory, guide.getSlug() + ".html");
+
+                }
             }
         }
+
+        guides = guides.stream().filter(Guide::isPublish).toList();
 
         String indexHtml = indexGenerator.renderIndex(guides);
         saveToFile(indexHtml, outputDirectory, FILENAME_INDEX_HTML);
