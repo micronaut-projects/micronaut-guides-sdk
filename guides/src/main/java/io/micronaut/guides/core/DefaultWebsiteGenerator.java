@@ -18,6 +18,7 @@ package io.micronaut.guides.core;
 import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.asciidoc.AsciidocConfiguration;
 import io.micronaut.guides.core.asciidoc.AsciidocConverter;
 import io.micronaut.guides.core.html.GuideMatrixGenerator;
 import io.micronaut.guides.core.html.GuidePageGenerator;
@@ -32,9 +33,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +65,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final JsonFeedConfiguration jsonFeedConfiguration;
     private final GuidesConfiguration guidesConfiguration;
     private final GuidePageGenerator guidePageGenerator;
+    private final AsciidocConfiguration asciidocConfiguration;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     DefaultWebsiteGenerator(GuideParser guideParser,
@@ -80,7 +81,9 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                             GuideProjectZipper guideProjectZipper,
                             RssFeedConfiguration rssFeedConfiguration,
                             JsonFeedConfiguration jsonFeedConfiguration,
-                            GuidesConfiguration guidesConfiguration, GuidePageGenerator guidePageGenerator) {
+                            GuidesConfiguration guidesConfiguration,
+                            GuidePageGenerator guidePageGenerator,
+                            AsciidocConfiguration asciidocConfiguration) {
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
         this.jsonFeedGenerator = jsonFeedGenerator;
@@ -96,6 +99,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.jsonFeedConfiguration = jsonFeedConfiguration;
         this.guidesConfiguration = guidesConfiguration;
         this.guidePageGenerator = guidePageGenerator;
+        this.asciidocConfiguration = asciidocConfiguration;
     }
 
     @Override
@@ -163,6 +167,17 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
 
         String json = jsonFeedGenerator.jsonFeedString(guides);
         saveToFile(json, outputDirectory, jsonFeedConfiguration.getFilename());
+
+        File imagesFolder = new File(inputDirectory, asciidocConfiguration.getImagesDir());
+        if (imagesFolder.exists()) {
+            File outputImagesFolder = new File(outputDirectory, asciidocConfiguration.getImagesDir());
+            if (!outputImagesFolder.exists()) {
+                outputImagesFolder.mkdir();
+            }
+
+            copyFolder(imagesFolder.toPath(), outputImagesFolder.toPath());
+
+        }
     }
 
     private void renderHtml(String asciidoc, Guide guide, GuidesOption option, File inputDirectory, File outputDirectory, String name, File guideOutput) throws IOException {
@@ -288,5 +303,24 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     private static String readFile(File file) throws IOException {
         Path path = file.toPath();
         return new String(Files.readAllBytes(path));
+    }
+
+    private static void copyFolder(Path source, Path destination) throws IOException {
+        Files.walkFileTree(source, new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                Path targetPath = destination.resolve(source.relativize(dir));
+                if (!Files.exists(targetPath)) {
+                    Files.createDirectory(targetPath);
+                }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.copy(file, destination.resolve(source.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
+                return FileVisitResult.CONTINUE;
+            }
+        });
     }
 }

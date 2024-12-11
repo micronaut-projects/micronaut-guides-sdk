@@ -21,8 +21,10 @@ import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.asciidoctor.*;
+import org.asciidoctor.log.Severity;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 /**
  * DefaultAsciidocConverter is a singleton class that implements the AsciidocConverter interface.
@@ -44,12 +46,14 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
                 .attribute("toc-title", "")
                 .sectionNumbers(asciidocConfiguration.getSectnums())
                 .attribute("idprefix", asciidocConfiguration.getIdprefix())
+                .imagesDir(asciidocConfiguration.getImagesdir())
                 .attribute("idseparator", asciidocConfiguration.getIdseparator())
                 .icons(asciidocConfiguration.getIcons()).imagesDir(asciidocConfiguration.getImagesdir())
                 .noFooter(asciidocConfiguration.isNofooter());
 
         optionsBuilder = Options.builder()
                 .eruby(asciidocConfiguration.getRuby())
+                .docType("book")
                 .safe(SafeMode.UNSAFE);
 
         if (StringUtils.isNotEmpty(asciidocConfiguration.getBaseDir())) {
@@ -57,6 +61,15 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
         }
 
         asciidoctor = Asciidoctor.Factory.create();
+
+        Logger.getLogger("asciidoctor").setUseParentHandlers(false);
+
+        asciidoctor.registerLogHandler(logRecord -> {
+            if (logRecord.getSeverity().ordinal() >= Severity.ERROR.ordinal()) {
+                throw new RuntimeException(logRecord.getMessage());
+            }
+            System.out.println("[Asciidoctor] " + logRecord.getSeverity() + " " + logRecord.getSourceFileName() + ": " + logRecord.getMessage());
+        });
     }
 
     @Override
