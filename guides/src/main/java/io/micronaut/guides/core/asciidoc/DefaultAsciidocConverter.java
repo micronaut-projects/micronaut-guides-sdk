@@ -17,13 +17,14 @@ package io.micronaut.guides.core.asciidoc;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.StringUtils;
+import io.micronaut.guides.core.GuideContextProvider;
 import io.micronaut.guides.core.asciidoc.extensions.ExtensionsRegistry;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.asciidoctor.*;
-import org.asciidoctor.log.Severity;
 import org.asciidoctor.extension.JavaExtensionRegistry;
+import org.asciidoctor.log.Severity;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -40,7 +41,11 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
 
     Asciidoctor asciidoctor;
 
-    DefaultAsciidocConverter(AsciidocConfiguration asciidocConfiguration, ExtensionsRegistry extensionsRegistry) {
+    GuideContextProvider guideContextProvider;
+
+    DefaultAsciidocConverter(AsciidocConfiguration asciidocConfiguration, ExtensionsRegistry extensionsRegistry, GuideContextProvider guideContextProvider) {
+        this.guideContextProvider = guideContextProvider;
+
         attributesBuilder = Attributes.builder()
                 .sourceHighlighter(asciidocConfiguration.getSourceHighlighter())
                 .tableOfContents(asciidocConfiguration.getToc())
@@ -77,7 +82,7 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
             if (logRecord.getSeverity().ordinal() >= Severity.ERROR.ordinal()) {
                 throw new RuntimeException(logRecord.getMessage());
             }
-            System.out.println("[Asciidoctor] " + logRecord.getSeverity() + " " + logRecord.getSourceFileName() + ": " + logRecord.getMessage());
+            System.out.println("[Asciidoctor] " + logRecord.getSeverity() + "for guide " + guideContextProvider.getGuide().getSlug() + " [" + logRecord.getSourceFileName() + "]: " + logRecord.getMessage());
         });
     }
 
@@ -92,7 +97,13 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
                 .attributes(attributesBuilder
                         .attribute("sourcedir", sourceDir)
                         .attribute("guidesourcedir", guideSourceDir)
-                        .build())
+                        .attribute("cloud", guideContextProvider.getGuide().getCloud() != null ? guideContextProvider.getGuide().getCloud().getAccronym().toLowerCase() : "")
+                        .attribute("cloudName", guideContextProvider.getGuide().getCloud() != null ? guideContextProvider.getGuide().getCloud().getName() : "")
+                        .attribute("guideTitle", guideContextProvider.getGuide().getTitle())
+                        .attribute("sourceModule", guideContextProvider.getGuide().getSourceModule() != null ? guideContextProvider.getGuide().getSourceModule() : "")
+                        .attribute("sourceBaseModule", guideContextProvider.getGuide().getBaseSourceModule() != null ? guideContextProvider.getGuide().getBaseSourceModule() : "")
+                        .build()
+                )
                 .build());
     }
 }
