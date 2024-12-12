@@ -141,4 +141,10 @@ public interface GuidesConfiguration {
      * @return the system property for Micronaut guide
      */
     String getSysPropMicronautGuide();
+
+    /**
+     *
+     * @return Whether the Guide metadata should be validated against the JSON Schema
+     */
+    boolean isValidateMetadata();
 }

@@ -26,10 +26,11 @@ public class GuideParserReplacement extends DefaultGuideParser {
      * @param jsonMapper         the JSON mapper
      * @param guideMerger        the guide merger
      */
-    public GuideParserReplacement(JsonSchemaProvider jsonSchemaProvider,
+    public GuideParserReplacement(GuidesConfiguration guidesConfiguration,
+                                  JsonSchemaProvider jsonSchemaProvider,
                                   JsonMapper jsonMapper,
                                   GuideMerger guideMerger) {
-        super(jsonSchemaProvider, jsonMapper, guideMerger);
+        super(guidesConfiguration, jsonSchemaProvider, jsonMapper, guideMerger);
     }
 
     protected Optional<? extends Guide> readGuide(File guidesDir, String content, File configFile) {
