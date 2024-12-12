@@ -12,8 +12,6 @@ dependencies {
     implementation(mnValidation.micronaut.validation)
     annotationProcessor(mnSerde.micronaut.serde.processor)
     implementation(mnSerde.micronaut.serde.jackson)
-    annotationProcessor(mnJsonSchema.micronaut.json.schema.processor)
-    compileOnly(mnJsonSchema.micronaut.json.schema.annotations)
     api(mnJsonSchema.json.schema.validator)
 
     testAnnotationProcessor(mn.micronaut.inject.java)

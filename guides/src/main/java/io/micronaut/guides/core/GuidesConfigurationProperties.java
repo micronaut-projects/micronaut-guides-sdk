@@ -17,6 +17,7 @@ package io.micronaut.guides.core;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.starter.options.JdkVersion;
+import io.micronaut.starter.options.Language;
 
 import java.util.List;
 
@@ -46,8 +47,9 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private static final String ENV_GITHUB_WORKFLOW = "GITHUB_WORKFLOW";
     private static final String SYS_PROP_MICRONAUT_GUIDE = "micronaut.guide";
     private static final String DEFAULT_GUIDES_DIR = "guides";
+    private static final List<Language> JAVA_KOTLIN_GROOVY = List.of(Language.JAVA, Language.GROOVY, Language.KOTLIN);
+    private static final List<String> DEFAULT_ZIP_INCLUDES_EXTENSIONS = List.of(".sh", ".bat");
     private final boolean DEFAULT_VALIDATE_METADATA = true;
-
     private String guidesDir = DEFAULT_GUIDES_DIR;
     private String title = "Micronaut Guides";
     private String homePageUrl = GUIDES_URL;
@@ -62,7 +64,27 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private String sysPropMicronautGuide = SYS_PROP_MICRONAUT_GUIDE;
     private String version = DEFAULT_VERSION;
     private boolean validateMetadata = DEFAULT_VALIDATE_METADATA;
+    private List<Language> defaultLanguages = JAVA_KOTLIN_GROOVY;
+    private String defaultAppName = DEFAULT_APP_NAME;
+    private List<String> zipIncludesExtensions = DEFAULT_ZIP_INCLUDES_EXTENSIONS;
 
+    /**
+     *
+     * @param zipIncludesExtensions File extensions to be zip included by default
+     */
+    public void setZipIncludesExtensions(List<String> zipIncludesExtensions) {
+        this.zipIncludesExtensions = zipIncludesExtensions;
+    }
+
+    @Override
+    public List<String> getZipIncludesExtensions() {
+        return zipIncludesExtensions;
+    }
+
+    /**
+     *
+     * @param validateMetadata Whether the Guide metadata should be validated against the JSON Schema
+     */
     public void setValidateMetadata(boolean validateMetadata) {
         this.validateMetadata = validateMetadata;
     }
@@ -179,6 +201,14 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     @Override
     public String getDefaultAppName() {
         return DEFAULT_APP_NAME;
+    }
+
+    /**
+     *
+     * @param defaultAppName Default App name
+     */
+    public void setDefaultAppName(String defaultAppName) {
+        this.defaultAppName = defaultAppName;
     }
 
     /**
@@ -370,5 +400,21 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
      */
     public void setGuidesDir(String guidesDir) {
         this.guidesDir = guidesDir;
+    }
+
+    /***
+     *
+     * @return Languages of a guide if no languages are specified in a guide.
+     */
+    public List<Language> getDefaultLanguages() {
+        return defaultLanguages;
+    }
+
+    /**
+     *
+     * @param languages Languages of a guide if no languages are specified in a guide.
+     */
+    public void setDefaultLanguages(List<Language> languages) {
+        this.defaultLanguages = languages;
     }
 }

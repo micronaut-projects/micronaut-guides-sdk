@@ -22,9 +22,11 @@ import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.asciidoctor.*;
+import org.asciidoctor.log.Severity;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 /**
  * DefaultAsciidocConverter is a singleton class that implements the AsciidocConverter interface.
@@ -53,6 +55,7 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
 
         optionsBuilder = Options.builder()
                 .eruby(asciidocConfiguration.getRuby())
+                .docType("book")
                 .safe(SafeMode.UNSAFE);
 
         if (StringUtils.isNotEmpty(asciidocConfiguration.getBaseDir())) {
@@ -60,12 +63,22 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
         }
 
         asciidoctor = Asciidoctor.Factory.create();
+
         JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
         extensionsRegistry.getBlockMacroProcessors().forEach(javaExtensionRegistry::blockMacro);
         extensionsRegistry.getBlockProcessors().forEach(javaExtensionRegistry::block);
         extensionsRegistry.getIncludeProcessors().forEach(javaExtensionRegistry::includeProcessor);
         extensionsRegistry.getLineMacroProcessors().forEach(javaExtensionRegistry::inlineMacro);
         extensionsRegistry.getPreProcessors().forEach(javaExtensionRegistry::preprocessor);
+
+        Logger.getLogger("asciidoctor").setUseParentHandlers(false);
+
+        asciidoctor.registerLogHandler(logRecord -> {
+            if (logRecord.getSeverity().ordinal() >= Severity.ERROR.ordinal()) {
+                throw new RuntimeException(logRecord.getMessage());
+            }
+            System.out.println("[Asciidoctor] " + logRecord.getSeverity() + " " + logRecord.getSourceFileName() + ": " + logRecord.getMessage());
+        });
     }
 
     @Override

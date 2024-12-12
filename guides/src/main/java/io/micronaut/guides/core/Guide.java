@@ -15,12 +15,12 @@
  */
 package io.micronaut.guides.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.util.StringUtils;
-import io.micronaut.jsonschema.JsonSchema;
 import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.starter.api.TestFramework;
 import io.micronaut.starter.options.BuildTool;
@@ -29,6 +29,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,7 +41,6 @@ import static io.micronaut.guides.core.GuideUtils.addAllSafe;
  * Represents a guide metadata.
  **/
 @Serdeable
-@JsonSchema
 public class Guide {
     @JsonPropertyDescription("The guide's title")
     @NonNull
@@ -52,9 +52,14 @@ public class Guide {
     @NotBlank
     private String intro;
 
+    @Nullable
+    private String sourceModule;
+
+    @Nullable
+    private String baseSourceModule;
+
     @JsonPropertyDescription("The guide's authors")
-    @NotEmpty
-    @NonNull
+    @Nullable
     private List<String> authors;
 
     @JsonPropertyDescription("The guide's categories")
@@ -117,6 +122,10 @@ public class Guide {
     @Nullable
     private String slug;
 
+    @JsonIgnore
+    @Nullable
+    private File folder;
+
     @JsonPropertyDescription("Whether the guide should be published, it defaults to true. You can set it to false for draft or base guides")
     @Nullable
     @JsonProperty(defaultValue = StringUtils.TRUE)
@@ -176,7 +185,8 @@ public class Guide {
      *
      * @return The list of authors.
      */
-    public @NotEmpty @NonNull List<String> getAuthors() {
+    @Nullable
+    public List<String> getAuthors() {
         return authors != null ? authors : Collections.emptyList();
     }
 
@@ -185,7 +195,7 @@ public class Guide {
      *
      * @param authors The list of authors to set.
      */
-    public void setAuthors(@NotEmpty @NonNull List<String> authors) {
+    public void setAuthors(@Nullable List<String> authors) {
         this.authors = authors;
     }
 
@@ -339,9 +349,7 @@ public class Guide {
      * @return The list of supported languages, or null if not specified.
      */
     public @Nullable List<Language> getLanguages() {
-        return languages == null
-                ? List.of(Language.JAVA, Language.GROOVY, Language.KOTLIN)
-                : languages;
+        return languages;
     }
 
     /**
@@ -468,6 +476,24 @@ public class Guide {
     }
 
     /**
+     * Sets the slug for the guide.
+     *
+     * @param folder The folder to set.
+     */
+    public void setFolder(@Nullable File folder) {
+        this.folder = folder;
+    }
+
+    /**
+     * Gets the folder for the guide.
+     *
+     * @return The folder, or null if not specified.
+     */
+    public @Nullable File getFolder() {
+        return folder;
+    }
+
+    /**
      * Checks if the guide should be published.
      *
      * @return True if the guide should be published, false otherwise.
@@ -565,5 +591,40 @@ public class Guide {
      */
     public Set<String> getFrameworks() {
         return getApps().stream().map(App::getFramework).collect(Collectors.toSet());
+    }
+
+    /**
+     *
+     * @return Base Source Module
+     */
+    @Nullable
+    public String getBaseSourceModule() {
+        return baseSourceModule;
+    }
+
+    /**
+     *
+     * @param baseSourceModule Base Source Module
+     */
+    @Nullable
+    public void setBaseSourceModule(String baseSourceModule) {
+        this.baseSourceModule = baseSourceModule;
+    }
+
+    /**
+     *
+     * @return Source Module
+     */
+    @Nullable
+    public String getSourceModule() {
+        return sourceModule;
+    }
+
+    /**
+     *
+     * @param sourceModule Source Module
+     */
+    public void setSourceModule(@Nullable String sourceModule) {
+        this.sourceModule = sourceModule;
     }
 }

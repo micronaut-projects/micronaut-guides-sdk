@@ -68,7 +68,12 @@ public class DefaultGuideMerger implements GuideMerger {
      */
     public <T> void merge(T base, T guide) {
         try {
-            for (Field field : guide.getClass().getDeclaredFields()) {
+            Class<?> parentClass = guide.getClass().getSuperclass();
+            List<Field> fields = new ArrayList<>(Arrays.asList(guide.getClass().getDeclaredFields()));
+            if (parentClass != null && (Guide.class.isAssignableFrom(parentClass) || App.class.isAssignableFrom(parentClass))) {
+                fields.addAll(List.of(parentClass.getDeclaredFields()));
+            }
+            for (Field field : fields) {
                 field.setAccessible(true);
 
                 Object guideValue = field.get(guide);

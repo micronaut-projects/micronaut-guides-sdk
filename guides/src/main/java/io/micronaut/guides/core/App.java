@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.util.StringUtils;
-import io.micronaut.jsonschema.JsonSchema;
 import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.starter.api.TestFramework;
 import io.micronaut.starter.application.ApplicationType;
@@ -37,7 +36,6 @@ import static io.micronaut.guides.core.GuideUtils.addAllSafe;
  * Represents an application metadata.
  */
 @Serdeable
-@JsonSchema
 public class App {
     public static final String SPOTLESS = "spotless";
 
@@ -89,9 +87,17 @@ public class App {
     @Nullable
     private List<String> excludeTest;
 
+    @JsonPropertyDescription("The base tests that should not be run")
+    @Nullable
+    private List<String> excludeBaseTest;
+
     @JsonPropertyDescription("The source files that should not be included")
     @Nullable
     private List<String> excludeSource;
+
+    @JsonPropertyDescription("The base source files that should not be included")
+    @Nullable
+    private List<String> excludeBaseSource;
 
     @JsonPropertyDescription("To enable Spotless code check")
     @JsonProperty(defaultValue = StringUtils.TRUE)
@@ -288,6 +294,24 @@ public class App {
     }
 
     /**
+     * Gets the base source files that should not be included.
+     *
+     * @return The list of source files to exclude, or null if not specified.
+     */
+    public @Nullable List<String> getExcludeBaseTest() {
+        return excludeBaseTest;
+    }
+
+    /**
+     * Sets the base source files that should not be included.
+     *
+     * @param excludeBaseTest The list of source files to exclude.
+     */
+    public void setExcludeBaseTest(@Nullable List<String> excludeBaseTest) {
+        this.excludeBaseTest = excludeBaseTest;
+    }
+
+    /**
      * Gets the source files that should not be included.
      *
      * @return The list of source files to exclude, or null if not specified.
@@ -303,6 +327,24 @@ public class App {
      */
     public void setExcludeSource(@Nullable List<String> excludeSource) {
         this.excludeSource = excludeSource;
+    }
+
+    /**
+     * Gets the base source files that should not be included.
+     *
+     * @return The list of source files to exclude, or null if not specified.
+     */
+    public @Nullable List<String> getExcludeBaseSource() {
+        return excludeBaseSource;
+    }
+
+    /**
+     * Sets the base source files that should not be included.
+     *
+     * @param excludeBaseSource The list of source files to exclude.
+     */
+    public void setExcludeBaseSource(@Nullable List<String> excludeBaseSource) {
+        this.excludeBaseSource = excludeBaseSource;
     }
 
     /**

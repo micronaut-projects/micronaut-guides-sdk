@@ -122,6 +122,13 @@ public interface AsciidocConfiguration {
     String getBaseDir();
 
     /**
+     * Returns the base directory.
+     *
+     * @return the base directory
+     */
+    String getImagesDir();
+
+    /**
      * Returns the callouts directory.
      *
      * @return the callouts directory

@@ -20,6 +20,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * FilesTransferUtility is an interface that defines a method to transfer files from an input directory to an output directory.
@@ -34,5 +35,8 @@ public interface FilesTransferUtility {
      * @param guide           the guide containing the transfer instructions
      * @throws IOException if an I/O error occurs during the file transfer
      */
-    void transferFiles(@NotNull @NonNull File inputDirectory, @NotNull @NonNull File outputDirectory, @NotNull @NonNull Guide guide) throws IOException;
+    void transferFiles(@NotNull @NonNull File inputDirectory,
+                       @NotNull @NonNull File outputDirectory,
+                       @NotNull @NonNull Guide guide,
+                       @NotNull @NonNull List<? extends Guide> guides) throws IOException;
 }

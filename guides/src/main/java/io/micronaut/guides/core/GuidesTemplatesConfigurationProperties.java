@@ -23,6 +23,7 @@ import io.micronaut.core.annotation.Internal;
 class GuidesTemplatesConfigurationProperties implements GuidesTemplatesConfiguration {
     private String folder = "templates";
 
+    @Override
     public String getFolder() {
         return folder;
     }

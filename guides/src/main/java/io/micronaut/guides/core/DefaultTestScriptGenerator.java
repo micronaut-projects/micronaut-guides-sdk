@@ -263,10 +263,10 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
         StringBuilder bashScript = new StringBuilder("""
                 #!/usr/bin/env bash
                 set -e
-                
+
                 FAILED_PROJECTS=()
                 EXIT_STATUS=0
-                
+
                 kill_kotlin_daemon () {
                   echo "Killing KotlinCompile daemon to pick up fresh properties (due to kapt and java > 17)"
                   for daemon in $(jps | grep KotlinCompile | cut -d' ' -f1); do
@@ -282,11 +282,12 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
             for (GuidesOption guidesOption : guidesOptionList) {
                 String folder = MacroUtils.getSourceDir(metadata.getSlug(), guidesOption);
                 BuildTool buildTool = folder.contains(MAVEN.toString()) ? MAVEN : GRADLE;
-                if (metadata.getApps().stream().anyMatch(app -> app.getName().equals(guidesConfiguration.getDefaultAppName()))) {
+                if (metadata.getApps().size() == 1) {
                     if (metadata.shouldSkip(buildTool)) {
                         continue;
                     }
-                    Optional<? extends App> appOptional = metadata.getApps().stream().filter(app -> app.getName().equals(guidesConfiguration.getDefaultAppName())).findFirst();
+                    Optional<? extends App> appOptional = metadata.getApps().stream()
+                        .findFirst();
                     if (appOptional.isPresent()) {
                         App defaultApp = appOptional.get();
                         if (!nativeTest || supportsNativeTest(defaultApp, guidesOption)) {
@@ -328,7 +329,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
                     else
                       exit 0
                     fi
-                    
+
                     """);
         }
 

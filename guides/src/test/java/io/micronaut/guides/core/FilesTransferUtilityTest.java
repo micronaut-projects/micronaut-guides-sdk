@@ -40,8 +40,8 @@ class FilesTransferUtilityTest {
         guideProjectGenerator.generate(outputDirectory, metadatas.get(0));
         guideProjectGenerator.generate(outputDirectory, metadatas.get(1));
 
-        filesTransferUtility.transferFiles(fileBase, outputDirectory, metadatas.get(0));
-        filesTransferUtility.transferFiles(file, outputDirectory, metadatas.get(1));
+        filesTransferUtility.transferFiles(fileBase, outputDirectory, metadatas.get(0), metadatas);
+        filesTransferUtility.transferFiles(file, outputDirectory, metadatas.get(1), metadatas);
 
         assertTrue(new File(outputDirectory, "/creating-your-first-micronaut-app-gradle-groovy").exists());
         assertTrue(new File(outputDirectory, "/creating-your-first-micronaut-app-gradle-java").exists());
