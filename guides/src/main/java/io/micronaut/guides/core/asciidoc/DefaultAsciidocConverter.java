@@ -17,12 +17,12 @@ package io.micronaut.guides.core.asciidoc;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.StringUtils;
-import io.micronaut.guides.core.asciidoc.extensions.BuildDiffLinkMacroProcessor;
-import io.micronaut.guides.core.asciidoc.extensions.CustomIncludeProcessor;
+import io.micronaut.guides.core.asciidoc.extensions.ExtensionsRegistry;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.asciidoctor.*;
+import org.asciidoctor.extension.JavaExtensionRegistry;
 
 import java.io.File;
 
@@ -38,7 +38,7 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
 
     Asciidoctor asciidoctor;
 
-    DefaultAsciidocConverter(AsciidocConfiguration asciidocConfiguration, BuildDiffLinkMacroProcessor buildDiffLinkMacroProcessor, CustomIncludeProcessor customIncludeProcessor) {
+    DefaultAsciidocConverter(AsciidocConfiguration asciidocConfiguration, ExtensionsRegistry extensionsRegistry) {
         attributesBuilder = Attributes.builder()
                 .sourceHighlighter(asciidocConfiguration.getSourceHighlighter())
                 .tableOfContents(asciidocConfiguration.getToc())
@@ -47,7 +47,8 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
                 .sectionNumbers(asciidocConfiguration.getSectnums())
                 .attribute("idprefix", asciidocConfiguration.getIdprefix())
                 .attribute("idseparator", asciidocConfiguration.getIdseparator())
-                .icons(asciidocConfiguration.getIcons()).imagesDir(asciidocConfiguration.getImagesdir())
+                .icons(asciidocConfiguration.getIcons())
+                .imagesDir(asciidocConfiguration.getImagesdir())
                 .noFooter(asciidocConfiguration.isNofooter());
 
         optionsBuilder = Options.builder()
@@ -59,8 +60,12 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
         }
 
         asciidoctor = Asciidoctor.Factory.create();
-        asciidoctor.javaExtensionRegistry().inlineMacro(buildDiffLinkMacroProcessor);
-        asciidoctor.javaExtensionRegistry().includeProcessor(customIncludeProcessor);
+        JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
+        extensionsRegistry.getBlockMacroProcessors().forEach(javaExtensionRegistry::blockMacro);
+        extensionsRegistry.getBlockProcessors().forEach(javaExtensionRegistry::block);
+        extensionsRegistry.getIncludeProcessors().forEach(javaExtensionRegistry::includeProcessor);
+        extensionsRegistry.getLineMacroProcessors().forEach(javaExtensionRegistry::inlineMacro);
+        extensionsRegistry.getPreProcessors().forEach(javaExtensionRegistry::preprocessor);
     }
 
     @Override
@@ -71,8 +76,10 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
         return asciidoctor.convert(asciidoc, optionsBuilder
                 .baseDir(baseDir)
                 .toFile(false)
-                .attributes(attributesBuilder.attribute("sourcedir", sourceDir).build())
-                .attributes(attributesBuilder.attribute("guidesourcedir", guideSourceDir).build())
+                .attributes(attributesBuilder
+                        .attribute("sourcedir", sourceDir)
+                        .attribute("guidesourcedir", guideSourceDir)
+                        .build())
                 .build());
     }
 }
