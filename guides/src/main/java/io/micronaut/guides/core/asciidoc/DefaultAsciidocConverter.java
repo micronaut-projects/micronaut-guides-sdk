@@ -25,6 +25,8 @@ import jakarta.validation.constraints.NotNull;
 import org.asciidoctor.*;
 import org.asciidoctor.extension.JavaExtensionRegistry;
 import org.asciidoctor.log.Severity;
+import org.slf4j.LoggerFactory;
+import org.slf4j.event.Level;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -35,6 +37,8 @@ import java.util.logging.Logger;
  */
 @Singleton
 public class DefaultAsciidocConverter implements AsciidocConverter {
+
+    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(DefaultAsciidocConverter.class);
 
     OptionsBuilder optionsBuilder;
     AttributesBuilder attributesBuilder;
@@ -79,10 +83,10 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
         Logger.getLogger("asciidoctor").setUseParentHandlers(false);
 
         asciidoctor.registerLogHandler(logRecord -> {
+            LOG.atLevel(mapSeverity(logRecord.getSeverity())).log("[" + guideContextProvider.getGuide().getSlug() + "] " + (logRecord.getCursor() != null ? logRecord.getCursor().getFile() + " line " + logRecord.getCursor().getLineNumber() : "") + ": " + logRecord.getMessage());
             if (logRecord.getSeverity().ordinal() >= Severity.ERROR.ordinal()) {
                 throw new RuntimeException(logRecord.getMessage());
             }
-            System.out.println("[Asciidoctor] " + logRecord.getSeverity() + "for guide " + guideContextProvider.getGuide().getSlug() + " [" + logRecord.getSourceFileName() + "]: " + logRecord.getMessage());
         });
     }
 
@@ -100,10 +104,19 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
                         .attribute("cloud", guideContextProvider.getGuide().getCloud() != null ? guideContextProvider.getGuide().getCloud().getAccronym().toLowerCase() : "")
                         .attribute("cloudName", guideContextProvider.getGuide().getCloud() != null ? guideContextProvider.getGuide().getCloud().getName() : "")
                         .attribute("guideTitle", guideContextProvider.getGuide().getTitle())
-                        .attribute("sourceModule", guideContextProvider.getGuide().getSourceModule() != null ? guideContextProvider.getGuide().getSourceModule() : "")
-                        .attribute("sourceBaseModule", guideContextProvider.getGuide().getBaseSourceModule() != null ? guideContextProvider.getGuide().getBaseSourceModule() : "")
+                        .attribute("sourceModule", guideContextProvider.getGuide().getSourceModule() != null ? guideContextProvider.getGuide().getSourceModule() + "/" : "")
+                        .attribute("sourceBaseModule", guideContextProvider.getGuide().getBaseSourceModule() != null ? guideContextProvider.getGuide().getBaseSourceModule() + "/" : "")
                         .build()
                 )
                 .build());
+    }
+
+    private static Level mapSeverity(Severity severity) {
+        return switch (severity) {
+            case DEBUG -> Level.DEBUG;
+            case WARN -> Level.WARN;
+            case ERROR, FATAL -> Level.ERROR;
+            default -> Level.INFO;
+        };
     }
 }
