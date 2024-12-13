@@ -43,6 +43,7 @@ public class AsciidocConfigurationProperties implements AsciidocConfiguration {
     private static final String DEFAULT_TEMPLATE_DIRS = "src/docs/asciidoc";
     private static final String DEFAULT_COMMONS_DIR = "src/docs/asciidoc/common";
     private static final String DEFAULT_CALLOUTS_DIR = "src/docs/asciidoc/callouts";
+    private static final String DEFAULT_IMAGES_DIR = "images";
     private static final String DEFAULT_BASE_DIR = "";
 
     private String sourceHighlighter = DEFAULT_SOURCE_HIGHLIGHTER;
@@ -60,6 +61,7 @@ public class AsciidocConfigurationProperties implements AsciidocConfiguration {
     private String commonsDir = DEFAULT_COMMONS_DIR;
     private String baseDir = DEFAULT_BASE_DIR;
     private String calloutsDir = DEFAULT_CALLOUTS_DIR;
+    private String imagesDir = DEFAULT_IMAGES_DIR;
 
     /**
      * Gets the source highlighter.
@@ -344,5 +346,14 @@ public class AsciidocConfigurationProperties implements AsciidocConfiguration {
      */
     public void setCalloutsDir(String calloutsDir) {
         this.calloutsDir = calloutsDir;
+    }
+
+    @Override
+    public String getImagesDir() {
+        return imagesDir;
+    }
+
+    public void setImagesDir(String imagesDir) {
+        this.imagesDir = imagesDir;
     }
 }
