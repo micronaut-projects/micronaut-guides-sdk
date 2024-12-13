@@ -19,6 +19,7 @@ import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.guides.core.asciidoc.AsciidocConverter;
+import io.micronaut.guides.core.asciidoc.GuideRenderAttributesProvider;
 import io.micronaut.guides.core.html.GuideMatrixGenerator;
 import io.micronaut.guides.core.html.GuidePageGenerator;
 import io.micronaut.guides.core.html.IndexGenerator;
@@ -36,7 +37,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Default implementation of the {@link WebsiteGenerator} interface.
@@ -50,6 +53,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     private static final String FILENAME_NATIVE_TEST_SH = "native-test.sh";
     private static final String FILENAME_INDEX_HTML = "index.html";
 
+    private final GuideRenderAttributesProvider guideRenderAttributesProvider;
     private final GuideParser guideParser;
     private final GuideProjectGenerator guideProjectGenerator;
     private final JsonFeedGenerator jsonFeedGenerator;
@@ -67,7 +71,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final GuidePageGenerator guidePageGenerator;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
-    DefaultWebsiteGenerator(GuideParser guideParser,
+    DefaultWebsiteGenerator(GuideRenderAttributesProvider guideRenderAttributesProvider, GuideParser guideParser,
                             GuideProjectGenerator guideProjectGenerator,
                             JsonFeedGenerator jsonFeedGenerator,
                             RssFeedGenerator rssFeedGenerator,
@@ -80,7 +84,9 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                             GuideProjectZipper guideProjectZipper,
                             RssFeedConfiguration rssFeedConfiguration,
                             JsonFeedConfiguration jsonFeedConfiguration,
-                            GuidesConfiguration guidesConfiguration, GuidePageGenerator guidePageGenerator) {
+                            GuidesConfiguration guidesConfiguration,
+                            GuidePageGenerator guidePageGenerator) {
+        this.guideRenderAttributesProvider = guideRenderAttributesProvider;
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
         this.jsonFeedGenerator = jsonFeedGenerator;
@@ -170,8 +176,11 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         String optionAsciidoc = macroSubstitution.substitute(asciidoc, guideRender);
 
         // HTML rendering
-
-        String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, outputDirectory.getAbsolutePath(), new File(guideOutput, name).getAbsolutePath());
+        Map<String, Object> attributes = new HashMap<>();
+        attributes.put("sourcedir", outputDirectory.getAbsolutePath());
+        attributes.put("guidesourcedir", new File(guideOutput, name).getAbsolutePath());
+        attributes.putAll(guideRenderAttributesProvider.attributes(guideRender));
+        String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, () -> attributes);
 
         List<String> extractedToc = extractToc(optionHtml);
         String tocHtml;

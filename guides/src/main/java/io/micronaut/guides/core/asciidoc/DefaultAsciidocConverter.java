@@ -21,7 +21,6 @@ import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.asciidoctor.*;
-
 import java.io.File;
 
 /**
@@ -62,13 +61,13 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
     @Override
     public String convert(@NonNull @NotBlank String asciidoc,
                           @NonNull @NotNull File baseDir,
-                          @NonNull @NotBlank String sourceDir,
-                          @NonNull @NotBlank String guideSourceDir) {
+                          @NonNull AsciidocAttributeProvider attributeProvider) {
+        attributeProvider.attributes()
+                .forEach((name, value) -> attributesBuilder.attribute(name, value));
         return asciidoctor.convert(asciidoc, optionsBuilder
                 .baseDir(baseDir)
                 .toFile(false)
-                .attributes(attributesBuilder.attribute("sourcedir", sourceDir).build())
-                .attributes(attributesBuilder.attribute("guidesourcedir", guideSourceDir).build())
+                .attributes(attributesBuilder.build())
                 .build());
     }
 }
