@@ -69,6 +69,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final JsonFeedConfiguration jsonFeedConfiguration;
     private final GuidesConfiguration guidesConfiguration;
     private final GuidePageGenerator guidePageGenerator;
+    private final GuideRenderProvider guideRenderProvider;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     DefaultWebsiteGenerator(GuideRenderAttributesProvider guideRenderAttributesProvider, GuideParser guideParser,
@@ -85,7 +86,8 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                             RssFeedConfiguration rssFeedConfiguration,
                             JsonFeedConfiguration jsonFeedConfiguration,
                             GuidesConfiguration guidesConfiguration,
-                            GuidePageGenerator guidePageGenerator) {
+                            GuidePageGenerator guidePageGenerator,
+                            GuideRenderProvider guideRenderProvider) {
         this.guideRenderAttributesProvider = guideRenderAttributesProvider;
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
@@ -102,6 +104,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.jsonFeedConfiguration = jsonFeedConfiguration;
         this.guidesConfiguration = guidesConfiguration;
         this.guidePageGenerator = guidePageGenerator;
+        this.guideRenderProvider = guideRenderProvider;
     }
 
     @Override
@@ -125,7 +128,8 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                 String asciidoc = readFile(asciidocFile);
 
                 if (guide.getApps().isEmpty()) {
-                    renderHtml(asciidoc, new GuideRender(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)), inputDirectory, outputDirectory, guide.getSlug(), guideInputDirectory);
+                    GuideRender render = new GuideRender(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT));
+                    renderHtml(asciidoc, render, inputDirectory, outputDirectory, guide.getSlug(), guideInputDirectory);
                 } else {
                     File guideOutput = new File(outputDirectory, guide.getSlug());
                     guideOutput.mkdir();
@@ -149,12 +153,14 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                         File folderFile = new File(guideOutput, name);
                         guideProjectZipper.zipDirectory(folderFile.getAbsolutePath(), zipFile.getAbsolutePath());
 
-                        renderHtml(asciidoc, new GuideRender(guide, guidesOption), inputDirectory, outputDirectory, name, guideOutput);
+                        GuideRender guideRender = new GuideRender(guide, guidesOption);
+                        guideRenderProvider.setGuideRender(guideRender);
+
+                        renderHtml(asciidoc, guideRender, inputDirectory, outputDirectory, name, guideOutput);
                     }
 
                     String guideMatrixHtml = guideMatrixGenerator.renderIndex(guide);
                     saveToFile(guideMatrixHtml, outputDirectory, guide.getSlug() + ".html");
-
                 }
             }
         }
