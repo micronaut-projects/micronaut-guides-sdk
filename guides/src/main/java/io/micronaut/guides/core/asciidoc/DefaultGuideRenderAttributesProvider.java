@@ -32,15 +32,20 @@ class DefaultGuideRenderAttributesProvider implements GuideRenderAttributesProvi
     private static final String ATTRIBUTE_BUILD_TOOL = "buildTool";
     private static final String ATTRIBUTE_INTRO = "intro";
     private static final String ATTRIBUTE_TITLE = "title";
+    public static final String ATTRIBUTE_GUIDE_OPTION = "guideOption";
+    public static final String ATTRIBUTE_GUIDE = "guide";
 
     @Override
     public Map<String, Object> attributes(GuideRender guideRender) {
         Map<String, Object> attributes = new HashMap<>();
         Guide guide = guideRender.guide();
+        attributes.put(ATTRIBUTE_GUIDE, guide);
         GuidesOption guidesOption = guideRender.option();
+        attributes.put(ATTRIBUTE_GUIDE_OPTION, guidesOption);
         if (guide.getCloud() != null) {
             attributes.put(ATTRIBUTE_CLOUD, guide.getCloud().getAccronym());
         }
+
         attributes.put(ATTRIBUTE_LANGUAGE, guidesOption.getLanguage());
         attributes.put(ATTRIBUTE_TEST_FRAMEWORK, guidesOption.getTestFramework());
         attributes.put(ATTRIBUTE_BUILD_TOOL, guidesOption.getBuildTool());
