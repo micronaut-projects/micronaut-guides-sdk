@@ -1,6 +1,6 @@
 package io.micronaut.guides.core.asciidoc;
 
-import io.micronaut.guides.core.GuideRenderProvider;
+import io.micronaut.guides.core.GuideRender;
 import jakarta.inject.Singleton;
 import org.asciidoctor.log.LogRecord;
 import org.asciidoctor.log.Severity;
@@ -11,18 +11,13 @@ import org.slf4j.event.Level;
 public class DefaultAsciidocLogger implements AsciidocLogger {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(AsciidocLogger.class);
 
-    private final GuideRenderProvider guideRenderProvider;
+    public void log(LogRecord logRecord, GuideRender guideRender) {
 
-    DefaultAsciidocLogger(GuideRenderProvider guideRenderProvider) {
-        this.guideRenderProvider = guideRenderProvider;
-    }
-
-    @Override
-    public void log(LogRecord logRecord) {
         LOG.atLevel(mapSeverity(logRecord.getSeverity()))
-                .log("[{}] {}: {}",
-                        guideRenderProvider.getGuideRender().guide().getSlug(),
-                        logRecord.getCursor() != null ? logRecord.getCursor().getFile() + " line " + logRecord.getCursor().getLineNumber() : "",
+                .log("[{}] {}{}: {}",
+                        guideRender.guide().getAsciidoctor(),
+                        logRecord.getCursor() != null && logRecord.getCursor().getFile() != null ? (logRecord.getCursor().getFile() + " ") : "",
+                        logRecord.getCursor() != null ? ("(line: " + logRecord.getCursor().getLineNumber() + ")") : "",
                         logRecord.getMessage());
     }
 

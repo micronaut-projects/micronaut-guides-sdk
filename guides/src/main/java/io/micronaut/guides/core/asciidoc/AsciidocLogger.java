@@ -1,8 +1,8 @@
 package io.micronaut.guides.core.asciidoc;
 
-import org.asciidoctor.log.LogHandler;
+import io.micronaut.guides.core.GuideRender;
 import org.asciidoctor.log.LogRecord;
 
-public interface AsciidocLogger extends LogHandler {
-    void log(LogRecord logRecord);
+public interface AsciidocLogger {
+    void log(LogRecord logRecord, GuideRender guideRender);
 }

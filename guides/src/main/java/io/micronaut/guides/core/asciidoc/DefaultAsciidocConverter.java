@@ -17,6 +17,9 @@ package io.micronaut.guides.core.asciidoc;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.StringUtils;
+import io.micronaut.guides.core.Guide;
+import io.micronaut.guides.core.GuideRender;
+import io.micronaut.guides.core.GuidesOption;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -38,6 +41,8 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
     AttributesBuilder attributesBuilder;
 
     Asciidoctor asciidoctor;
+
+    GuideRender guideRender;
 
     DefaultAsciidocConverter(AsciidocConfiguration asciidocConfiguration,
                              AsciidocLogger asciidocLogger,
@@ -69,7 +74,7 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
         asciidoctor = Asciidoctor.Factory.create();
 
         Logger.getLogger("asciidoctor").setUseParentHandlers(false);
-        asciidoctor.registerLogHandler(asciidocLogger);
+        asciidoctor.registerLogHandler(logRecord -> asciidocLogger.log(logRecord, guideRender));
 
         JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
         includeProcessors.forEach(javaExtensionRegistry::includeProcessor);
@@ -83,6 +88,7 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
     public String convert(@NonNull @NotBlank String asciidoc,
                           @NonNull @NotNull File baseDir,
                           @NonNull AsciidocAttributeProvider attributeProvider) {
+        guideRender = new GuideRender((Guide) attributeProvider.attributes().get("guide"), (GuidesOption) attributeProvider.attributes().get("option"));
         attributeProvider.attributes()
                 .forEach((name, value) -> attributesBuilder.attribute(name, value));
         return asciidoctor.convert(asciidoc, optionsBuilder
