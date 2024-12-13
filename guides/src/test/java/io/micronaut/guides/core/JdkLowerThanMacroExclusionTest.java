@@ -52,7 +52,7 @@ public class JdkLowerThanMacroExclusionTest {
                 ----
                 
                 """;
-        String result = jdkLowerThanMacroExclusion.substitute(str, guide, option);
+        String result = jdkLowerThanMacroExclusion.substitute(str, new GuideRender(guide, option));
         String expected = """
                 Run the unit test:
                 

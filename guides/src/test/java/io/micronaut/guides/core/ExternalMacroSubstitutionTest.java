@@ -15,7 +15,7 @@ public class ExternalMacroSubstitutionTest {
     @Test
     void testSubstitute() {
         String line = "external:micronaut-k8s/requirements.adoc[]";
-        String result = externalMacroSubstitution.substitute(line, null, null);
+        String result = externalMacroSubstitution.substitute(line, null);
         String exptected = "include::{guidesDir}/micronaut-k8s/requirements.adoc[]";
         assertEquals(exptected, result);
     }

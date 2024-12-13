@@ -31,12 +31,11 @@ public interface MacroSubstitution extends Ordered {
      * Substitutes macros in the given string with the appropriate values.
      *
      * @param str    the string containing macros
-     * @param guide  the guide object
-     * @param option the guides option
+     * @param guideRender Guide
      * @return the string with macros substituted
      */
     @NonNull
-    String substitute(@NonNull String str, @NonNull Guide guide, @NonNull GuidesOption option);
+    String substitute(@NonNull String str, @NonNull GuideRender guideRender);
 
     /**
      * Retrieves the application associated with the given guide and Asciidoc macro.

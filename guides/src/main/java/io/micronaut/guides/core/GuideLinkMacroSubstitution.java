@@ -50,12 +50,11 @@ public class GuideLinkMacroSubstitution implements MacroSubstitution {
      * Substitutes guide link macros in the given string with standard link formats.
      *
      * @param str    the string containing guide link macros
-     * @param guide  the guide object (not used in this implementation)
-     * @param option the guides option (not used in this implementation)
+     * @param guideRender Guide
      * @return the string with guide link macros substituted with standard link formats
      */
     @Override
-    public String substitute(String str, Guide guide, GuidesOption option) {
+    public String substitute(String str, GuideRender guideRender) {
         for (String instance : findMacroInstances(str, GUIDE_LINK_REGEX)) {
             String res = processGuideLink(instance);
             str = str.replace(instance, res);

@@ -36,7 +36,7 @@ class BuildDiffLinkSubstitutionTest {
         final InputStream inputStreamBase = inputStreamOptional.get();
         Guide guide = assertDoesNotThrow(() -> jsonMapper.readValue(inputStreamBase, Guide.class));
         String str = "diffLink:[app=cli]";
-        String resJava = buildDiffLinkSubstitution.substitute(str, guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT));
+        String resJava = buildDiffLinkSubstitution.substitute(str, new GuideRender(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)));
         URI expectedURI = UriBuilder.of("https://micronaut.io")
                 .path("launch")
                 .queryParam("lang", "JAVA")
@@ -55,7 +55,7 @@ class BuildDiffLinkSubstitutionTest {
         assertEquals(expectedJava, resJava);
 
         str = "diffLink:[app=cli,featureExcludes=graalvm]";
-        resJava = buildDiffLinkSubstitution.substitute(str, guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT));
+        resJava = buildDiffLinkSubstitution.substitute(str, new GuideRender(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)));
         expectedURI = UriBuilder.of("https://micronaut.io")
                 .path("launch")
                 .queryParam("lang", "JAVA")

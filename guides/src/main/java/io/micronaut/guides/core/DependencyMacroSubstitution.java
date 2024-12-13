@@ -32,18 +32,17 @@ public class DependencyMacroSubstitution implements MacroSubstitution {
      * Substitutes dependency placeholders in the given string with Asciidoc formatted dependency lines.
      *
      * @param str    the string containing dependency placeholders
-     * @param guide  the guide metadata
-     * @param option the guide option
+     * @param guideRender guide
      * @return the string with dependency placeholders substituted
      */
     @Override
-    public String substitute(String str, Guide guide, GuidesOption option) {
+    public String substitute(String str, GuideRender guideRender) {
         for (String block : findMacroGroups(str, "dependencies")) {
-            List<String> lines = DependencyLines.asciidoc(block.replace(":dependencies:", "").strip().lines().toList(), option.getBuildTool(), option.getLanguage());
+            List<String> lines = DependencyLines.asciidoc(block.replace(":dependencies:", "").strip().lines().toList(), guideRender.option().getBuildTool(), guideRender.option().getLanguage());
             str = str.replace(block, String.join("\n", lines));
         }
         for (String line : findMacroLines(str, "dependency")) {
-            List<String> lines = DependencyLines.asciidoc(line, option.getBuildTool(), option.getLanguage());
+            List<String> lines = DependencyLines.asciidoc(line, guideRender.option().getBuildTool(), guideRender.option().getLanguage());
             str = str.replace(line, String.join("\n", lines));
         }
         return str;

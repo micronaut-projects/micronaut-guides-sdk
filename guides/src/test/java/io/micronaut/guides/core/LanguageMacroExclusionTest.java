@@ -50,7 +50,7 @@ public class LanguageMacroExclusionTest {
                 
                 Create package named `auth` where you will check basic authentication credentials.
                 """;
-        String result = languageMacroExclusion.substitute(str, guide, option);
+        String result = languageMacroExclusion.substitute(str, new GuideRender(guide, option));
         String expected = """
                 Create package named `models` where we will put our data beans.
                 
@@ -90,7 +90,7 @@ public class LanguageMacroExclusionTest {
                 
                 Create package named `auth` where you will check basic authentication credentials.
                 """;
-        String result = languageMacroExclusion.substitute(str, guide, option);
+        String result = languageMacroExclusion.substitute(str, new GuideRender(guide, option));
         String expected = """
                 Create package named `models` where we will put our data beans.
                 
@@ -130,7 +130,7 @@ public class LanguageMacroExclusionTest {
                 
                 Create package named `auth` where you will check basic authentication credentials.
                 """;
-        String result = languageMacroExclusion.substitute(str, guide, option);
+        String result = languageMacroExclusion.substitute(str, new GuideRender(guide, option));
         String expected = """
                 Create package named `models` where we will put our data beans.
                 

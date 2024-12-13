@@ -52,7 +52,7 @@ public class FeaturesMacroSubstitutionTest {
                 ----
                 
                 common:build-lang-arguments.adoc[]""";
-        String result = featuresMacroSubstitution.substitute(str, guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT));
+        String result = featuresMacroSubstitution.substitute(str, new GuideRender(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)));
         String expected = """
                 common:cli-or-launch.adoc[]
                 
