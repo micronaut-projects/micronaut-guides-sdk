@@ -21,8 +21,10 @@ import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.asciidoctor.*;
+import org.asciidoctor.extension.*;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * DefaultAsciidocConverter is a singleton class that implements the AsciidocConverter interface.
@@ -36,7 +38,12 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
 
     Asciidoctor asciidoctor;
 
-    DefaultAsciidocConverter(AsciidocConfiguration asciidocConfiguration) {
+    DefaultAsciidocConverter(AsciidocConfiguration asciidocConfiguration,
+                             List<IncludeProcessor> includeProcessors,
+                             List<BlockProcessor> blockProcessors,
+                             List<BlockMacroProcessor> blockMacroProcessors,
+                             List<InlineMacroProcessor> inLineMacroProcessors,
+                             List<Preprocessor> preProcessors) {
         attributesBuilder = Attributes.builder()
                 .sourceHighlighter(asciidocConfiguration.getSourceHighlighter())
                 .tableOfContents(asciidocConfiguration.getToc())
@@ -57,6 +64,12 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
         }
 
         asciidoctor = Asciidoctor.Factory.create();
+        JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
+        includeProcessors.forEach(javaExtensionRegistry::includeProcessor);
+        blockProcessors.forEach(javaExtensionRegistry::block);
+        blockMacroProcessors.forEach(javaExtensionRegistry::blockMacro);
+        inLineMacroProcessors.forEach(javaExtensionRegistry::inlineMacro);
+        preProcessors.forEach(javaExtensionRegistry::preprocessor);
     }
 
     @Override
