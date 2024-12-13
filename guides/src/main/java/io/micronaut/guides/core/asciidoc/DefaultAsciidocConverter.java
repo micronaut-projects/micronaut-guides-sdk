@@ -22,6 +22,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.asciidoctor.*;
 import org.asciidoctor.extension.*;
+
 import java.io.File;
 import java.util.List;
 
@@ -51,7 +52,8 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
                 .sectionNumbers(asciidocConfiguration.getSectnums())
                 .attribute("idprefix", asciidocConfiguration.getIdprefix())
                 .attribute("idseparator", asciidocConfiguration.getIdseparator())
-                .icons(asciidocConfiguration.getIcons()).imagesDir(asciidocConfiguration.getImagesdir())
+                .icons(asciidocConfiguration.getIcons())
+                .imagesDir(asciidocConfiguration.getImagesdir())
                 .noFooter(asciidocConfiguration.isNofooter());
 
         optionsBuilder = Options.builder()
