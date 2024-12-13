@@ -138,7 +138,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      *
      * @param inputDir        the input directory
      * @param destinationRoot the destination root
-     * @param sourceFile sourceFile
+     * @param sourceFile      sourceFile
      * @throws IOException if an I/O error occurs during file copy
      */
     private static void copyFile(File inputDir, File destinationRoot, File sourceFile) throws IOException {
@@ -177,18 +177,18 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
 
                 if (guide.getBase() != null) {
                     guides.stream()
-                        .filter(g -> g.getSlug().equals(guide.getBase()))
-                        .findFirst()
-                        .ifPresent(parentGuide -> {
-                            File baseDir = parentGuide.getFolder();
-                            String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
-                            Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
-                            try {
-                                copyGuideSourceFiles(baseDir, baseDestinationPath, appName, guidesOption.getLanguage().toString(), true);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
+                            .filter(g -> g.getSlug().equals(guide.getBase()))
+                            .findFirst()
+                            .ifPresent(parentGuide -> {
+                                File baseDir = parentGuide.getFolder();
+                                String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
+                                Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
+                                try {
+                                    copyGuideSourceFiles(baseDir, baseDestinationPath, appName, guidesOption.getLanguage().toString(), true);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
 
                 }
 
@@ -196,11 +196,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
 
                 if (app.getExcludeSource() != null) {
                     for (String mainSource : app.getExcludeSource()) {
-                        File f = fileToDelete(destination, GuideGenerationUtils.mainPath(appName, mainSource, guidesOption, guidesConfiguration));
-                        if (f.exists()) {
-                            f.delete();
-                        }
-                        f = fileToDelete(destination, GuideGenerationUtils.mainPath(appName, mainSource, guidesOption, guidesConfiguration));
+                        File f = fileToDelete(destination, GuideGenerationUtils.mainPath("", mainSource, guidesOption, guidesConfiguration));
                         if (f.exists()) {
                             f.delete();
                         }
@@ -209,11 +205,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
 
                 if (app.getExcludeTest() != null) {
                     for (String testSource : app.getExcludeTest()) {
-                        File f = fileToDelete(destination, GuideGenerationUtils.testPath(appName, testSource, guidesOption, guidesConfiguration));
-                        if (f.exists()) {
-                            f.delete();
-                        }
-                        f = fileToDelete(destination, GuideGenerationUtils.testPath(appName, testSource, guidesOption, guidesConfiguration));
+                        File f = fileToDelete(destination, GuideGenerationUtils.testPath("", testSource, guidesOption, guidesConfiguration));
                         if (f.exists()) {
                             f.delete();
                         }
