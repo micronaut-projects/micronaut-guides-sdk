@@ -126,12 +126,13 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                 }
 
                 String asciidoc = readFile(asciidocFile);
+                File guideOutput = new File(outputDirectory, guide.getSlug());
+                guideOutput.mkdir();
 
                 if (guide.getApps().isEmpty()) {
-                    renderHtml(asciidoc, new GuideRender(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)), inputDirectory, outputDirectory, guide.getSlug(), guideInputDirectory);
+                    renderHtml(asciidoc, new GuideRender(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)), inputDirectory, outputDirectory, guide.getSlug(), guideOutput);
                 } else {
-                    File guideOutput = new File(outputDirectory, guide.getSlug());
-                    guideOutput.mkdir();
+
                     guideProjectGenerator.generate(guideOutput, guide);
                     filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
 
