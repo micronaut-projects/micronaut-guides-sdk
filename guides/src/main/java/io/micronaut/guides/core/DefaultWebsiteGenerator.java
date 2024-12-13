@@ -119,7 +119,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                 String asciidoc = readFile(asciidocFile);
 
                 if (guide.getApps().isEmpty()) {
-                    renderHtml(asciidoc, guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT), inputDirectory, outputDirectory, guide.getSlug(), guideInputDirectory);
+                    renderHtml(asciidoc, new GuideRender(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)), inputDirectory, outputDirectory, guide.getSlug(), guideInputDirectory);
                 } else {
                     File guideOutput = new File(outputDirectory, guide.getSlug());
                     guideOutput.mkdir();
@@ -143,7 +143,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                         File folderFile = new File(guideOutput, name);
                         guideProjectZipper.zipDirectory(folderFile.getAbsolutePath(), zipFile.getAbsolutePath());
 
-                        renderHtml(asciidoc, guide, guidesOption, inputDirectory, outputDirectory, name, guideOutput);
+                        renderHtml(asciidoc, new GuideRender(guide, guidesOption), inputDirectory, outputDirectory, name, guideOutput);
                     }
 
                     String guideMatrixHtml = guideMatrixGenerator.renderIndex(guide);
@@ -165,9 +165,9 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         saveToFile(json, outputDirectory, jsonFeedConfiguration.getFilename());
     }
 
-    private void renderHtml(String asciidoc, Guide guide, GuidesOption option, File inputDirectory, File outputDirectory, String name, File guideOutput) throws IOException {
+    private void renderHtml(String asciidoc, GuideRender guideRender, File inputDirectory, File outputDirectory, String name, File guideOutput) throws IOException {
         // Macro substitution
-        String optionAsciidoc = macroSubstitution.substitute(asciidoc, guide, option);
+        String optionAsciidoc = macroSubstitution.substitute(asciidoc, guideRender);
 
         // HTML rendering
 
@@ -185,6 +185,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
             }
         }
 
+        Guide guide = guideRender.guide();
         String guideOptionHtmlFileName = name + ".html";
         optionHtml = guidePageGenerator.render(tocHtml, optionHtml);
         optionHtml = optionHtml.replace("{title}", guide.getTitle());

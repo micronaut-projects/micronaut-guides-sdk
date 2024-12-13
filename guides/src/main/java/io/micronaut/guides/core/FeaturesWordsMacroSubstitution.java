@@ -39,14 +39,13 @@ public class FeaturesWordsMacroSubstitution extends PlaceholderWithTargetMacroSu
     /**
      * Substitutes placeholders with features words in the given guide and option.
      *
-     * @param guide   the guide metadata
-     * @param option  the guide option
+     * @param guideRender guide
      * @param appName the application name
      * @return the string with features words substituted
      */
     @Override
-    protected String getSubstitution(Guide guide, GuidesOption option, String appName) {
-        List<String> features = app(guide, appName).visibleFeatures(option.getLanguage())
+    protected String getSubstitution(GuideRender guideRender, String appName) {
+        List<String> features = app(guideRender.guide(), appName).visibleFeatures(guideRender.option().getLanguage())
                 .stream()
                 .map(feature -> "`" + feature + "`")
                 .collect(Collectors.toList());

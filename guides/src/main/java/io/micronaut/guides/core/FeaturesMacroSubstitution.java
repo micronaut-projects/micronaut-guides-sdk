@@ -37,13 +37,12 @@ public class FeaturesMacroSubstitution extends PlaceholderWithTargetMacroSubstit
     /**
      * Returns the substitution string for the given guide, option, and application name.
      *
-     * @param guide   the guide metadata
-     * @param option  the guide option
+     * @param guideRender guide
      * @param appName the application name
      * @return the substitution string
      */
     @Override
-    protected String getSubstitution(Guide guide, GuidesOption option, String appName) {
-        return String.join(AsciidocMacro.ATTRIBUTE_SEPARATOR, app(guide, appName).visibleFeatures(option.getLanguage()));
+    protected String getSubstitution(GuideRender guideRender, String appName) {
+        return String.join(AsciidocMacro.ATTRIBUTE_SEPARATOR, app(guideRender.guide(), appName).visibleFeatures(guideRender.option().getLanguage()));
     }
 }

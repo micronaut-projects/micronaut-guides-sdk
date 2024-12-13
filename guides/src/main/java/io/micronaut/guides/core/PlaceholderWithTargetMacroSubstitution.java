@@ -33,14 +33,13 @@ abstract class PlaceholderWithTargetMacroSubstitution implements MacroSubstituti
     /**
      * Gets the substitution string for the given guide, option, and app.
      *
-     * @param guide  the guide to consider
-     * @param option the GuidesOption to consider
+     * @param guideRender Guide
      * @param app    the application name or target
      * @return the substitution string
      */
-    protected abstract String getSubstitution(Guide guide, GuidesOption option, String app);
+    protected abstract String getSubstitution(GuideRender guideRender, String app);
 
-    public String substitute(String str, Guide guide, GuidesOption option) {
+    public String substitute(String str, GuideRender guideRender) {
         Pattern pattern = Pattern.compile("@(?:([\\w-]*):)?" + getMacroName() + "@");
         for (String instance : MacroUtils.findMacroInstances(str, pattern)) {
             Optional<PlacheholderMacro> macroOptional = PlacheholderMacro.of(getMacroName(), instance);
@@ -49,7 +48,7 @@ abstract class PlaceholderWithTargetMacroSubstitution implements MacroSubstituti
             }
             PlacheholderMacro macro = macroOptional.get();
             String app = StringUtils.isNotEmpty(macro.target()) ? macro.target() : "default";
-            String res = getSubstitution(guide, option, app);
+            String res = getSubstitution(guideRender, app);
             str = str.replace(instance, res);
         }
         return str;

@@ -75,8 +75,9 @@ abstract class SourceBlockMacroSubstitution implements MacroSubstitution {
     }
 
     @Override
-    public String substitute(String str, Guide guide, GuidesOption option) {
-        String slug = guide.getSlug();
+    public String substitute(String str, GuideRender guideRender) {
+        GuidesOption option = guideRender.option();
+        String slug = guideRender.guide().getSlug();
         for (String line : findMacroLines(str, getMacroName())) {
             Optional<AsciidocMacro> asciidocMacroOptional = AsciidocMacro.of(getMacroName(), line);
             if (asciidocMacroOptional.isPresent()) {

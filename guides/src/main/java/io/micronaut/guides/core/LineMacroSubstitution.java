@@ -48,7 +48,7 @@ abstract class LineMacroSubstitution implements MacroSubstitution {
     protected abstract String getPrefix();
 
     @Override
-    public String substitute(String str, Guide guide, GuidesOption option) {
+    public String substitute(String str, GuideRender guideRender) {
         for (String line : findMacroLines(str, getMacroName())) {
             Optional<AsciidocMacro> asciidocMacroOptional = AsciidocMacro.of(getMacroName(), line);
             if (asciidocMacroOptional.isEmpty()) {

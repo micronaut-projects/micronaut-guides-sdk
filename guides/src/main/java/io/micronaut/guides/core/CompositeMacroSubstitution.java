@@ -45,16 +45,15 @@ class CompositeMacroSubstitution implements MacroSubstitution {
      * Applies the list of {@link MacroSubstitution} instances to the given string in sequence.
      *
      * @param str    the string to substitute
-     * @param guide  the guide context
-     * @param option the guides option context
+     * @param guideRender Guide
      * @return the substituted string
      */
     @Override
     @NonNull
-    public String substitute(@NonNull String str, @NonNull Guide guide, @NonNull GuidesOption option) {
+    public String substitute(@NonNull String str, @NonNull GuideRender guideRender) {
         String result = str;
         for (MacroSubstitution substitution : substitutions) {
-            result = substitution.substitute(result, guide, option);
+            result = substitution.substitute(result, guideRender);
         }
         return result;
     }

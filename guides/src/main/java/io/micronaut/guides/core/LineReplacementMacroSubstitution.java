@@ -32,14 +32,13 @@ public abstract class LineReplacementMacroSubstitution implements MacroSubstitut
     /**
      *
      * @param asciidocMacro Asciidoc Macro
-     * @param guide Guide
-     * @param option Guide Option
+     * @param guideRender Guide
      * @return Line replacement
      */
-    protected abstract String replacement(AsciidocMacro asciidocMacro, Guide guide, GuidesOption option);
+    protected abstract String replacement(AsciidocMacro asciidocMacro, GuideRender guideRender);
 
     @Override
-    public String substitute(String str, Guide guide, GuidesOption option) {
+    public String substitute(String str, GuideRender guideRender) {
         for (String line : findMacroLines(str, getMacro())) {
             Optional<AsciidocMacro> asciidocMacroOptional = AsciidocMacro.of(getMacro(), line);
             if (asciidocMacroOptional.isEmpty()) {
@@ -47,7 +46,7 @@ public abstract class LineReplacementMacroSubstitution implements MacroSubstitut
             }
 
             AsciidocMacro asciidocMacro = asciidocMacroOptional.get();
-            str = str.replace(line, replacement(asciidocMacro, guide, option));
+            str = str.replace(line, replacement(asciidocMacro, guideRender));
         }
         return str;
     }
