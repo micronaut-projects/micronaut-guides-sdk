@@ -15,7 +15,7 @@ public class DefaultAsciidocLogger implements AsciidocLogger {
 
         LOG.atLevel(mapSeverity(logRecord.getSeverity()))
                 .log("[{}] {}{}: {}",
-                        guideRender.guide().getAsciidoctor(),
+                        logRecord.getCursor(),
                         logRecord.getCursor() != null && logRecord.getCursor().getFile() != null ? (logRecord.getCursor().getFile() + " ") : "",
                         logRecord.getCursor() != null ? ("(line: " + logRecord.getCursor().getLineNumber() + ")") : "",
                         logRecord.getMessage());
