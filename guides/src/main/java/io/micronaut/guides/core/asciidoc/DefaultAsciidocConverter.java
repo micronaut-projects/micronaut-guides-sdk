@@ -65,6 +65,7 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
 
         optionsBuilder = Options.builder()
                 .eruby(asciidocConfiguration.getRuby())
+                .docType("book")
                 .safe(SafeMode.UNSAFE);
 
         if (StringUtils.isNotEmpty(asciidocConfiguration.getBaseDir())) {
