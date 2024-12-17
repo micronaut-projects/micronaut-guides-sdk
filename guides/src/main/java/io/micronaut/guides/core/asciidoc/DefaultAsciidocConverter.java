@@ -17,11 +17,13 @@ package io.micronaut.guides.core.asciidoc;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.StringUtils;
+import io.micronaut.guides.core.Guide;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.asciidoctor.*;
 import org.asciidoctor.extension.*;
+import org.slf4j.MDC;
 
 import java.io.File;
 import java.util.List;
@@ -33,6 +35,7 @@ import java.util.List;
 @Singleton
 public class DefaultAsciidocConverter implements AsciidocConverter {
 
+    public static final String ATTRIBUTE_GUIDE = "guide";
     OptionsBuilder optionsBuilder;
     AttributesBuilder attributesBuilder;
 
@@ -81,6 +84,10 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
                           @NonNull AsciidocAttributeProvider attributeProvider) {
         attributeProvider.attributes()
                 .forEach((name, value) -> attributesBuilder.attribute(name, value));
+        Object guide = attributeProvider.attributes().get(ATTRIBUTE_GUIDE);
+        if (guide instanceof Guide g) {
+            MDC.put("guide", g.getSlug());
+        }
         return asciidoctor.convert(asciidoc, optionsBuilder
                 .baseDir(baseDir)
                 .toFile(false)
