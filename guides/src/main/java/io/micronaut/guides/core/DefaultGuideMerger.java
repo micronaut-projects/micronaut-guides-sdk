@@ -68,7 +68,12 @@ public class DefaultGuideMerger implements GuideMerger {
      */
     public <T> void merge(T base, T guide) {
         try {
-            for (Field field : guide.getClass().getDeclaredFields()) {
+            Class<?> parentClass = guide.getClass().getSuperclass();
+            List<Field> fields = new ArrayList<>(Arrays.asList(guide.getClass().getDeclaredFields()));
+            if (parentClass != null && (Guide.class.isAssignableFrom(parentClass) || App.class.isAssignableFrom(parentClass))) {
+                fields.addAll(List.of(parentClass.getDeclaredFields()));
+            }
+            for (Field field : fields) {
                 field.setAccessible(true);
 
                 Object guideValue = field.get(guide);
@@ -127,21 +132,14 @@ public class DefaultGuideMerger implements GuideMerger {
 
     private boolean isOfType(Field field, String type) {
         ParameterizedType stringListType = (ParameterizedType) field.getGenericType();
-        Type actualTypeArgument = ((ParameterizedType) stringListType).getActualTypeArguments()[0];
+        Type actualTypeArgument = stringListType.getActualTypeArguments()[0];
 
-        if (actualTypeArgument instanceof Class<?>) {
-            Class<?> stringListClass = (Class<?>) actualTypeArgument;
-            if (stringListClass.getName().equals(type)) {
-                return true;
-            }
-        } else if (actualTypeArgument instanceof WildcardType) {
-            WildcardType wildcardType = (WildcardType) actualTypeArgument;
+        if (actualTypeArgument instanceof Class<?> stringListClass) {
+            return stringListClass.getName().equals(type);
+        } else if (actualTypeArgument instanceof WildcardType wildcardType) {
             Type[] upperBounds = wildcardType.getUpperBounds();
-            if (upperBounds.length > 0 && upperBounds[0] instanceof Class<?>) {
-                Class<?> boundClass = (Class<?>) upperBounds[0];
-                if (boundClass.getName().equals(type)) {
-                    return true;
-                }
+            if (upperBounds.length > 0 && upperBounds[0] instanceof Class<?> boundClass) {
+                return boundClass.getName().equals(type);
             }
         }
 
