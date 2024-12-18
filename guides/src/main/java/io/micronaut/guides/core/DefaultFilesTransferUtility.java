@@ -15,7 +15,6 @@
  */
 package io.micronaut.guides.core;
 
-import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.ArrayUtils;
@@ -95,14 +94,10 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         }
 
         Path sourcePath = Paths.get(inputDir.getAbsolutePath(), appName, language);
-        if (!Files.exists(sourcePath)) {
-            sourcePath.toFile().mkdir();
-        }
+
         if (Files.exists(sourcePath)) {
             // copy source/resource files for the current language
             Files.walkFileTree(sourcePath, new CopyFileVisitor(destinationPath));
-        } else if (!ignoreMissingDirectories) {
-            throw new ConfigurationException("source directory " + sourcePath.toFile().getAbsolutePath() + " does not exist");
         }
     }
 
