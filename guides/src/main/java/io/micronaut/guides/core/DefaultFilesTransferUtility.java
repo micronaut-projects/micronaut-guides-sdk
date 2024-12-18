@@ -30,10 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static io.micronaut.core.util.StringUtils.EMPTY_STRING;
 
@@ -230,6 +227,29 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
     }
 
     private void deleteFiles(List<String> sources, File destination, GuidesOption guidesOption, GuidesConfiguration guidesConfiguration, String pathType) {
+        if (sources.size() == 1 && sources.get(0).equals("*")) {
+            File destinationFolder = new File(destination, "src/" + pathType);
+            //delete all files in the destination folder and its subfolders
+            if (destinationFolder.exists()) {
+                Arrays.stream(destinationFolder.listFiles()).forEach(file -> {
+                    if (file.isDirectory()) {
+                        try {
+                            Files.walk(file.toPath())
+                                    .sorted(Comparator.reverseOrder())
+                                    .map(Path::toFile)
+                                    .forEach(File::delete);
+                        } catch (IOException e) {
+                            LOG.warn("Failed to delete directory {}", file, e);
+                        }
+                    } else {
+                        file.delete();
+                    }
+                });
+            }
+
+            return;
+        }
+
         for (String source : sources) {
             String path = pathType.equals("main") ? GuideGenerationUtils.mainPath("", source, guidesOption, guidesConfiguration) : GuideGenerationUtils.testPath("", source, guidesOption, guidesConfiguration);
             File file = fileToDelete(destination, path);
