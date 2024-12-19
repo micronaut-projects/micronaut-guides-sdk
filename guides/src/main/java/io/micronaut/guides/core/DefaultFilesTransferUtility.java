@@ -15,7 +15,6 @@
  */
 package io.micronaut.guides.core;
 
-import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.ArrayUtils;
@@ -30,10 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static io.micronaut.core.util.StringUtils.EMPTY_STRING;
 
@@ -98,14 +94,10 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         }
 
         Path sourcePath = Paths.get(inputDir.getAbsolutePath(), appName, language);
-        if (!Files.exists(sourcePath)) {
-            sourcePath.toFile().mkdir();
-        }
+
         if (Files.exists(sourcePath)) {
             // copy source/resource files for the current language
             Files.walkFileTree(sourcePath, new CopyFileVisitor(destinationPath));
-        } else if (!ignoreMissingDirectories) {
-            throw new ConfigurationException("source directory " + sourcePath.toFile().getAbsolutePath() + " does not exist");
         }
     }
 
@@ -138,7 +130,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      *
      * @param inputDir        the input directory
      * @param destinationRoot the destination root
-     * @param sourceFile sourceFile
+     * @param sourceFile      sourceFile
      * @throws IOException if an I/O error occurs during file copy
      */
     private static void copyFile(File inputDir, File destinationRoot, File sourceFile) throws IOException {
@@ -177,48 +169,44 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
 
                 if (guide.getBase() != null) {
                     guides.stream()
-                        .filter(g -> g.getSlug().equals(guide.getBase()))
-                        .findFirst()
-                        .ifPresent(parentGuide -> {
-                            File baseDir = parentGuide.getFolder();
-                            String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
-                            Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
-                            try {
-                                copyGuideSourceFiles(baseDir, baseDestinationPath, appName, guidesOption.getLanguage().toString(), true);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
+                            .filter(g -> g.getSlug().equals(guide.getBase()))
+                            .findFirst()
+                            .ifPresent(parentGuide -> {
+                                File baseDir = parentGuide.getFolder();
+                                String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
+                                Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
+                                try {
+                                    copyGuideSourceFiles(baseDir, baseDestinationPath, appName, guidesOption.getLanguage().toString(), true);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            });
 
                 }
 
                 copyGuideSourceFiles(inputDirectory, destinationPath, appName, guidesOption.getLanguage().toString(), false);
 
                 if (app.getExcludeSource() != null) {
-                    for (String mainSource : app.getExcludeSource()) {
-                        File f = fileToDelete(destination, GuideGenerationUtils.mainPath(appName, mainSource, guidesOption, guidesConfiguration));
-                        if (f.exists()) {
-                            f.delete();
-                        }
-                        f = fileToDelete(destination, GuideGenerationUtils.mainPath(appName, mainSource, guidesOption, guidesConfiguration));
-                        if (f.exists()) {
-                            f.delete();
-                        }
-                    }
+                    deleteFiles(app.getExcludeSource(), destination, guidesOption, guidesConfiguration, "main");
+                }
+
+                if (app.getExcludeBaseSource() != null) {
+                    String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
+                    Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
+                    deleteFiles(app.getExcludeBaseSource(), baseDestinationPath.toFile(), guidesOption, guidesConfiguration, "main");
                 }
 
                 if (app.getExcludeTest() != null) {
-                    for (String testSource : app.getExcludeTest()) {
-                        File f = fileToDelete(destination, GuideGenerationUtils.testPath(appName, testSource, guidesOption, guidesConfiguration));
-                        if (f.exists()) {
-                            f.delete();
-                        }
-                        f = fileToDelete(destination, GuideGenerationUtils.testPath(appName, testSource, guidesOption, guidesConfiguration));
-                        if (f.exists()) {
-                            f.delete();
-                        }
-                    }
+                    deleteFiles(app.getExcludeTest(), destination, guidesOption, guidesConfiguration, "test");
                 }
+
+                if (app.getExcludeBaseTest() != null) {
+                    String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
+                    Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
+                    deleteFiles(app.getExcludeBaseTest(), baseDestinationPath.toFile(), guidesOption, guidesConfiguration, "test");
+                }
+
+
                 File destinationRoot = new File(outputDirectory.getAbsolutePath(), folder);
                 if (guide.getZipIncludes() != null) {
                     for (String zipInclude : guide.getZipIncludes()) {
@@ -229,6 +217,41 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                     copyFile(inputDirectory, destinationRoot, f);
                 }
                 addLicenses(new File(outputDirectory.getAbsolutePath(), folder));
+            }
+        }
+    }
+
+    private void deleteFiles(List<String> sources, File destination, GuidesOption guidesOption, GuidesConfiguration guidesConfiguration, String pathType) {
+        if (sources.size() == 1 && sources.get(0).equals("*")) {
+            File destinationFolder = new File(destination, "src/" + pathType);
+            //delete all files in the destination folder and its subfolders
+            if (destinationFolder.exists()) {
+                Arrays.stream(destinationFolder.listFiles()).forEach(file -> {
+                    if (file.isDirectory()) {
+                        try {
+                            Files.walk(file.toPath())
+                                    .sorted(Comparator.reverseOrder())
+                                    .map(Path::toFile)
+                                    .forEach(File::delete);
+                        } catch (IOException e) {
+                            LOG.warn("Failed to delete directory {}", file, e);
+                        }
+                    } else {
+                        file.delete();
+                    }
+                });
+            }
+
+            return;
+        }
+
+        for (String source : sources) {
+            String path = pathType.equals("main") ? GuideGenerationUtils.mainPath("", source, guidesOption, guidesConfiguration) : GuideGenerationUtils.testPath("", source, guidesOption, guidesConfiguration);
+            File file = fileToDelete(destination, path);
+            if (file.exists()) {
+                file.delete();
+            } else {
+                LOG.warn("File {} to delete does not exist", file);
             }
         }
     }
