@@ -167,7 +167,11 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                 Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, module);
                 File destination = destinationPath.toFile();
 
-                if (guide.getBase() != null) {
+                File libDir = Paths.get(inputDirectory.getAbsolutePath(), appName, "lib").toFile();
+                if (libDir.exists()) {
+                    File destinationLibDir = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, "lib").toFile();
+                    Files.walkFileTree(libDir.toPath(), new CopyFileVisitor(destinationLibDir.toPath()));
+                } else if (guide.getBase() != null) {
                     guides.stream()
                             .filter(g -> g.getSlug().equals(guide.getBase()))
                             .findFirst()
@@ -240,6 +244,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                         file.delete();
                     }
                 });
+                destinationFolder.delete();
             }
 
             return;
