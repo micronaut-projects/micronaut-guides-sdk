@@ -39,12 +39,15 @@ abstract class MacroExclusion implements MacroSubstitution {
     @Override
     public String substitute(String str, GuideRender guideRender) {
         for (List<String> group : MacroUtils.findMacroGroupsNested(str, getMacroName())) {
-            List<String> params = MacroUtils.extractMacroGroupParameters(group.getFirst(), getMacroName());
-            if (shouldExclude(params, guideRender)) {
-                str = str.replace(String.join(LINE_BREAK, group) + LINE_BREAK, "");
-            } else {
-                str = str.replace(String.join(LINE_BREAK, group), String.join(LINE_BREAK, group.subList(1, group.size() - 1)));
+            if (!group.isEmpty()) {
+                List<String> params = MacroUtils.extractMacroGroupParameters(group.get(0), getMacroName());
+                if (shouldExclude(params, guideRender)) {
+                    str = str.replace(String.join(LINE_BREAK, group) + LINE_BREAK, "");
+                } else {
+                    str = str.replace(String.join(LINE_BREAK, group), String.join(LINE_BREAK, group.subList(1, group.size() - 1)));
+                }
             }
+
         }
         return str;
     }
