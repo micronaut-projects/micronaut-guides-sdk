@@ -32,8 +32,8 @@ class DefaultGuideRenderAttributesProvider implements GuideRenderAttributesProvi
     private static final String ATTRIBUTE_BUILD_TOOL = "buildTool";
     private static final String ATTRIBUTE_INTRO = "intro";
     private static final String ATTRIBUTE_TITLE = "title";
-    public static final String ATTRIBUTE_GUIDE_OPTION = "guideOption";
-    public static final String ATTRIBUTE_GUIDE = "guide";
+    private static final String ATTRIBUTE_GUIDE_OPTION = "guideOption";
+    private static final String ATTRIBUTE_GUIDE = "guide";
 
     @Override
     public Map<String, Object> attributes(GuideRender guideRender) {
