@@ -1,6 +1,6 @@
 [versions]
-micronaut-platform = "4.7.0"
 micronaut = "4.7.10"
+micronaut-platform = "4.7.3"
 micronaut-docs = "2.0.0"
 micronaut-test = "4.6.0"
 groovy = "4.0.23"
