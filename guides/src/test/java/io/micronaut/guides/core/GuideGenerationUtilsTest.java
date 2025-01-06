@@ -9,9 +9,11 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @MicronautTest(startApplication = false)
 class GuideGenerationUtilsTest {
@@ -23,7 +25,8 @@ class GuideGenerationUtilsTest {
     @Test
     void testMainPath() {
         GuidesOption option = new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT);
-        String result = GuideGenerationUtils.mainPath("appName", "fileName", option, configuration);
+        App app = new App();
+        String result = GuideGenerationUtils.mainPath(app, "fileName", option, configuration);
 
         assertEquals("appName/src/main/java/example/micronaut/fileName.java", result);
     }
@@ -31,15 +34,17 @@ class GuideGenerationUtilsTest {
     @Test
     void testTestPath() {
         GuidesOption option = new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT);
-        String result = GuideGenerationUtils.testPath("appName", "fileNameTest", option, configuration);
+        String result = GuideGenerationUtils.testPath(new App(), "fileNameTest", option, configuration);
 
         assertEquals("appName/src/test/java/example/micronaut/fileNameTest.java", result);
     }
 
+
     @Test
     void testPathByFolder() {
         GuidesOption option = new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT);
-        String result = GuideGenerationUtils.pathByFolder("appName", "fileName", "main", option, configuration);
+        App app = new App();
+        String result = GuideGenerationUtils.pathByFolder(app, "fileName", "main", option);
 
         assertEquals("appName/src/main/java/example/micronaut/fileName.java", result);
     }
