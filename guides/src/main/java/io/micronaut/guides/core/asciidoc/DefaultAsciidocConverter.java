@@ -55,6 +55,7 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
                 .sectionNumbers(asciidocConfiguration.getSectnums())
                 .attribute("idprefix", asciidocConfiguration.getIdprefix())
                 .attribute("idseparator", asciidocConfiguration.getIdseparator())
+                .showTitle(true)
                 .icons(asciidocConfiguration.getIcons())
                 .imagesDir(asciidocConfiguration.getImagesdir())
                 .noFooter(asciidocConfiguration.isNofooter());
