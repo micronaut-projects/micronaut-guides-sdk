@@ -2,6 +2,20 @@ plugins {
     id("io.micronaut.build.internal.guides-module")
 }
 
+repositories {
+    maven {
+        url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+    mavenCentral {
+        mavenContent {
+            releasesOnly()
+        }
+    }
+}
+
 dependencies {
     api(libs.micronaut.starter.api)
     api(libs.managed.asciidoctorj)
@@ -22,12 +36,12 @@ dependencies {
     testImplementation(libs.jsonassert)
 }
 java {
-    sourceCompatibility = JavaVersion.toVersion("21")
-    targetCompatibility = JavaVersion.toVersion("21")
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
 }
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 tasks.withType<Test> {

@@ -98,6 +98,14 @@ public class GuideProjectGeneratorTest {
                     mainClass = "example.micronaut.CliCommand"
                 }
                 java {
+                    sourceCompatibility = JavaVersion.toVersion("17")
+                    targetCompatibility = JavaVersion.toVersion("17")
+                }""") ||
+                result.contains("""
+                application {
+                    mainClass = "example.micronaut.CliCommand"
+                }
+                java {
                     sourceCompatibility = JavaVersion.toVersion("21")
                     targetCompatibility = JavaVersion.toVersion("21")
                 }"""));

@@ -183,7 +183,7 @@ public class IncludeDirective {
             if (getTags().size() > 1) {
                 attributes.add(ATTRIBUTE_TAGS + "=" + String.join(";", getTags()));
             } else if (getTags().size() == 1) {
-                attributes.add(ATTRIBUTE_TAG + "=" + getTags().getFirst());
+                attributes.add(ATTRIBUTE_TAG + "=" + getTags().get(0));
             }
         }
         if (getIndent() != null) {
