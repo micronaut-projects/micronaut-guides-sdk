@@ -2,6 +2,20 @@ plugins {
     id("io.micronaut.build.internal.guides-module")
 }
 
+repositories {
+    maven {
+        url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+    mavenCentral {
+        mavenContent {
+            releasesOnly()
+        }
+    }
+}
+
 dependencies {
     api(libs.micronaut.starter.api)
     api(libs.managed.asciidoctorj)
