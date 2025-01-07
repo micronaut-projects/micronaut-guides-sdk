@@ -17,12 +17,16 @@ package io.micronaut.guides.core.asciidoc;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.StringUtils;
+import io.micronaut.guides.core.Guide;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.asciidoctor.*;
+import org.asciidoctor.extension.*;
+import org.slf4j.MDC;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * DefaultAsciidocConverter is a singleton class that implements the AsciidocConverter interface.
@@ -31,12 +35,18 @@ import java.io.File;
 @Singleton
 public class DefaultAsciidocConverter implements AsciidocConverter {
 
+    public static final String ATTRIBUTE_GUIDE = "guide";
     OptionsBuilder optionsBuilder;
     AttributesBuilder attributesBuilder;
 
     Asciidoctor asciidoctor;
 
-    DefaultAsciidocConverter(AsciidocConfiguration asciidocConfiguration) {
+    DefaultAsciidocConverter(AsciidocConfiguration asciidocConfiguration,
+                             List<IncludeProcessor> includeProcessors,
+                             List<BlockProcessor> blockProcessors,
+                             List<BlockMacroProcessor> blockMacroProcessors,
+                             List<InlineMacroProcessor> inLineMacroProcessors,
+                             List<Preprocessor> preProcessors) {
         attributesBuilder = Attributes.builder()
                 .sourceHighlighter(asciidocConfiguration.getSourceHighlighter())
                 .tableOfContents(asciidocConfiguration.getToc())
@@ -45,11 +55,14 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
                 .sectionNumbers(asciidocConfiguration.getSectnums())
                 .attribute("idprefix", asciidocConfiguration.getIdprefix())
                 .attribute("idseparator", asciidocConfiguration.getIdseparator())
-                .icons(asciidocConfiguration.getIcons()).imagesDir(asciidocConfiguration.getImagesdir())
+                .showTitle(true)
+                .icons(asciidocConfiguration.getIcons())
+                .imagesDir(asciidocConfiguration.getImagesdir())
                 .noFooter(asciidocConfiguration.isNofooter());
 
         optionsBuilder = Options.builder()
                 .eruby(asciidocConfiguration.getRuby())
+                .docType("book")
                 .safe(SafeMode.UNSAFE);
 
         if (StringUtils.isNotEmpty(asciidocConfiguration.getBaseDir())) {
@@ -57,18 +70,28 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
         }
 
         asciidoctor = Asciidoctor.Factory.create();
+        JavaExtensionRegistry javaExtensionRegistry = asciidoctor.javaExtensionRegistry();
+        includeProcessors.forEach(javaExtensionRegistry::includeProcessor);
+        blockProcessors.forEach(javaExtensionRegistry::block);
+        blockMacroProcessors.forEach(javaExtensionRegistry::blockMacro);
+        inLineMacroProcessors.forEach(javaExtensionRegistry::inlineMacro);
+        preProcessors.forEach(javaExtensionRegistry::preprocessor);
     }
 
     @Override
     public String convert(@NonNull @NotBlank String asciidoc,
                           @NonNull @NotNull File baseDir,
-                          @NonNull @NotBlank String sourceDir,
-                          @NonNull @NotBlank String guideSourceDir) {
+                          @NonNull AsciidocAttributeProvider attributeProvider) {
+        attributeProvider.attributes()
+                .forEach((name, value) -> attributesBuilder.attribute(name, value));
+        Object guide = attributeProvider.attributes().get(ATTRIBUTE_GUIDE);
+        if (guide instanceof Guide g) {
+            MDC.put("guide", g.getSlug());
+        }
         return asciidoctor.convert(asciidoc, optionsBuilder
                 .baseDir(baseDir)
                 .toFile(false)
-                .attributes(attributesBuilder.attribute("sourcedir", sourceDir).build())
-                .attributes(attributesBuilder.attribute("guidesourcedir", guideSourceDir).build())
+                .attributes(attributesBuilder.build())
                 .build());
     }
 }

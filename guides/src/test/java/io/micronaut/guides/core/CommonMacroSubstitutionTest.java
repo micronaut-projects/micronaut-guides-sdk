@@ -15,7 +15,7 @@ public class CommonMacroSubstitutionTest {
     @Test
     void testSubstitute() {
         String line = "common:header-top.adoc[]";
-        String result = commonMacroSubstitution.substitute(line, null, null);
+        String result = commonMacroSubstitution.substitute(line, null);
         String exptected = "include::{commonsDir}/common-header-top.adoc[]";
         assertEquals(exptected, result);
     }

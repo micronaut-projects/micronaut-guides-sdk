@@ -44,12 +44,11 @@ public class LanguageMacroExclusion extends MacroExclusion {
      * Determines whether the macro should be excluded based on the specified parameters, option, and guide.
      *
      * @param params the list of parameters
-     * @param option the guides option
-     * @param guide  the guide object
+     * @param guideRender guide
      * @return true if the macro should be excluded, false otherwise
      */
     @Override
-    protected boolean shouldExclude(List<String> params, GuidesOption option, Guide guide) {
-        return params.contains(option.getLanguage().toString());
+    protected boolean shouldExclude(List<String> params, GuideRender guideRender) {
+        return params.contains(guideRender.option().getLanguage().toString());
     }
 }

@@ -48,13 +48,13 @@ public class PlaceholderMacroSubstitution implements MacroSubstitution {
      * Substitutes placeholders in the given string with values from the guide and option.
      *
      * @param str    the string containing placeholders
-     * @param guide  the guide metadata
-     * @param option the guide option
+     * @param guideRender Guide
      * @return the string with placeholders substituted
      */
     @Override
-    public String substitute(String str, Guide guide, GuidesOption option) {
-
+    public String substitute(String str, GuideRender guideRender) {
+        Guide guide = guideRender.guide();
+        GuidesOption option = guideRender.option();
         str = str.replace("{githubSlug}", guide.getSlug());
         str = str.replace("@language@", StringUtils.capitalize(option.getLanguage().toString()));
         str = str.replace("@guideTitle@", guide.getTitle());

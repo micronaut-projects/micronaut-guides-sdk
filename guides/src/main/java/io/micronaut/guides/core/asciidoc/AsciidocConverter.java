@@ -31,13 +31,11 @@ public interface AsciidocConverter {
      *
      * @param asciidoc the source Asciidoc, must not be null
      * @param baseDir Base directory for asciidoc
-     * @param sourceDir the directory where all the projects source code has been generated
-     * @param guideSourceDir the directory where the source code for the guide option has been generated
+     * @param attributeProvider Attribute provider
      * @return the converted content as a string, or null if the conversion fails
      */
     @Nullable
     String convert(@NonNull @NotBlank String asciidoc,
                    @NonNull @NotNull File baseDir,
-                   @NonNull @NotBlank String sourceDir,
-                   @NonNull @NotBlank String guideSourceDir);
+                   @NonNull AsciidocAttributeProvider attributeProvider);
 }

@@ -85,19 +85,18 @@ public class BuildDiffLinkSubstitution implements MacroSubstitution {
      * Substitutes macros in the given string with the appropriate values.
      *
      * @param str    the string containing macros
-     * @param guide  the guide object
-     * @param option the guides option
+     * @param guideRender  guide
      * @return the string with macros substituted
      */
     @Override
-    public String substitute(String str, Guide guide, GuidesOption option) {
+    public String substitute(String str, GuideRender guideRender) {
         for (String line : findMacroLines(str, MACRO_DIFF_LINK)) {
             Optional<AsciidocMacro> asciidocMacroOptional = AsciidocMacro.of(MACRO_DIFF_LINK, line);
             if (asciidocMacroOptional.isEmpty()) {
                 continue;
             }
             AsciidocMacro asciidocMacro = asciidocMacroOptional.get();
-            String res = buildDiffLink(asciidocMacro, guide, option).toString() + "[Diff]";
+            String res = buildDiffLink(asciidocMacro, guideRender).toString() + "[Diff]";
             str = str.replace(line, res);
         }
         return str;
@@ -107,18 +106,18 @@ public class BuildDiffLinkSubstitution implements MacroSubstitution {
      * Builds a URI for the diff link based on the given Asciidoc macro, guide, and guides option.
      *
      * @param asciidocMacro the Asciidoc macro
-     * @param guide         the guide object
-     * @param option        the guides option
+     * @param guideRender the guide object
      * @return the URI for the diff link
      */
-    private URI buildDiffLink(AsciidocMacro asciidocMacro, Guide guide, GuidesOption option) {
+    private URI buildDiffLink(AsciidocMacro asciidocMacro, GuideRender guideRender) {
         String appName = appName(asciidocMacro);
+        Guide guide = guideRender.guide();
         App app = app(guide, asciidocMacro);
-        Set<String> features = features(app, asciidocMacro, option);
+        Set<String> features = features(app, asciidocMacro, guideRender.option());
         UriBuilder uriBuilder = UriBuilder.of(guidesConfiguration.getProjectGeneratorUrl())
-                .queryParam(QUERY_PARAMLANG, option.getLanguage().name())
-                .queryParam(QUERY_PARAM_BUILD, option.getBuildTool().name())
-                .queryParam(QUERY_PARAM_TEST, option.getTestFramework().name())
+                .queryParam(QUERY_PARAMLANG, guideRender.option().getLanguage().name())
+                .queryParam(QUERY_PARAM_BUILD, guideRender.option().getBuildTool().name())
+                .queryParam(QUERY_PARAM_TEST, guideRender.option().getTestFramework().name())
                 .queryParam(QUERY_PARAM_NAME, appName.equals(guidesConfiguration.getDefaultAppName()) ? "micronautguide" : appName)
                 .queryParam(QUERY_PARAM_TYPE, app != null ? app.getApplicationType().name() : ApplicationType.DEFAULT.name())
                 .queryParam(QUERY_PARAM_PACKAGE, guidesConfiguration.getPackageName())

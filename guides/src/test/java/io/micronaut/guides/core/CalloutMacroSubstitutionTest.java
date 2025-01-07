@@ -15,7 +15,7 @@ public class CalloutMacroSubstitutionTest {
     @Test
     void testSubstitute() {
         String line = "callout:get[arg0=index,arg1=/hello]";
-        String result = calloutMacro.substitute(line, null, null);
+        String result = calloutMacro.substitute(line, null);
         String exptected = """
                 :arg0: index
                 :arg1: /hello

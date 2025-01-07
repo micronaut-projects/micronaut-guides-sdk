@@ -61,22 +61,21 @@ public class CliMacroSubstitution extends PlaceholderWithTargetMacroSubstitution
     /**
      * Returns the substitution for the given guide, option, and application name.
      *
-     * @param guide   the guide
-     * @param option  the option
+     * @param guideRender the guide
      * @param appName the application name
      * @return the substitution string
      * @throws ConfigurationException if no CLI command is found for the application
      */
     @Override
-    protected String getSubstitution(Guide guide, GuidesOption option, String appName) {
-        App app = guide.getApps().stream()
+    protected String getSubstitution(GuideRender guideRender, String appName) {
+        App app = guideRender.guide().getApps().stream()
                 .filter(a -> a.getName().equals(appName))
                 .findFirst()
                 .orElse(null);
         if (app != null) {
             return cliCommandForApp(app);
         } else {
-            throw new ConfigurationException("No CLI command found for app: " + app + " -- should be one of " + guide.getApps().stream().map(el -> "@" + el + ":cli-command@").collect(Collectors.joining(", ")));
+            throw new ConfigurationException("No CLI command found for app: " + app + " -- should be one of " + guideRender.guide().getApps().stream().map(el -> "@" + el + ":cli-command@").collect(Collectors.joining(", ")));
         }
     }
 }

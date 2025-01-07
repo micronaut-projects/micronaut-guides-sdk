@@ -63,7 +63,7 @@ public class PlaceholderMacroSubstitutionTest {
 
                 Test File: @sourceDir@/Main@testsuffix@.@languageextension@
                 """;
-        String result = placeholderMacroSubstitution.substitute(str, guide, option);
+        String result = placeholderMacroSubstitution.substitute(str, new GuideRender(guide, option));
         String expected = """
                 = 1. Testing Serialization - Spring Boot vs Micronaut Framework - Building a Rest API
 
@@ -92,7 +92,7 @@ public class PlaceholderMacroSubstitutionTest {
     void testSubstituteVersion(){
         String str = """
                 @micronaut@""";
-        String result = placeholderMacroSubstitution.substitute(str, guide, option);
+        String result = placeholderMacroSubstitution.substitute(str, new GuideRender(guide, option));
         assertNotEquals("@micronaut@", result);
     }
 
@@ -100,7 +100,7 @@ public class PlaceholderMacroSubstitutionTest {
     void testSubstituteMicronautVersion(){
         String str = """
                 @micronautVersion@""";
-        String result = placeholderMacroSubstitution.substitute(str, guide, option);
+        String result = placeholderMacroSubstitution.substitute(str, new GuideRender(guide, option));
         assertEquals(VersionInfo.getMicronautVersion(),result);
     }
 
@@ -109,7 +109,7 @@ public class PlaceholderMacroSubstitutionTest {
         String str = """
                 dependency:log4j-core[groupId=org.apache.logging.log4j,scope=implementation,version=@log4j-coreVersion@]
                 """;
-        String result = placeholderMacroSubstitution.substitute(str, guide, option);
+        String result = placeholderMacroSubstitution.substitute(str, new GuideRender(guide, option));
         assertNotEquals(str, result);
     }
 }

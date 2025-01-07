@@ -40,13 +40,12 @@ public class BuildMacroExclusion extends MacroExclusion {
      * Determines whether the given parameters should be excluded based on the build tool option.
      *
      * @param params the list of parameters
-     * @param option the guide option
-     * @param guide  the guide
+     * @param guideRender Guide
      * @return true if the parameters should be excluded, false otherwise
      */
     @Override
-    protected boolean shouldExclude(List<String> params, GuidesOption option, Guide guide) {
-        return params.contains(option.getBuildTool().toString());
+    protected boolean shouldExclude(List<String> params, GuideRender guideRender) {
+        return params.contains(guideRender.option().getBuildTool().toString());
     }
 
     @Override

@@ -13,22 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.asciidoc;
 
-import io.micronaut.context.annotation.ConfigurationProperties;
-import io.micronaut.core.annotation.Internal;
+import java.util.Map;
 
-@Internal
-@ConfigurationProperties("guides.templates")
-class GuidesTemplatesConfigurationProperties implements GuidesTemplatesConfiguration {
-    private String folder = "templates";
-
-    @Override
-    public String getFolder() {
-        return folder;
-    }
-
-    public void setFolder(String folder) {
-        this.folder = folder;
-    }
+/**
+ * Provider of Asciidoctor attributes.
+ */
+@FunctionalInterface
+public interface AsciidocAttributeProvider {
+    Map<String, Object> attributes();
 }

@@ -45,7 +45,7 @@ public class FeaturesWordsMacroSubstitutionTest {
                 If you use Micronaut Launch, select Micronaut Application as application type and add @cli:features-words@ features.
                 
                 common:diff.adoc[]""";
-        String result = featuresWordsMacroSubstitution.substitute(str, guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT));
+        String result = featuresWordsMacroSubstitution.substitute(str, new GuideRender(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)));
         String expected = """
                 Rename this `micronautguide` directory to `cli`.
                 

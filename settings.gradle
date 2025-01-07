@@ -12,7 +12,6 @@ plugins {
 rootProject.name = 'micronaut-guides-sdk'
 
 include 'guides'
-include 'guides-cli'
 include 'guides-bom'
 
 enableFeaturePreview 'TYPESAFE_PROJECT_ACCESSORS'

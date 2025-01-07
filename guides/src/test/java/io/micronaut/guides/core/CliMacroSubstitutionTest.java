@@ -53,7 +53,7 @@ public class CliMacroSubstitutionTest {
                 ----
                 mn @cli-command@ example.micronaut.micronautguide --build=@build@ --lang=@lang@
                 ----""";
-        String result = cliMacroSubstitution.substitute(str, guide, option);
+        String result = cliMacroSubstitution.substitute(str, new GuideRender(guide, option));
         String expected = """
                 [source,bash]
                 ----
@@ -87,7 +87,7 @@ public class CliMacroSubstitutionTest {
                 ----
                 mn @cli:cli-command@ example.micronaut.micronautguide --build=@build@ --lang=@lang@
                 ----""";
-        String result = cliMacroSubstitution.substitute(str, guide, option);
+        String result = cliMacroSubstitution.substitute(str, new GuideRender(guide, option));
         String expected = """
                 [source,bash]
                 ----

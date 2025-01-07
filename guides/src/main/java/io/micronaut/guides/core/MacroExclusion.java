@@ -31,21 +31,23 @@ abstract class MacroExclusion implements MacroSubstitution {
      * Determines whether the exclusion applies for this guide and option.
      *
      * @param params the list of parameters for the macro
-     * @param option the GuidesOption
-     * @param guide  the Guide
+     * @param guideRender  the Guide
      * @return true if the exclusion applies for this guide and option, false otherwise
      */
-    protected abstract boolean shouldExclude(List<String> params, GuidesOption option, Guide guide);
+    protected abstract boolean shouldExclude(List<String> params, GuideRender guideRender);
 
     @Override
-    public String substitute(String str, Guide guide, GuidesOption option) {
+    public String substitute(String str, GuideRender guideRender) {
         for (List<String> group : MacroUtils.findMacroGroupsNested(str, getMacroName())) {
-            List<String> params = MacroUtils.extractMacroGroupParameters(group.getFirst(), getMacroName());
-            if (shouldExclude(params, option, guide)) {
-                str = str.replace(String.join(LINE_BREAK, group) + LINE_BREAK, "");
-            } else {
-                str = str.replace(String.join(LINE_BREAK, group), String.join(LINE_BREAK, group.subList(1, group.size() - 1)));
+            if (!group.isEmpty()) {
+                List<String> params = MacroUtils.extractMacroGroupParameters(group.get(0), getMacroName());
+                if (shouldExclude(params, guideRender)) {
+                    str = str.replace(String.join(LINE_BREAK, group) + LINE_BREAK, "");
+                } else {
+                    str = str.replace(String.join(LINE_BREAK, group), String.join(LINE_BREAK, group.subList(1, group.size() - 1)));
+                }
             }
+
         }
         return str;
     }

@@ -59,13 +59,13 @@ public class JdkLowerThanMacroExclusion extends MacroExclusion {
      * Determines whether the macro should be excluded based on the specified parameters, option, and guide.
      *
      * @param params the list of parameters
-     * @param option the guides option
-     * @param guide  the guide object
+     * @param guideRender Guide
      * @return true if the macro should be excluded, false otherwise
      */
     @Override
-    protected boolean shouldExclude(List<String> params, GuidesOption option, Guide guide) {
+    protected boolean shouldExclude(List<String> params, GuideRender guideRender) {
         if (StringUtils.isNotEmpty(params.get(0))) {
+            Guide guide = guideRender.guide();
             Integer minJdk = Integer.valueOf(params.get(0));
             return (guide.getMinimumJavaVersion() != null ? guide.getMinimumJavaVersion() : guidesConfiguration.getDefaultMinJdk()) < minJdk;
         }

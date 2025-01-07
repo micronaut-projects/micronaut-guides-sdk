@@ -48,7 +48,7 @@ abstract class LineMacroSubstitution implements MacroSubstitution {
     protected abstract String getPrefix();
 
     @Override
-    public String substitute(String str, Guide guide, GuidesOption option) {
+    public String substitute(String str, GuideRender guideRender) {
         for (String line : findMacroLines(str, getMacroName())) {
             Optional<AsciidocMacro> asciidocMacroOptional = AsciidocMacro.of(getMacroName(), line);
             if (asciidocMacroOptional.isEmpty()) {
@@ -59,8 +59,10 @@ abstract class LineMacroSubstitution implements MacroSubstitution {
             StringBuilder builder = new StringBuilder();
 
             for (Attribute attribute : macro.attributes()) {
-                Argument argument = new Argument(attribute.key(), attribute.values().getFirst());
-                builder.append(argument).append("\n");
+                if (!attribute.values().isEmpty()) {
+                    Argument argument = new Argument(attribute.key(), attribute.values().get(0));
+                    builder.append(argument).append("\n");
+                }
             }
 
             Path target = Path.of(getBaseDirectory(), getPrefix() + macro.target());

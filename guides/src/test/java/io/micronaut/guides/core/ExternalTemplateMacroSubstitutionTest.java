@@ -14,7 +14,7 @@ public class ExternalTemplateMacroSubstitutionTest {
     @Test
     public void testSubstitute() {
         String line = "external-template:micronaut-k8s-oci/k8s-microservice.adoc[arg0=users]";
-        String result = externalTemplateMacroSubstitution.substitute(line, null, null);
+        String result = externalTemplateMacroSubstitution.substitute(line, null);
         String exptected = """
                 :arg0: users
                 include::{guidesDir}/micronaut-k8s-oci/k8s-microservice.adoc[]""";

@@ -45,7 +45,7 @@ public class GuideProjectGeneratorTest {
         guide.setAuthors(List.of("Sergio del Amo"));
         guide.setCategories(List.of("Boot to Micronaut Building a REST API"));
         guide.setPublicationDate(LocalDate.of(2024,4,24));
-        guide.setSlug("building-a-rest-api-spring-boot-vs-micronaut-data.adoc");
+        guide.setSlug("building-a-rest-api-spring-boot-vs-micronaut-data");
         guide.setLanguages(List.of(Language.JAVA));
         guide.setBuildTools(List.of(BuildTool.GRADLE));
         guide.setTestFramework(TestFramework.JUNIT);
@@ -53,7 +53,7 @@ public class GuideProjectGeneratorTest {
 
         assertDoesNotThrow(() -> guideProjectGenerator.generate(outputDirectory, guide));
 
-        File dest = Paths.get(outputDirectory.getAbsolutePath(), MacroUtils.getSourceDir(guide.getSlug(), new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)), "cli").toFile();
+        File dest = Paths.get(outputDirectory.getAbsolutePath(), MacroUtils.getSourceDir(guide.getSlug(), new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT))).toFile();
 
         assertTrue(new File(dest, "build.gradle").exists());
         assertTrue(new File(dest, "gradlew.bat").exists());
@@ -94,6 +94,14 @@ public class GuideProjectGeneratorTest {
                     }
                 }"""));
         assertTrue(result.contains("""
+                application {
+                    mainClass = "example.micronaut.CliCommand"
+                }
+                java {
+                    sourceCompatibility = JavaVersion.toVersion("17")
+                    targetCompatibility = JavaVersion.toVersion("17")
+                }""") ||
+                result.contains("""
                 application {
                     mainClass = "example.micronaut.CliCommand"
                 }
