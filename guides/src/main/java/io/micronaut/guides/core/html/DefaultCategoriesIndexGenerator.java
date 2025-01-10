@@ -17,13 +17,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Singleton
-public class DefaultModuleIndexGenerator implements ModuleIndexGenerator {
+public class DefaultCategoriesIndexGenerator implements CategoriesIndexGenerator {
 
     private final String guideHtml;
 
-    public DefaultModuleIndexGenerator(ResourceLoader resourceLoader,
-                                       GuidesTemplatesConfiguration guidesTemplatesConfiguration) {
-        String path = "classpath:" + guidesTemplatesConfiguration.getFolder() + "/modules.html";
+    public DefaultCategoriesIndexGenerator(ResourceLoader resourceLoader,
+                                           GuidesTemplatesConfiguration guidesTemplatesConfiguration) {
+        String path = "classpath:" + guidesTemplatesConfiguration.getFolder() + "/categories.html";
         Optional<InputStream> inputStreamOptional = resourceLoader.getResourceAsStream(path);
         if (inputStreamOptional.isEmpty()) {
             throw new ConfigurationException(path);
@@ -55,7 +55,7 @@ public class DefaultModuleIndexGenerator implements ModuleIndexGenerator {
         List<String> modules = guides.stream()
                 .flatMap(g -> g.getCategories().stream())
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
         for (String module : modules) {
             sb.append("<h2>");
             sb.append(module);

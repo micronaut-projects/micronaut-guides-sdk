@@ -21,10 +21,10 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.guides.core.asciidoc.AsciidocConfiguration;
 import io.micronaut.guides.core.asciidoc.AsciidocConverter;
 import io.micronaut.guides.core.asciidoc.GuideRenderAttributesProvider;
+import io.micronaut.guides.core.html.CategoriesIndexGenerator;
 import io.micronaut.guides.core.html.GuideMatrixGenerator;
 import io.micronaut.guides.core.html.GuidePageGenerator;
 import io.micronaut.guides.core.html.IndexGenerator;
-import io.micronaut.guides.core.html.ModuleIndexGenerator;
 import io.micronaut.starter.api.TestFramework;
 import io.micronaut.starter.options.BuildTool;
 import io.micronaut.starter.options.Language;
@@ -72,7 +72,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final JsonFeedConfiguration jsonFeedConfiguration;
     private final GuidesConfiguration guidesConfiguration;
     private final GuidePageGenerator guidePageGenerator;
-    private final ModuleIndexGenerator moduleIndexGenerator;
+    private final CategoriesIndexGenerator categoriesIndexGenerator;
     private final AsciidocConfiguration asciidocConfiguration;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
@@ -92,7 +92,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                             GuidePageGenerator guidePageGenerator,
                             AsciidocConfiguration asciidocConfiguration,
                             GuidesConfiguration guidesConfiguration,
-                            ModuleIndexGenerator moduleIndexGenerator) {
+                            CategoriesIndexGenerator categoriesIndexGenerator) {
         this.guideRenderAttributesProvider = guideRenderAttributesProvider;
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
@@ -109,7 +109,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.jsonFeedConfiguration = jsonFeedConfiguration;
         this.guidesConfiguration = guidesConfiguration;
         this.guidePageGenerator = guidePageGenerator;
-        this.moduleIndexGenerator = moduleIndexGenerator;
+        this.categoriesIndexGenerator = categoriesIndexGenerator;
         this.asciidocConfiguration = asciidocConfiguration;
     }
 
@@ -173,7 +173,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         String indexHtml = indexGenerator.renderIndex(guides);
         saveToFile(indexHtml, outputDirectory, FILENAME_INDEX_HTML);
 
-        String moduleIndexHtml = moduleIndexGenerator.renderIndex(guides);
+        String moduleIndexHtml = categoriesIndexGenerator.renderIndex(guides);
         saveToFile(moduleIndexHtml, outputDirectory, FILENAME_MODULE_INDEX_HTML);
 
         String rss = rssFeedGenerator.rssFeed(guides);

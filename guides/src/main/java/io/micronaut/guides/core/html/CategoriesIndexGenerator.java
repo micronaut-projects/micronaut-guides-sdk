@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public interface ModuleIndexGenerator {
+public interface CategoriesIndexGenerator {
     @NonNull
     String renderIndex(@NonNull @NotNull List<? extends Guide> guides);
 }
