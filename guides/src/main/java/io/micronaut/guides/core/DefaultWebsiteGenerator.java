@@ -53,7 +53,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     private static final String FILENAME_TEST_SH = "test.sh";
     private static final String FILENAME_NATIVE_TEST_SH = "native-test.sh";
     private static final String FILENAME_INDEX_HTML = "index.html";
-    private static final String FILENAME_MODULE_INDEX_HTML = "module_index.html";
+    private static final String FILENAME_CATEGORIES_INDEX_HTML = "categories-index.html";
 
 
     private final GuideRenderAttributesProvider guideRenderAttributesProvider;
@@ -174,7 +174,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         saveToFile(indexHtml, outputDirectory, FILENAME_INDEX_HTML);
 
         String moduleIndexHtml = categoriesIndexGenerator.renderIndex(guides);
-        saveToFile(moduleIndexHtml, outputDirectory, FILENAME_MODULE_INDEX_HTML);
+        saveToFile(moduleIndexHtml, outputDirectory, FILENAME_CATEGORIES_INDEX_HTML);
 
         String rss = rssFeedGenerator.rssFeed(guides);
         saveToFile(rss, outputDirectory, rssFeedConfiguration.getFilename());
