@@ -33,6 +33,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     public static final String PREFIX = "guides";
     public static final String GUIDES_URL = "https://guides.micronaut.io/latest/";
     private static final String DEFAULT_LICENSEHEADER = "classpath:LICENSEHEADER";
+    private static final String DEFAULT_PACKAGE_NAME = "example.micronaut";
     private static final String DEFAULT_APP_NAME = "default";
     private static final String HOMEPAGE_URL = "https://micronaut.io";
     private static final String LAUNCHER_URL = HOMEPAGE_URL + "/launch";
@@ -53,6 +54,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private String title = "Micronaut Guides";
     private String homePageUrl = GUIDES_URL;
     private String licensePath = DEFAULT_LICENSEHEADER;
+    private String packageName = DEFAULT_PACKAGE_NAME;
     private List<String> sourceFilesExtensions = List.of("java", "kotlin", "groovy");
     private String envJdkVersion = DEFAULT_ENV_JDK_VERSION;
     private JdkVersion defaulJdkVersion = DEFAULT_JAVA_VERSION;
@@ -110,6 +112,25 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
      */
     public void setJdkVersionsSupportedByGraalvm(List<JdkVersion> jdkVersionsSupportedByGraalvm) {
         this.jdkVersionsSupportedByGraalvm = jdkVersionsSupportedByGraalvm;
+    }
+
+    /**
+     * Gets the package name.
+     *
+     * @return the package name
+     */
+    @Override
+    public String getPackageName() {
+        return packageName;
+    }
+
+    /**
+     * Sets the package name.
+     *
+     * @param packageName the package name to set
+     */
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
     /**

@@ -57,6 +57,13 @@ public interface GuidesConfiguration {
     String getLicensePath();
 
     /**
+     * Returns the package name.
+     *
+     * @return the package name
+     */
+    String getPackageName();
+
+    /**
      * Returns the default application name.
      *
      * @return the default application name
@@ -141,6 +148,7 @@ public interface GuidesConfiguration {
     String getSysPropMicronautGuide();
 
     /**
+     *
      * @return Whether the Guide metadata should be validated against the JSON Schema
      */
     boolean isValidateMetadata();
