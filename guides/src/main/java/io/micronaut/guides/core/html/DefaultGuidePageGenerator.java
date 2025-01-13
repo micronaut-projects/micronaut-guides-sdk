@@ -16,14 +16,21 @@
 package io.micronaut.guides.core.html;
 
 import io.micronaut.core.annotation.Internal;
+import io.micronaut.guides.core.GuidesConfiguration;
 import jakarta.inject.Singleton;
 
 @Singleton
 @Internal
 class DefaultGuidePageGenerator implements GuidePageGenerator {
 
+    private final GuidesConfiguration guidesConfiguration;
+
+    DefaultGuidePageGenerator(GuidesConfiguration guidesConfiguration) {
+        this.guidesConfiguration = guidesConfiguration;
+    }
+
     @Override
     public String render(String toc, String html) {
-        return HtmlUtils.html5("", toc + html);
+        return HtmlUtils.html5(guidesConfiguration.getTitle(), toc + html);
     }
 }

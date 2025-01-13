@@ -140,11 +140,11 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                     filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
 
                     // Test script generation
-                    String testScript = testScriptGenerator.generateTestScript(new ArrayList<>(List.of(guide)));
+                    String testScript = testScriptGenerator.generateTestScript(outputDirectory, new ArrayList<>(List.of(guide)));
                     saveToFile(testScript, guideOutput, FILENAME_TEST_SH, true);
 
                     // Native Test script generation
-                    String nativeTestScript = testScriptGenerator.generateNativeTestScript(new ArrayList<>(List.of(guide)));
+                    String nativeTestScript = testScriptGenerator.generateNativeTestScript(outputDirectory, new ArrayList<>(List.of(guide)));
                     saveToFile(nativeTestScript, guideOutput, FILENAME_NATIVE_TEST_SH, true);
 
                     List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
