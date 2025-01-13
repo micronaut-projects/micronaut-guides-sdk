@@ -51,9 +51,9 @@
             </div>
 <div class="sect2">
 <h3 id="_guides_config_properties">Guides Config Properties</h3>
-<a id="io.micronaut.guides.core.RssFeedConfigurationProperties" href="#io.micronaut.guides.core.RssFeedConfigurationProperties">&#128279;</a>
+<a id="io.micronaut.guides.core.asciidoc.AsciidocConfigurationProperties" href="#io.micronaut.guides.core.asciidoc.AsciidocConfigurationProperties">&#128279;</a>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. Configuration Properties for <a href="../api/io/micronaut/guides/core/RssFeedConfigurationProperties.html">RssFeedConfigurationProperties</a></caption>
+<caption class="title">Table 1. Configuration Properties for <a href="../api/io/micronaut/guides/core/asciidoc/AsciidocConfigurationProperties.html">AsciidocConfigurationProperties</a></caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -68,69 +68,86 @@
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>guides.rss-feed.filename</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.source-highlighter</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Returns the filename for the RSS feed.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the source highlighter.</p></td>
 </tr>
-</tbody>
-</table>
-<div style="page-break-after: always;"></div>
-<a id="io.micronaut.guides.core.JsonFeedConfigurationProperties" href="#io.micronaut.guides.core.JsonFeedConfigurationProperties">&#128279;</a>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. Configuration Properties for <a href="../api/io/micronaut/guides/core/JsonFeedConfigurationProperties.html">JsonFeedConfigurationProperties</a></caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
 <tr>
-<th class="tableblock halign-left valign-top">Property</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.toc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">org.asciidoctor.Placement</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the table of contents (TOC) placement.</p></td>
 </tr>
-</thead>
-<tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>guides.json-feed.filename</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.toclevels</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the number of TOC levels.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.sectnums</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the section numbers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.idprefix</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the filename for the JSON feed.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the ID prefix.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>guides.json-feed.feed-url</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.idseparator</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the feed URL.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the ID separator.</p></td>
 </tr>
-</tbody>
-</table>
-<div style="page-break-after: always;"></div>
-<a id="io.micronaut.guides.core.GuidesTemplatesConfigurationProperties" href="#io.micronaut.guides.core.GuidesTemplatesConfigurationProperties">&#128279;</a>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. Configuration Properties for <a href="../api/io/micronaut/guides/core/GuidesTemplatesConfigurationProperties.html">GuidesTemplatesConfigurationProperties</a></caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
 <tr>
-<th class="tableblock halign-left valign-top">Property</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>guides.templates.folder</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.icons</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the icons.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.imagesdir</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the images directory.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.nofooter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Checks if the footer is disabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.doc-type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the document type.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.ruby</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the Ruby engine.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.template-dirs</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.io.File</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the template directories.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.commons-dir</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the commons directory.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.base-dir</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the base directory.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.callouts-dir</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the callouts directory.</p></td>
 </tr>
 </tbody>
 </table>
 <div style="page-break-after: always;"></div>
 <a id="io.micronaut.guides.core.GuidesConfigurationProperties" href="#io.micronaut.guides.core.GuidesConfigurationProperties">&#128279;</a>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. Configuration Properties for <a href="../api/io/micronaut/guides/core/GuidesConfigurationProperties.html">GuidesConfigurationProperties</a></caption>
+<caption class="title">Table 2. Configuration Properties for <a href="../api/io/micronaut/guides/core/GuidesConfigurationProperties.html">GuidesConfigurationProperties</a></caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -237,9 +254,9 @@
 </tbody>
 </table>
 <div style="page-break-after: always;"></div>
-<a id="io.micronaut.guides.core.asciidoc.AsciidocConfigurationProperties" href="#io.micronaut.guides.core.asciidoc.AsciidocConfigurationProperties">&#128279;</a>
+<a id="io.micronaut.guides.core.JsonFeedConfigurationProperties" href="#io.micronaut.guides.core.JsonFeedConfigurationProperties">&#128279;</a>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Configuration Properties for <a href="../api/io/micronaut/guides/core/asciidoc/AsciidocConfigurationProperties.html">AsciidocConfigurationProperties</a></caption>
+<caption class="title">Table 3. Configuration Properties for <a href="../api/io/micronaut/guides/core/JsonFeedConfigurationProperties.html">JsonFeedConfigurationProperties</a></caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -254,79 +271,62 @@
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.source-highlighter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>guides.json-feed.filename</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the source highlighter.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the filename for the JSON feed.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.toc</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">org.asciidoctor.Placement</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the table of contents (TOC) placement.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.toclevels</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the number of TOC levels.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.sectnums</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the section numbers.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.idprefix</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>guides.json-feed.feed-url</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the ID prefix.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the feed URL.</p></td>
 </tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<a id="io.micronaut.guides.core.GuidesTemplatesConfigurationProperties" href="#io.micronaut.guides.core.GuidesTemplatesConfigurationProperties">&#128279;</a>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. Configuration Properties for <a href="../api/io/micronaut/guides/core/GuidesTemplatesConfigurationProperties.html">GuidesTemplatesConfigurationProperties</a></caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.idseparator</code></p></td>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>guides.templates.folder</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the ID separator.</p></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<a id="io.micronaut.guides.core.RssFeedConfigurationProperties" href="#io.micronaut.guides.core.RssFeedConfigurationProperties">&#128279;</a>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. Configuration Properties for <a href="../api/io/micronaut/guides/core/RssFeedConfigurationProperties.html">RssFeedConfigurationProperties</a></caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.icons</code></p></td>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>guides.rss-feed.filename</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the icons.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.imagesdir</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the images directory.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.nofooter</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Checks if the footer is disabled.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.doc-type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the document type.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.ruby</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the Ruby engine.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.template-dirs</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.io.File</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the template directories.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.commons-dir</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the commons directory.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.base-dir</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the base directory.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>asciidoc.callouts-dir</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Gets the callouts directory.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Returns the filename for the RSS feed.</p></td>
 </tr>
 </tbody>
 </table>
