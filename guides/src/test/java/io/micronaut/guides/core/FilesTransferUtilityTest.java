@@ -1,5 +1,8 @@
 package io.micronaut.guides.core;
 
+import io.micronaut.starter.api.TestFramework;
+import io.micronaut.starter.options.BuildTool;
+import io.micronaut.starter.options.Language;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
@@ -9,6 +12,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.micronaut.guides.core.DefaultFilesTransferUtility.pathByFolder;
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,6 +28,26 @@ class FilesTransferUtilityTest {
 
     @Inject
     GuideParser guideParser;
+
+    @Inject
+    GuidesConfiguration guidesConfiguration;
+
+    @Test
+    void testPathByFolder() {
+        App app = new App();
+        app.setPackageName(GuidesConfigurationProperties.DEFAULT_PACKAGE_NAME);
+        app.setName("books");
+        String source = "HelloController";
+        String pathType = "main";
+        GuidesOption guidesOption = new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT);
+        String path = pathByFolder(app, source, pathType, guidesOption);
+
+        assertEquals("src/main/java/example/micronaut/HelloController.java", path);
+
+        String oldPath = pathType.equals("main") ? GuideGenerationUtils.mainPath(app, source, guidesOption, guidesConfiguration) : GuideGenerationUtils.testPath(app, source, guidesOption, guidesConfiguration);
+
+        assertEquals(path, oldPath);
+    }
 
     @Test
     void testTransfer() throws Exception {
