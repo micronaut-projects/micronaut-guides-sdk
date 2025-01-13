@@ -38,6 +38,25 @@ public final class HtmlUtils {
 
     /**
      *
+     * @param title Page title
+     * @param content Page content
+     * @return HTML 5 document
+     */
+    public static String html5(String title, String content) {
+        return """
+            <!DOCTYPE html>
+            <html>
+            <head>
+            <title>"""  + title + """
+            </title>
+            </head>
+            <body>""" + content + """
+            </body>
+            </html>""";
+    }
+
+    /**
+     *
      * @param href link url
      * @param text link text
      * @return HTML Link

@@ -49,9 +49,9 @@ public class DefaultGuideParser implements GuideParser {
      * Constructs a new DefaultGuideParser.
      *
      * @param guidesConfiguration Guides Configuration
-     * @param jsonSchemaProvider the JSON schema provider
-     * @param jsonMapper         the JSON mapper
-     * @param guideMerger        the guide merger
+     * @param jsonSchemaProvider  the JSON schema provider
+     * @param jsonMapper          the JSON mapper
+     * @param guideMerger         the guide merger
      */
     public DefaultGuideParser(GuidesConfiguration guidesConfiguration,
                               JsonSchemaProvider jsonSchemaProvider,
@@ -143,12 +143,11 @@ public class DefaultGuideParser implements GuideParser {
     }
 
     /**
-     *
-     * @param guide Guide
-     * @param content Metadata content
+     * @param guide      Guide
+     * @param content    Metadata content
      * @param configFile Configuration File
+     * @param <T>        Guide
      * @return Whether the guide metadata validates against the JSON Schema
-     * @param <T> Guide
      */
     protected <T extends Guide> boolean validateGuide(T guide, String content, File configFile) {
         if (guidesConfiguration.isValidateMetadata() && guide.isPublish() && jsonSchema != null) {
@@ -163,10 +162,9 @@ public class DefaultGuideParser implements GuideParser {
     }
 
     /**
-     *
      * @param guidesDir Guide directory
-     * @param guide Guide
-     * @param <T> Guide
+     * @param guide     Guide
+     * @param <T>       Guide
      */
     protected <T extends Guide> void populateGuideDefaultMetadata(File guidesDir, T guide) {
         if (CollectionUtils.isEmpty(guide.getLanguages())) {
@@ -182,6 +180,9 @@ public class DefaultGuideParser implements GuideParser {
         for (App app : guide.getApps()) {
             if (StringUtils.isEmpty(app.getName())) {
                 app.setName(guidesConfiguration.getDefaultAppName());
+            }
+            if (StringUtils.isEmpty(app.getPackageName())) {
+                app.setPackageName(guidesConfiguration.getPackageName());
             }
         }
     }
