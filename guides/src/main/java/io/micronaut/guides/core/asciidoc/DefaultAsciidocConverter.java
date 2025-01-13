@@ -38,8 +38,7 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
     public static final String ATTRIBUTE_GUIDE = "guide";
     OptionsBuilder optionsBuilder;
     AttributesBuilder attributesBuilder;
-
-    Asciidoctor asciidoctor;
+    private final Asciidoctor asciidoctor;
 
     DefaultAsciidocConverter(AsciidocConfiguration asciidocConfiguration,
                              List<IncludeProcessor> includeProcessors,
@@ -63,7 +62,9 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
         optionsBuilder = Options.builder()
                 .eruby(asciidocConfiguration.getRuby())
                 .docType("book")
-                .safe(SafeMode.UNSAFE);
+                .safe(SafeMode.UNSAFE)
+                .toFile(false)
+                .option("header_footer", asciidocConfiguration.isHeaderFooter());
 
         if (StringUtils.isNotEmpty(asciidocConfiguration.getBaseDir())) {
             optionsBuilder.baseDir(new File(asciidocConfiguration.getBaseDir()));
@@ -89,9 +90,9 @@ public class DefaultAsciidocConverter implements AsciidocConverter {
             MDC.put("guide", g.getSlug());
         }
         return asciidoctor.convert(asciidoc, optionsBuilder
-                .baseDir(baseDir)
-                .toFile(false)
-                .attributes(attributesBuilder.build())
-                .build());
+            .baseDir(baseDir)
+            .attributes(attributesBuilder.build())
+            .build());
+
     }
 }

@@ -219,31 +219,32 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
         attributes.put("sourcedir", outputDirectory.getAbsolutePath());
         attributes.put("guidesourcedir", new File(guideOutput, name).getAbsolutePath());
         attributes.putAll(guideRenderAttributesProvider.attributes(guideRender));
-        String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, () -> attributes);
-
-        List<String> extractedToc = extractToc(optionHtml);
-        String tocHtml;
-
-        if (extractedToc.isEmpty()) {
-            tocHtml = "";
-        } else {
-            tocHtml = extractedToc.get(0);
-            for (String toc : extractedToc) {
-                optionHtml = optionHtml.replace(toc + "\n", "");
-            }
-        }
-
-        Guide guide = guideRender.guide();
         String guideOptionHtmlFileName = name + ".html";
-        optionHtml = guidePageGenerator.render(tocHtml, optionHtml);
-        optionHtml = optionHtml.replace("{title}", guide.getTitle());
-        if (guide.getCategories().isEmpty()) {
-            optionHtml = optionHtml.replace("{section}", "");
-            optionHtml = optionHtml.replace("{section-link}", "");
+        String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, () -> attributes);
+        if (!asciidocConfiguration.isHeaderFooter()) {
+            List<String> extractedToc = extractToc(optionHtml);
+            String tocHtml;
 
-        } else {
-            optionHtml = optionHtml.replace("{section}", guide.getCategories().get(0));
-            optionHtml = optionHtml.replace("{section-link}", "https://graal.cloud/gdk/docs/gdk-modules/" + guide.getCategories().get(0).toLowerCase() + "/");
+            if (extractedToc.isEmpty()) {
+                tocHtml = "";
+            } else {
+                tocHtml = extractedToc.get(0);
+                for (String toc : extractedToc) {
+                    optionHtml = optionHtml.replace(toc + "\n", "");
+                }
+            }
+
+            Guide guide = guideRender.guide();
+            optionHtml = guidePageGenerator.render(tocHtml, optionHtml);
+            optionHtml = optionHtml.replace("{title}", guide.getTitle());
+            if (guide.getCategories().isEmpty()) {
+                optionHtml = optionHtml.replace("{section}", "");
+                optionHtml = optionHtml.replace("{section-link}", "");
+
+            } else {
+                optionHtml = optionHtml.replace("{section}", guide.getCategories().get(0));
+                optionHtml = optionHtml.replace("{section-link}", "https://graal.cloud/gdk/docs/gdk-modules/" + guide.getCategories().get(0).toLowerCase() + "/");
+            }
         }
         saveToFile(optionHtml, outputDirectory, guideOptionHtmlFileName);
     }
