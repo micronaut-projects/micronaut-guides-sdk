@@ -33,7 +33,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     public static final String PREFIX = "guides";
     public static final String GUIDES_URL = "https://guides.micronaut.io/latest/";
     private static final String DEFAULT_LICENSEHEADER = "classpath:LICENSEHEADER";
-    private static final String DEFAULT_PACKAGE_NAME = "example.micronaut";
+    public static final String DEFAULT_PACKAGE_NAME = "example.micronaut";
     private static final String DEFAULT_APP_NAME = "default";
     private static final String HOMEPAGE_URL = "https://micronaut.io";
     private static final String LAUNCHER_URL = HOMEPAGE_URL + "/launch";

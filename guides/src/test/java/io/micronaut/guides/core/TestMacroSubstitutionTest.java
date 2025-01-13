@@ -47,7 +47,7 @@ class TestMacroSubstitutionTest {
     @Test
     void TestSubstituteWithApp() {
         String str = "test:ApplicationTest[app=springboot]";
-        String resJava = testMacroSubstitution.substitute(str, new GuideRender(GuideTestUtils.guideWithSlug("spring-boot-to-micronaut-application-class"), new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)));
+        String resJava = testMacroSubstitution.substitute(str, new GuideRender(GuideTestUtils.guideWithSlug("spring-boot-to-micronaut-application-class", "springboot"), new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)));
         String expectedJava = """
                 [source,java]
                 .springboot/src/test/java/example/micronaut/ApplicationTest.java
@@ -73,7 +73,7 @@ class TestMacroSubstitutionTest {
     @Test
     void TestSubstituteWithMultiple(){
         String str = "test:TeamConfigurationTest[app=springboot,tags=teamConfigClassNoBuilder;gettersandsetters,indent=0]";
-        String resJava = testMacroSubstitution.substitute(str, new GuideRender(GuideTestUtils.guideWithSlug("micronaut-configuration"), new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)));
+        String resJava = testMacroSubstitution.substitute(str, new GuideRender(GuideTestUtils.guideWithSlug("micronaut-configuration", "springboot"), new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)));
         String expectedJava = """
                 [source,java]
                 .springboot/src/test/java/example/micronaut/TeamConfigurationTest.java
@@ -87,13 +87,13 @@ class TestMacroSubstitutionTest {
     void TestSubstituteMultipleLines(){
         String str = """
                 Test
-                
+
                 test:TeamConfigurationTest[app=springboot,tags=teamConfigClassNoBuilder;gettersandsetters,indent=0]
                 """;
-        String resJava = testMacroSubstitution.substitute(str, new GuideRender(GuideTestUtils.guideWithSlug("micronaut-configuration"), new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)));
+        String resJava = testMacroSubstitution.substitute(str, new GuideRender(GuideTestUtils.guideWithSlug("micronaut-configuration", "springboot"), new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)));
         String expectedJava = """
                 Test
-            
+
                 [source,java]
                 .springboot/src/test/java/example/micronaut/TeamConfigurationTest.java
                 ----
