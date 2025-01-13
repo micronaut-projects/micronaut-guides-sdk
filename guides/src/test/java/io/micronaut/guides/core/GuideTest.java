@@ -4,6 +4,7 @@ import io.micronaut.context.BeanContext;
 import io.micronaut.core.beans.BeanIntrospection;
 import io.micronaut.core.io.ResourceLoader;
 import io.micronaut.core.type.Argument;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.json.JsonMapper;
 import io.micronaut.serde.SerdeIntrospections;
 import io.micronaut.starter.application.ApplicationType;
@@ -55,11 +56,20 @@ class GuideTest {
         assertTrue(inputStreamOptional.isPresent());
         final InputStream inputStreamBase = inputStreamOptional.get();
         Guide base = assertDoesNotThrow(() -> jsonMapper.readValue(inputStreamBase, Guide.class));
-
+        for (App app : base.getApps()) {
+            if (StringUtils.isEmpty(app.getPackageName())) {
+                app.setPackageName(GuidesConfigurationProperties.DEFAULT_PACKAGE_NAME);
+            }
+        }
         inputStreamOptional = resourceLoader.getResourceAsStream("classpath:child.json");
         assertTrue(inputStreamOptional.isPresent());
         final InputStream inputStreamChild = inputStreamOptional.get();
         Guide child = assertDoesNotThrow(() -> jsonMapper.readValue(inputStreamChild, Guide.class));
+        for (App app : child.getApps()) {
+            if (StringUtils.isEmpty(app.getPackageName())) {
+                app.setPackageName(GuidesConfigurationProperties.DEFAULT_PACKAGE_NAME);
+            }
+        }
         guideMerger.merge(base, child);
         assertEquals(List.of("Graeme Rocher"), child.getAuthors());
         assertEquals("Connect a Micronaut Data JDBC Application to Azure Database for MySQL", child.getTitle());
@@ -117,6 +127,11 @@ class GuideTest {
         assertTrue(inputStreamOptional.isPresent());
         InputStream inputStream = inputStreamOptional.get();
         Guide guide = assertDoesNotThrow(() -> jsonMapper.readValue(inputStream, Guide.class));
+        for (App app : guide.getApps()) {
+            if (StringUtils.isEmpty(app.getPackageName())) {
+                app.setPackageName(GuidesConfigurationProperties.DEFAULT_PACKAGE_NAME);
+            }
+        }
         assertEquals(List.of("Sergio del Amo"), guide.getAuthors());
         assertEquals("1. Testing Serialization - Spring Boot vs Micronaut Framework - Building a Rest API", guide.getTitle());
         assertEquals("This guide compares how to test serialization and deserialization with Micronaut Framework and Spring Boot.", guide.getIntro());

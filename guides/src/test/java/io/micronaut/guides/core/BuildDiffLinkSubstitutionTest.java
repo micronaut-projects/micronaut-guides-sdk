@@ -2,6 +2,7 @@ package io.micronaut.guides.core;
 
 import io.micronaut.core.beans.BeanIntrospection;
 import io.micronaut.core.io.ResourceLoader;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.http.uri.UriBuilder;
 import io.micronaut.json.JsonMapper;
 import io.micronaut.starter.api.TestFramework;
@@ -35,6 +36,11 @@ class BuildDiffLinkSubstitutionTest {
         assertTrue(inputStreamOptional.isPresent());
         final InputStream inputStreamBase = inputStreamOptional.get();
         Guide guide = assertDoesNotThrow(() -> jsonMapper.readValue(inputStreamBase, Guide.class));
+        for (App app : guide.getApps()) {
+            if (StringUtils.isEmpty(app.getPackageName())) {
+                app.setPackageName(GuidesConfigurationProperties.DEFAULT_PACKAGE_NAME);
+            }
+        }
         String str = "diffLink:[app=cli]";
         String resJava = buildDiffLinkSubstitution.substitute(str, new GuideRender(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)));
         URI expectedURI = UriBuilder.of("https://micronaut.io")

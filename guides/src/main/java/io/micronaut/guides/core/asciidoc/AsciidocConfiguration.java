@@ -25,7 +25,7 @@ import java.io.File;
 public interface AsciidocConfiguration {
 
     /**
-     * value of header_footer option.
+     * @return value of header_footer option.
      */
     boolean isHeaderFooter();
 
