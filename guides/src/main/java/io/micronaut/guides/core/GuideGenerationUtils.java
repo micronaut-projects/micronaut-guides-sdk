@@ -18,7 +18,6 @@ package io.micronaut.guides.core;
 import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
-import io.micronaut.core.util.StringUtils;
 import io.micronaut.starter.api.TestFramework;
 import io.micronaut.starter.options.BuildTool;
 import io.micronaut.starter.options.JdkVersion;
@@ -26,7 +25,6 @@ import io.micronaut.starter.options.Language;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,72 +40,6 @@ import static io.micronaut.starter.options.Language.GROOVY;
 public final class GuideGenerationUtils {
 
     private GuideGenerationUtils() {
-    }
-
-    /**
-     * Generates the main path for a given application name, file name, option, and configuration.
-     *
-     * @param app           the application
-     * @param fileName      the name of the file
-     * @param option        the GuidesOption to consider
-     * @param configuration the GuidesConfiguration to use
-     * @return the generated main path
-     */
-    @NonNull
-    static String mainPath(@NonNull App app,
-                           @NonNull String fileName,
-                           @NonNull GuidesOption option,
-                           @NonNull GuidesConfiguration configuration) {
-        return pathByFolder(app, fileName, "main", option);
-    }
-
-    /**
-     * Generates the test path for a given application name, file name, option, and configuration.
-     *
-     * @param app           the application
-     * @param name          the name of the file
-     * @param option        the GuidesOption to consider
-     * @param configuration the GuidesConfiguration to use
-     * @return the generated test path
-     */
-    @NonNull
-    static String testPath(@NonNull App app,
-                           @NonNull String name,
-                           @NonNull GuidesOption option,
-                           @NonNull GuidesConfiguration configuration) {
-        String fileName = name;
-        if (option.getTestFramework() != null) {
-            if (name.endsWith("Test")) {
-                fileName = name.substring(0, name.indexOf("Test"));
-                fileName += option.getTestFramework() == SPOCK ? "Spec" : "Test";
-            }
-        }
-
-        return pathByFolder(app, fileName, "test", option);
-    }
-
-    /**
-     * Generates a path by folder for a given application name, file name, folder, option, and configuration.
-     *
-     * @param app      the application
-     * @param fileName the name of the file
-     * @param folder   the folder name (e.g., "main" or "test")
-     * @param option   the GuidesOption to consider
-     * @return the generated path
-     */
-    @NonNull
-    static String pathByFolder(@NonNull App app,
-                               @NonNull String fileName,
-                               @NonNull String folder,
-                               @NonNull GuidesOption option) {
-        String module = StringUtils.isNotEmpty(app.getName()) ? app.getName() + "/" : "";
-        Path path = Path.of(module,
-                "src",
-                folder,
-                option.getLanguage().getName(),
-                app.getPackageName().replace(".", "/"),
-                fileName + "." + option.getLanguage().getExtension());
-        return path.toString();
     }
 
     /**

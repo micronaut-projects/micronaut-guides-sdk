@@ -23,38 +23,6 @@ class GuideGenerationUtilsTest {
     GuidesConfiguration configuration;
 
     @Test
-    void testMainPath() {
-        GuidesOption option = new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT);
-        App app = new App();
-        app.setPackageName(GuidesConfigurationProperties.DEFAULT_PACKAGE_NAME);
-        String result = GuideGenerationUtils.mainPath(app, "fileName", option, configuration);
-
-        assertEquals("src/main/java/example/micronaut/fileName.java", result);
-    }
-
-    @Test
-    void testTestPath() {
-        GuidesOption option = new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT);
-        App app = new App();
-        app.setPackageName(GuidesConfigurationProperties.DEFAULT_PACKAGE_NAME);
-        String result = GuideGenerationUtils.testPath(app, "fileNameTest", option, configuration);
-
-        assertEquals("src/test/java/example/micronaut/fileNameTest.java", result);
-    }
-
-
-    @Test
-    void testPathByFolder() {
-        GuidesOption option = new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT);
-        App app = new App();
-        app.setPackageName(GuidesConfigurationProperties.DEFAULT_PACKAGE_NAME);
-
-        String result = GuideGenerationUtils.pathByFolder(app, "fileName", "main", option);
-
-        assertEquals("src/main/java/example/micronaut/fileName.java", result);
-    }
-
-    @Test
     void testGuidesOptions() {
         Guide guideMetadata = new Guide();
         guideMetadata.setLanguages(List.of(Language.JAVA, Language.KOTLIN));
