@@ -15,15 +15,16 @@
  */
 package io.micronaut.guides.core.html;
 
-import io.micronaut.core.annotation.Internal;
-import jakarta.inject.Singleton;
+import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.Guide;
+import jakarta.validation.constraints.NotNull;
 
-@Singleton
-@Internal
-class DefaultGuidePageGenerator implements GuidePageGenerator {
+import java.util.List;
 
-    @Override
-    public String render(String toc, String html) {
-        return HtmlUtils.html5("", toc + html);
-    }
+/**
+ * Generates a category index.
+ */
+public interface CategoriesIndexGenerator {
+    @NonNull
+    String renderIndex(@NonNull @NotNull List<? extends Guide> guides);
 }

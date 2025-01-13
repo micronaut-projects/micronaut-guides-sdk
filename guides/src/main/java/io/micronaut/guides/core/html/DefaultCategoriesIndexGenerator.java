@@ -18,20 +18,17 @@ package io.micronaut.guides.core.html;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.guides.core.Guide;
 import jakarta.inject.Singleton;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 /**
- * Default implementation of the {@link IndexGenerator} interface.
- * This class is responsible for generating an index for a list of guides.
+ * Default implementation of {@link CategoriesIndexGenerator}.
  */
 @Singleton
-public class DefaultIndexGenerator implements IndexGenerator {
+public class DefaultCategoriesIndexGenerator implements CategoriesIndexGenerator {
 
     @Override
-    @NonNull
-    public String renderIndex(@NonNull @NotNull List<? extends Guide> guides) {
+    public String renderIndex(List<? extends Guide> guides) {
         return HtmlUtils.html5("", guidesContent(guides));
     }
 
@@ -41,11 +38,22 @@ public class DefaultIndexGenerator implements IndexGenerator {
      */
     protected String guidesContent(@NonNull List<? extends Guide> guides) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<ul>");
-        for (Guide guide : guides) {
-            sb.append(guideContent(guide));
+        List<String> modules = guides.stream()
+                .flatMap(g -> g.getCategories().stream())
+                .distinct()
+                .toList();
+        for (String module : modules) {
+            sb.append("<h2>");
+            sb.append(module);
+            sb.append("</h2>");
+            sb.append("<ul>");
+            for (Guide guide : guides) {
+                if (guide.getCategories().contains(module)) {
+                    sb.append(guideContent(guide));
+                }
+            }
+            sb.append("</ul>");
         }
-        sb.append("</ul>");
         sb.append("</body></html>");
         return sb.toString();
     }
