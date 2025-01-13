@@ -91,12 +91,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#generateNativeTestScript(java.util.List)" class="member-name-link">generateNativeTestScript</a><wbr>(@NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;metadatas)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#generateNativeTestScript(java.io.File,java.util.List)" class="member-name-link">generateNativeTestScript</a><wbr>(@NotNull @NonNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputDirectory,
+ @NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;metadatas)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Generates a script for running native tests for the given guides.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#generateTestScript(java.util.List)" class="member-name-link">generateTestScript</a><wbr>(@NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;metadatas)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#generateTestScript(java.io.File,java.util.List)" class="member-name-link">generateTestScript</a><wbr>(@NotNull @NonNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputDirectory,
+ @NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;metadatas)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Generates a script for running tests for the given guides.</div>
 </div>
@@ -176,15 +178,18 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="generateNativeTestScript(java.util.List)">
+<section class="detail" id="generateNativeTestScript(java.io.File,java.util.List)">
 <h3>generateNativeTestScript</h3>
 <div class="member-signature"><span class="annotations">@NonNull
 @NotNull
-</span><span class="return-type">@NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">generateNativeTestScript</span><wbr><span class="parameters">(@NonNull @NotNull
+</span><span class="return-type">@NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">generateNativeTestScript</span><wbr><span class="parameters">(@NotNull @NonNull
+ @NotNull @NonNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputDirectory,
+ @NonNull @NotNull
  @NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;metadatas)</span></div>
 <div class="block">Generates a script for running native tests for the given guides.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
+<dd><code>outputDirectory</code> - the output directory</dd>
 <dd><code>metadatas</code> - the list of guides metadata</dd>
 <dt>Returns:</dt>
 <dd>the generated script as a string</dd>
@@ -192,15 +197,18 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="generateTestScript(java.util.List)">
+<section class="detail" id="generateTestScript(java.io.File,java.util.List)">
 <h3>generateTestScript</h3>
 <div class="member-signature"><span class="annotations">@NonNull
 @NotNull
-</span><span class="return-type">@NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">generateTestScript</span><wbr><span class="parameters">(@NonNull @NotNull
+</span><span class="return-type">@NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">generateTestScript</span><wbr><span class="parameters">(@NotNull @NonNull
+ @NotNull @NonNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputDirectory,
+ @NonNull @NotNull
  @NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;metadatas)</span></div>
 <div class="block">Generates a script for running tests for the given guides.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
+<dd><code>outputDirectory</code> - the output directory</dd>
 <dd><code>metadatas</code> - the list of guides metadata</dd>
 <dt>Returns:</dt>
 <dd>the generated script as a string</dd>
