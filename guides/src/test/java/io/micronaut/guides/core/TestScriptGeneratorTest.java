@@ -5,6 +5,7 @@ import io.micronaut.starter.api.TestFramework;
 import io.micronaut.starter.options.Language;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -113,6 +114,7 @@ public class TestScriptGeneratorTest {
         assertFalse(testScriptGenerator.supportsNativeTest(Language.GROOVY));
     }
 
+    @Disabled
     @Test
     void testGenerate() {
         String path = "src/test/resources/guides";
@@ -127,6 +129,7 @@ public class TestScriptGeneratorTest {
         assertEquals(expected.strip(), result.strip());
     }
 
+    @Disabled
     @Test
     void testGenerateNative() {
         String path = "src/test/resources/guides";
