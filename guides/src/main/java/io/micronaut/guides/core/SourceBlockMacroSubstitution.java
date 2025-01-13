@@ -83,6 +83,10 @@ abstract class SourceBlockMacroSubstitution implements MacroSubstitution {
             if (asciidocMacroOptional.isPresent()) {
                 AsciidocMacro asciidocMacro = asciidocMacroOptional.get();
                 String appName = appName(asciidocMacro);
+                App app = guideRender.guide().getApps().stream()
+                        .filter(a -> a.getName().equals(appName))
+                        .findFirst()
+                        .orElse(null);
 
                 String condensedTarget = condensedTarget(asciidocMacro, option);
                 String[] arr;
@@ -104,7 +108,7 @@ abstract class SourceBlockMacroSubstitution implements MacroSubstitution {
                     condensedTarget = condensedTarget + "." + extension;
                 }
 
-                String target = sourceInclude(slug, appName, condensedTarget, getClasspath(), option, language, getGuidesConfiguration().getPackageName());
+                String target = sourceInclude(slug, appName, condensedTarget, getClasspath(), option, language, app != null ? app.getPackageName() : "");
                 String title = Path.of(target).normalize().toString().replace("{sourceDir}/" + slug + "/", "").replace(getSourceDir(slug, option) + "/", "");
 
                 IncludeDirective.Builder includeDirectiveBuilder = IncludeDirective.builder().attributes(asciidocMacro.attributes())

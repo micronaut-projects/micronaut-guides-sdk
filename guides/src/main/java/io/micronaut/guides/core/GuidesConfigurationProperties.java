@@ -33,7 +33,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     public static final String PREFIX = "guides";
     public static final String GUIDES_URL = "https://guides.micronaut.io/latest/";
     private static final String DEFAULT_LICENSEHEADER = "classpath:LICENSEHEADER";
-    private static final String DEFAULT_PACKAGE_NAME = "example.micronaut";
+    public static final String DEFAULT_PACKAGE_NAME = "example.micronaut";
     private static final String DEFAULT_APP_NAME = "default";
     private static final String HOMEPAGE_URL = "https://micronaut.io";
     private static final String LAUNCHER_URL = HOMEPAGE_URL + "/launch";
@@ -69,7 +69,6 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private List<String> zipIncludesExtensions = DEFAULT_ZIP_INCLUDES_EXTENSIONS;
 
     /**
-     *
      * @param zipIncludesExtensions File extensions to be zip included by default
      */
     public void setZipIncludesExtensions(List<String> zipIncludesExtensions) {
@@ -82,7 +81,6 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     }
 
     /**
-     *
      * @param validateMetadata Whether the Guide metadata should be validated against the JSON Schema
      */
     public void setValidateMetadata(boolean validateMetadata) {
@@ -90,7 +88,6 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     }
 
     /**
-     *
      * @return Whether the Guide metadata should be validated against the JSON Schema
      */
     @Override
@@ -200,11 +197,10 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
      */
     @Override
     public String getDefaultAppName() {
-        return DEFAULT_APP_NAME;
+        return defaultAppName;
     }
 
     /**
-     *
      * @param defaultAppName Default App name
      */
     public void setDefaultAppName(String defaultAppName) {
@@ -411,7 +407,6 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     }
 
     /**
-     *
      * @param languages Languages of a guide if no languages are specified in a guide.
      */
     public void setDefaultLanguages(List<Language> languages) {

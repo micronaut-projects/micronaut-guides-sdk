@@ -84,8 +84,8 @@ public class BuildDiffLinkSubstitution implements MacroSubstitution {
     /**
      * Substitutes macros in the given string with the appropriate values.
      *
-     * @param str    the string containing macros
-     * @param guideRender  guide
+     * @param str         the string containing macros
+     * @param guideRender guide
      * @return the string with macros substituted
      */
     @Override
@@ -106,7 +106,7 @@ public class BuildDiffLinkSubstitution implements MacroSubstitution {
      * Builds a URI for the diff link based on the given Asciidoc macro, guide, and guides option.
      *
      * @param asciidocMacro the Asciidoc macro
-     * @param guideRender the guide object
+     * @param guideRender   the guide object
      * @return the URI for the diff link
      */
     private URI buildDiffLink(AsciidocMacro asciidocMacro, GuideRender guideRender) {
@@ -120,7 +120,7 @@ public class BuildDiffLinkSubstitution implements MacroSubstitution {
                 .queryParam(QUERY_PARAM_TEST, guideRender.option().getTestFramework().name())
                 .queryParam(QUERY_PARAM_NAME, appName.equals(guidesConfiguration.getDefaultAppName()) ? "micronautguide" : appName)
                 .queryParam(QUERY_PARAM_TYPE, app != null ? app.getApplicationType().name() : ApplicationType.DEFAULT.name())
-                .queryParam(QUERY_PARAM_PACKAGE, guidesConfiguration.getPackageName())
+                .queryParam(QUERY_PARAM_PACKAGE, app.getPackageName())
                 .queryParam(QUERY_PARAM_ACTIVITY, "diff");
         features.forEach(f -> uriBuilder.queryParam(QUERY_PARAM_FEATURES, f));
         return uriBuilder.build();
