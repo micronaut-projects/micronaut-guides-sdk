@@ -47,31 +47,31 @@ public final class GuideGenerationUtils {
     /**
      * Generates the main path for a given application name, file name, option, and configuration.
      *
-     * @param appName       the name of the application
+     * @param app           the application
      * @param fileName      the name of the file
      * @param option        the GuidesOption to consider
      * @param configuration the GuidesConfiguration to use
      * @return the generated main path
      */
     @NonNull
-    static String mainPath(@NonNull String appName,
+    static String mainPath(@NonNull App app,
                            @NonNull String fileName,
                            @NonNull GuidesOption option,
                            @NonNull GuidesConfiguration configuration) {
-        return pathByFolder(appName, fileName, "main", option, configuration);
+        return pathByFolder(app, fileName, "main", option);
     }
 
     /**
      * Generates the test path for a given application name, file name, option, and configuration.
      *
-     * @param appName       the name of the application
+     * @param app           the application
      * @param name          the name of the file
      * @param option        the GuidesOption to consider
      * @param configuration the GuidesConfiguration to use
      * @return the generated test path
      */
     @NonNull
-    static String testPath(@NonNull String appName,
+    static String testPath(@NonNull App app,
                            @NonNull String name,
                            @NonNull GuidesOption option,
                            @NonNull GuidesConfiguration configuration) {
@@ -83,31 +83,29 @@ public final class GuideGenerationUtils {
             }
         }
 
-        return pathByFolder(appName, fileName, "test", option, configuration);
+        return pathByFolder(app, fileName, "test", option);
     }
 
     /**
      * Generates a path by folder for a given application name, file name, folder, option, and configuration.
      *
-     * @param appName       the name of the application
-     * @param fileName      the name of the file
-     * @param folder        the folder name (e.g., "main" or "test")
-     * @param option        the GuidesOption to consider
-     * @param configuration the GuidesConfiguration to use
+     * @param app      the application
+     * @param fileName the name of the file
+     * @param folder   the folder name (e.g., "main" or "test")
+     * @param option   the GuidesOption to consider
      * @return the generated path
      */
     @NonNull
-    static String pathByFolder(@NonNull String appName,
+    static String pathByFolder(@NonNull App app,
                                @NonNull String fileName,
                                @NonNull String folder,
-                               @NonNull GuidesOption option,
-                               @NonNull GuidesConfiguration configuration) {
-        String module = StringUtils.isNotEmpty(appName) ? appName + "/" : "";
+                               @NonNull GuidesOption option) {
+        String module = StringUtils.isNotEmpty(app.getName()) ? app.getName() + "/" : "";
         Path path = Path.of(module,
                 "src",
                 folder,
                 option.getLanguage().getName(),
-                configuration.getPackageName().replace(".", "/"),
+                app.getPackageName().replace(".", "/"),
                 fileName + "." + option.getLanguage().getExtension());
         return path.toString();
     }

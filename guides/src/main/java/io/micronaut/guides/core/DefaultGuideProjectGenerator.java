@@ -130,11 +130,11 @@ public class DefaultGuideProjectGenerator implements GuideProjectGenerator {
         String folder = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
 
         Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder,
-            guide.getApps().size() > 1 ? app.getName() : EMPTY_STRING);
+                guide.getApps().size() > 1 ? app.getName() : EMPTY_STRING);
         File destination = destinationPath.toFile();
         destination.mkdir();
 
-        String packageAndName = guidesConfiguration.getPackageName() + '.' + app.getName();
+        String packageAndName = app.getPackageName() + '.' + app.getName();
         GeneratorContext generatorContext = createProjectGeneratorContext(app.getApplicationType(),
                 packageAndName,
                 app.getFramework(),

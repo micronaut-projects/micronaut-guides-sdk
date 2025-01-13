@@ -187,23 +187,23 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                 copyGuideSourceFiles(inputDirectory, destinationPath, appName, guidesOption.getLanguage().toString(), false);
 
                 if (app.getExcludeSource() != null) {
-                    deleteFiles(app.getExcludeSource(), destination, guidesOption, guidesConfiguration, "main");
+                    deleteFiles(app.getExcludeSource(), destination, app, guidesOption, guidesConfiguration, "main");
                 }
 
                 if (app.getExcludeBaseSource() != null) {
                     String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
                     Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
-                    deleteFiles(app.getExcludeBaseSource(), baseDestinationPath.toFile(), guidesOption, guidesConfiguration, "main");
+                    deleteFiles(app.getExcludeBaseSource(), baseDestinationPath.toFile(), app, guidesOption, guidesConfiguration, "main");
                 }
 
                 if (app.getExcludeTest() != null) {
-                    deleteFiles(app.getExcludeTest(), destination, guidesOption, guidesConfiguration, "test");
+                    deleteFiles(app.getExcludeTest(), destination, app, guidesOption, guidesConfiguration, "test");
                 }
 
                 if (app.getExcludeBaseTest() != null) {
                     String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
                     Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
-                    deleteFiles(app.getExcludeBaseTest(), baseDestinationPath.toFile(), guidesOption, guidesConfiguration, "test");
+                    deleteFiles(app.getExcludeBaseTest(), baseDestinationPath.toFile(), app, guidesOption, guidesConfiguration, "test");
                 }
 
 
@@ -221,7 +221,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         }
     }
 
-    private void deleteFiles(List<String> sources, File destination, GuidesOption guidesOption, GuidesConfiguration guidesConfiguration, String pathType) {
+    private void deleteFiles(List<String> sources, File destination, App app, GuidesOption guidesOption, GuidesConfiguration guidesConfiguration, String pathType) {
         if (sources.size() == 1 && sources.get(0).equals("*")) {
             File destinationFolder = new File(destination, "src/" + pathType);
             //delete all files in the destination folder and its subfolders
@@ -246,7 +246,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         }
 
         for (String source : sources) {
-            String path = pathType.equals("main") ? GuideGenerationUtils.mainPath("", source, guidesOption, guidesConfiguration) : GuideGenerationUtils.testPath("", source, guidesOption, guidesConfiguration);
+            String path = pathType.equals("main") ? GuideGenerationUtils.mainPath(app, source, guidesOption, guidesConfiguration) : GuideGenerationUtils.testPath(app, source, guidesOption, guidesConfiguration);
             File file = fileToDelete(destination, path);
             if (file.exists()) {
                 file.delete();
