@@ -48,6 +48,8 @@ public final class HtmlUtils {
             <html>
             <head>
             <title>"""  + title + """
+                <link rel="alternate" type="application/rss+xml" href="/rss.xml"/>
+                <link rel="alternate" type="application/json" href="/feed.json"/>
             </title>
             </head>
             <body>""" + content + """

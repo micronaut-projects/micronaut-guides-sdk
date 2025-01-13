@@ -16,7 +16,9 @@
 package io.micronaut.guides.core.html;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.guides.core.Guide;
+import io.micronaut.guides.core.GuidesConfiguration;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 
@@ -28,11 +30,21 @@ import java.util.List;
  */
 @Singleton
 public class DefaultIndexGenerator implements IndexGenerator {
+    private final GuidesConfiguration guidesConfiguration;
+
+    DefaultIndexGenerator(GuidesConfiguration guidesConfiguration) {
+        this.guidesConfiguration = guidesConfiguration;
+    }
 
     @Override
     @NonNull
     public String renderIndex(@NonNull @NotNull List<? extends Guide> guides) {
-        return HtmlUtils.html5("", guidesContent(guides));
+        String content = "";
+        if (StringUtils.isNotEmpty(guidesConfiguration.getTitle())) {
+            content += "<h1>" + guidesConfiguration.getTitle() + "</h1>";
+        }
+        content += guidesContent(guides);
+        return HtmlUtils.html5(guidesConfiguration.getTitle(), content);
     }
 
     /**
@@ -58,6 +70,9 @@ public class DefaultIndexGenerator implements IndexGenerator {
         StringBuilder sb = new StringBuilder();
         String href = guide.getSlug() + ".html";
         String title = guide.getTitle();
+        if (guide.getLanguages().size() == 1 && guide.getBuildTools().size() == 1) {
+            href = guide.getSlug() + "-" + guide.getBuildTools().get(0).toString().toLowerCase() + "-" + guide.getLanguages().get(0).toString().toLowerCase() + ".html";
+        }
         sb.append("<li>");
         sb.append("<a href=\"");
         sb.append(href);

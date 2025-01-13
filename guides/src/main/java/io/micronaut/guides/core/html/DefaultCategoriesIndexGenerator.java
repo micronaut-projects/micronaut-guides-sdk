@@ -16,7 +16,9 @@
 package io.micronaut.guides.core.html;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.guides.core.Guide;
+import io.micronaut.guides.core.GuidesConfiguration;
 import jakarta.inject.Singleton;
 
 import java.util.List;
@@ -27,9 +29,20 @@ import java.util.List;
 @Singleton
 public class DefaultCategoriesIndexGenerator implements CategoriesIndexGenerator {
 
+    private final GuidesConfiguration guidesConfiguration;
+
+    DefaultCategoriesIndexGenerator(GuidesConfiguration guidesConfiguration) {
+        this.guidesConfiguration = guidesConfiguration;
+    }
+
     @Override
     public String renderIndex(List<? extends Guide> guides) {
-        return HtmlUtils.html5("", guidesContent(guides));
+        String content = "";
+        if (StringUtils.isNotEmpty(guidesConfiguration.getTitle())) {
+            content += "<h1>" + guidesConfiguration.getTitle() + "<h1>";
+        }
+        content += guidesContent(guides);
+        return HtmlUtils.html5(guidesConfiguration.getTitle(), content);
     }
 
     /**
