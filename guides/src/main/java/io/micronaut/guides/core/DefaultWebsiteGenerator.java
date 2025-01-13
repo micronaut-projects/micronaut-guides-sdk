@@ -48,7 +48,7 @@ import java.util.Map;
  */
 @Internal
 @Singleton
-class DefaultWebsiteGenerator implements WebsiteGenerator {
+public class DefaultWebsiteGenerator implements WebsiteGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultWebsiteGenerator.class);
     private static final String FILENAME_TEST_SH = "test.sh";
     private static final String FILENAME_NATIVE_TEST_SH = "native-test.sh";
@@ -74,7 +74,7 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final AsciidocConfiguration asciidocConfiguration;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
-    DefaultWebsiteGenerator(GuideRenderAttributesProvider guideRenderAttributesProvider, GuideParser guideParser,
+    public DefaultWebsiteGenerator(GuideRenderAttributesProvider guideRenderAttributesProvider, GuideParser guideParser,
                             GuideProjectGenerator guideProjectGenerator,
                             JsonFeedGenerator jsonFeedGenerator,
                             RssFeedGenerator rssFeedGenerator,
@@ -150,18 +150,12 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
                     List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
                     for (GuidesOption guidesOption : guideOptions) {
                         String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
-
-                        // Zip creation
-                        File zipFile = new File(outputDirectory, name + ".zip");
-                        File folderFile = new File(guideOutput, name);
-                        guideProjectZipper.zipDirectory(folderFile.getAbsolutePath(), zipFile.getAbsolutePath());
-
+                        zipGuide(outputDirectory, guideOutput, name);
                         renderHtml(asciidoc, new GuideRender(guide, guidesOption), inputDirectory, outputDirectory, name, guideOutput);
                     }
 
                     String guideMatrixHtml = guideMatrixGenerator.renderIndex(guide);
                     saveToFile(guideMatrixHtml, outputDirectory, guide.getSlug() + ".html");
-
                 }
             }
         }
@@ -189,6 +183,19 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
 
             copyFolder(imagesFolder.toPath(), outputImagesFolder.toPath());
         }
+    }
+
+    /**
+     *
+     * @param outputDirectory Output Directory
+     * @param guideOutput Guide Output
+     * @param name Guide Option name
+     * @throws IOException if an I/O error occurs during zipping
+     */
+    protected void zipGuide(File outputDirectory, File guideOutput, String name) throws IOException {
+        File zipFile = new File(outputDirectory, name + ".zip");
+        File folderFile = new File(guideOutput, name);
+        guideProjectZipper.zipDirectory(folderFile.getAbsolutePath(), zipFile.getAbsolutePath());
     }
 
     private static void copyFolder(Path source, Path destination) throws IOException {
