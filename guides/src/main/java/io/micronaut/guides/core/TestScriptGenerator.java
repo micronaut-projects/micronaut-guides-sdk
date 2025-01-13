@@ -19,6 +19,7 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.starter.options.Language;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -56,21 +57,24 @@ public interface TestScriptGenerator {
     /**
      * Generates a script for running native tests for the given guides.
      *
+     * @param outputDirectory the output directory
      * @param metadatas the list of guides metadata
      * @return the generated script as a string
      */
     @NonNull
     @NotNull
-    String generateNativeTestScript(@NonNull @NotNull List<? extends Guide> metadatas);
+    String generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas);
 
     /**
+     *
      * Generates a script for running tests for the given guides.
      *
+     * @param outputDirectory the output directory
      * @param metadatas the list of guides metadata
      * @return the generated script as a string
      */
     @NonNull
     @NotNull
-    String generateTestScript(@NonNull @NotNull List<? extends Guide> metadatas);
+    String generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas);
 
 }
