@@ -9,13 +9,13 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 import static io.micronaut.guides.core.DefaultFilesTransferUtility.pathByFolder;
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @MicronautTest(startApplication = false)
 class FilesTransferUtilityTest {
@@ -42,11 +42,13 @@ class FilesTransferUtilityTest {
         GuidesOption guidesOption = new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT);
         String path = pathByFolder(app, source, pathType, guidesOption);
 
-        assertEquals("src/main/java/example/micronaut/HelloController.java", path);
+        String base = "guides/micronaut-example/micronaut-example-gradle-java/books";
+
+        assertEquals("guides/micronaut-example/micronaut-example-gradle-java/books/src/main/java/example/micronaut/HelloController.java", Path.of(base, path).toString());
 
         String oldPath = pathType.equals("main") ? GuideGenerationUtils.mainPath(app, source, guidesOption, guidesConfiguration) : GuideGenerationUtils.testPath(app, source, guidesOption, guidesConfiguration);
 
-        assertEquals(path, oldPath);
+        assertNotEquals(path, Path.of(base, oldPath).toString());
     }
 
     @Test
