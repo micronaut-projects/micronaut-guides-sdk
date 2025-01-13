@@ -1,49 +1,35 @@
+/*
+ * Copyright 2017-2024 original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.micronaut.guides.core.html;
 
-import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.core.io.ResourceLoader;
 import io.micronaut.guides.core.Guide;
-import io.micronaut.guides.core.GuidesTemplatesConfiguration;
 import jakarta.inject.Singleton;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
+/**
+ * Default implementation of {@link CategoriesIndexGenerator}.
+ */
 @Singleton
 public class DefaultCategoriesIndexGenerator implements CategoriesIndexGenerator {
 
-    private final String guideHtml;
-
-    public DefaultCategoriesIndexGenerator(ResourceLoader resourceLoader,
-                                           GuidesTemplatesConfiguration guidesTemplatesConfiguration) {
-        String path = "classpath:" + guidesTemplatesConfiguration.getFolder() + "/categories.html";
-        Optional<InputStream> inputStreamOptional = resourceLoader.getResourceAsStream(path);
-        if (inputStreamOptional.isEmpty()) {
-            throw new ConfigurationException(path);
-        }
-        try (InputStream inputStream = inputStreamOptional.get()) {
-            this.guideHtml = readInputStream(inputStream);
-        } catch (Exception e) {
-            throw new ConfigurationException("Error loading resource: " + path, e);
-        }
-    }
-
     @Override
     public String renderIndex(List<? extends Guide> guides) {
-        return guideHtml.replace("{content}", guidesContent(guides));
-    }
-
-    protected static String readInputStream(InputStream inputStream) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            return reader.lines().collect(Collectors.joining(System.lineSeparator()));
-        }
+        return HtmlUtils.html5("", guidesContent(guides));
     }
 
     /**

@@ -54,8 +54,6 @@ class DefaultWebsiteGenerator implements WebsiteGenerator {
     private static final String FILENAME_NATIVE_TEST_SH = "native-test.sh";
     private static final String FILENAME_INDEX_HTML = "index.html";
     private static final String FILENAME_CATEGORIES_INDEX_HTML = "categories-index.html";
-
-
     private final GuideRenderAttributesProvider guideRenderAttributesProvider;
     private final GuideParser guideParser;
     private final GuideProjectGenerator guideProjectGenerator;

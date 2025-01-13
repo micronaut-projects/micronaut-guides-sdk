@@ -15,22 +15,12 @@
  */
 package io.micronaut.guides.core.html;
 
-import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.core.io.ResourceLoader;
 import io.micronaut.guides.core.Guide;
-import io.micronaut.guides.core.GuidesTemplatesConfiguration;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Default implementation of the {@link IndexGenerator} interface.
@@ -39,32 +29,10 @@ import java.util.stream.Collectors;
 @Singleton
 public class DefaultIndexGenerator implements IndexGenerator {
 
-    private final String guideHtml;
-
-    public DefaultIndexGenerator(ResourceLoader resourceLoader,
-                                 GuidesTemplatesConfiguration guidesTemplatesConfiguration) {
-        String path = "classpath:" + guidesTemplatesConfiguration.getFolder() + "/guides.html";
-        Optional<InputStream> inputStreamOptional = resourceLoader.getResourceAsStream(path);
-        if (inputStreamOptional.isEmpty()) {
-            throw new ConfigurationException(path);
-        }
-        try (InputStream inputStream = inputStreamOptional.get()) {
-            this.guideHtml = readInputStream(inputStream);
-        } catch (Exception e) {
-            throw new ConfigurationException("Error loading resource: " + path, e);
-        }
-    }
-
-    protected static String readInputStream(InputStream inputStream) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-            return reader.lines().collect(Collectors.joining(System.lineSeparator()));
-        }
-    }
-
     @Override
     @NonNull
     public String renderIndex(@NonNull @NotNull List<? extends Guide> guides) {
-        return guideHtml.replace("{content}", guidesContent(guides));
+        return HtmlUtils.html5("", guidesContent(guides));
     }
 
     /**
