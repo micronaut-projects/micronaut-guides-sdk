@@ -45,7 +45,6 @@ public class App {
     private String name;
 
     @JsonPropertyDescription("The app's package name. If you don't specify, the package name example.micronaut is used")
-    @JsonProperty(defaultValue = "example.micronaut")
     @Nullable
     private String packageName;
 
