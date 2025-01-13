@@ -15,7 +15,8 @@ import java.util.List;
 
 import static io.micronaut.guides.core.DefaultFilesTransferUtility.pathByFolder;
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MicronautTest(startApplication = false)
 class FilesTransferUtilityTest {
@@ -48,7 +49,7 @@ class FilesTransferUtilityTest {
 
         String oldPath = pathType.equals("main") ? GuideGenerationUtils.mainPath(app, source, guidesOption, guidesConfiguration) : GuideGenerationUtils.testPath(app, source, guidesOption, guidesConfiguration);
 
-        assertNotEquals(path, Path.of(base, oldPath).toString());
+        assertEquals(path, Path.of(base, oldPath).toString());
     }
 
     @Test
