@@ -246,7 +246,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         }
 
         for (String source : sources) {
-            String path = pathType.equals("main") ? GuideGenerationUtils.mainPath(app, source, guidesOption, guidesConfiguration) : GuideGenerationUtils.testPath(app, source, guidesOption, guidesConfiguration);
+            String path = pathByFolder(app, source, pathType, guidesOption);
             File file = fileToDelete(destination, path);
             if (file.exists()) {
                 file.delete();
@@ -270,6 +270,29 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
             }
         }
         return result;
+    }
+
+    /**
+     * Generates a path by folder for a given application name, file name, folder, option, and configuration.
+     *
+     * @param app      the application
+     * @param fileName the name of the file
+     * @param folder   the folder name (e.g., "main" or "test")
+     * @param option   the GuidesOption to consider
+     * @return the generated path
+     */
+    @NonNull
+    static String pathByFolder(@NonNull App app,
+                               @NonNull String fileName,
+                               @NonNull String folder,
+                               @NonNull GuidesOption option) {
+        Path path = Path.of(
+                "src",
+                folder,
+                option.getLanguage().getName(),
+                app.getPackageName().replace(".", "/"),
+                fileName + "." + option.getLanguage().getExtension());
+        return path.toString();
     }
 
     /**

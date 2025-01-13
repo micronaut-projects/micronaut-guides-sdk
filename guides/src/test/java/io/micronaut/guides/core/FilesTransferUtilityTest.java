@@ -1,14 +1,20 @@
 package io.micronaut.guides.core;
 
+import io.micronaut.starter.api.TestFramework;
+import io.micronaut.starter.options.BuildTool;
+import io.micronaut.starter.options.Language;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.micronaut.guides.core.DefaultFilesTransferUtility.pathByFolder;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,6 +29,21 @@ class FilesTransferUtilityTest {
 
     @Inject
     GuideParser guideParser;
+
+    @Test
+    void testPathByFolder() {
+        App app = new App();
+        app.setPackageName(GuidesConfigurationProperties.DEFAULT_PACKAGE_NAME);
+        app.setName("books");
+        String source = "HelloController";
+        String pathType = "main";
+        GuidesOption guidesOption = new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT);
+        String path = pathByFolder(app, source, pathType, guidesOption);
+
+        String base = "guides/micronaut-example/micronaut-example-gradle-java/books";
+
+        Assertions.assertEquals("guides/micronaut-example/micronaut-example-gradle-java/books/src/main/java/example/micronaut/HelloController.java", Path.of(base, path).toString());
+    }
 
     @Test
     void testTransfer() throws Exception {
