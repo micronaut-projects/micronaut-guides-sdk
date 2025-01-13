@@ -15,7 +15,7 @@ import static io.micronaut.starter.options.BuildTool.MAVEN;
 import static org.junit.jupiter.api.Assertions.*;
 
 @MicronautTest(startApplication = false)
-public class TestScriptGeneratorTest {
+class TestScriptGeneratorTest {
 
     @Inject
     GuideParser guideParser;
