@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -26,7 +27,7 @@ public class GuideProjectZipperTest {
 
         guideProjectZipper.zipDirectory(projectFolder, zipFile);
 
-        List<String> expected = List.of("metadata.json", "creating-your-first-micronaut-app.adoc");
+        List<String> expected = List.of("creating-your-first-micronaut-app.adoc", "metadata.json");
         List<String> result = new LinkedList<>();
 
         try (ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile))) {
@@ -37,6 +38,8 @@ public class GuideProjectZipperTest {
             }
             zis.closeEntry();
         }
+
+        Collections.sort(result);
 
         assertEquals(expected, result);
     }
