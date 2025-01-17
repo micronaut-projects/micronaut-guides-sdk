@@ -77,22 +77,22 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     public DefaultWebsiteGenerator(GuideRenderAttributesProvider guideRenderAttributesProvider, GuideParser guideParser,
-                            GuideProjectGenerator guideProjectGenerator,
-                            JsonFeedGenerator jsonFeedGenerator,
-                            RssFeedGenerator rssFeedGenerator,
-                            FilesTransferUtility filesTransferUtility,
-                            TestScriptGenerator testScriptGenerator,
-                            MacroSubstitution macroSubstitution,
-                            AsciidocConverter asciidocConverter,
-                            IndexGenerator indexGenerator,
-                            GuideMatrixGenerator guideMatrixGenerator,
-                            GuideProjectZipper guideProjectZipper,
-                            RssFeedConfiguration rssFeedConfiguration,
-                            JsonFeedConfiguration jsonFeedConfiguration,
-                            GuidePageGenerator guidePageGenerator,
-                            AsciidocConfiguration asciidocConfiguration,
-                            GuidesConfiguration guidesConfiguration,
-                            CategoriesIndexGenerator categoriesIndexGenerator) {
+                                   GuideProjectGenerator guideProjectGenerator,
+                                   JsonFeedGenerator jsonFeedGenerator,
+                                   RssFeedGenerator rssFeedGenerator,
+                                   FilesTransferUtility filesTransferUtility,
+                                   TestScriptGenerator testScriptGenerator,
+                                   MacroSubstitution macroSubstitution,
+                                   AsciidocConverter asciidocConverter,
+                                   IndexGenerator indexGenerator,
+                                   GuideMatrixGenerator guideMatrixGenerator,
+                                   GuideProjectZipper guideProjectZipper,
+                                   RssFeedConfiguration rssFeedConfiguration,
+                                   JsonFeedConfiguration jsonFeedConfiguration,
+                                   GuidePageGenerator guidePageGenerator,
+                                   AsciidocConfiguration asciidocConfiguration,
+                                   GuidesConfiguration guidesConfiguration,
+                                   CategoriesIndexGenerator categoriesIndexGenerator) {
         this.guideRenderAttributesProvider = guideRenderAttributesProvider;
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
@@ -112,6 +112,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.categoriesIndexGenerator = categoriesIndexGenerator;
         this.asciidocConfiguration = asciidocConfiguration;
     }
+
     @Override
     public void generate(@NonNull @NotNull File inputDirectory, @NonNull @NotNull File outputDirectory) throws IOException {
         generate(inputDirectory, outputDirectory, null);
@@ -119,9 +120,9 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
     @Override
     public void generate(
-        @NonNull @NotNull File inputDirectory,
-        @NonNull @NotNull File outputDirectory,
-        @Nullable Predicate<Guide> condition) throws IOException {
+            @NonNull @NotNull File inputDirectory,
+            @NonNull @NotNull File outputDirectory,
+            @Nullable Predicate<Guide> condition) throws IOException {
 
         File guidesInputDirectory = new File(inputDirectory, guidesConfiguration.getGuidesDir());
         if (!guidesInputDirectory.exists()) {
@@ -132,7 +133,8 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         }
         List<? extends Guide> guides = guideParser.parseGuidesMetadata(guidesInputDirectory);
         if (condition != null) {
-            guides = guides.stream().filter(condition).toList();
+            List<String> bases = guides.stream().filter(condition).map(Guide::getBase).toList();
+            guides = guides.stream().filter(guide -> bases.contains(guide.getSlug()) || condition.test(guide)).toList();
         }
         for (Guide guide : guides) {
             if (guide.isPublish()) {
@@ -199,10 +201,9 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     }
 
     /**
-     *
      * @param outputDirectory Output Directory
-     * @param guideOutput Guide Output
-     * @param name Guide Option name
+     * @param guideOutput     Guide Output
+     * @param name            Guide Option name
      * @throws IOException if an I/O error occurs during zipping
      */
     protected void zipGuide(File outputDirectory, File guideOutput, String name) throws IOException {
