@@ -16,10 +16,12 @@
 package io.micronaut.guides.core;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.function.Predicate;
 
 /**
  * Interface for generating the guides website assets from the specified input directory to the specified output directory.
@@ -36,4 +38,18 @@ public interface WebsiteGenerator {
     void generate(
             @NonNull @NotNull File inputDirectory,
             @NonNull @NotNull File outputDirectory) throws IOException;
+
+
+    /**
+     * Generates the guides website assets from the contents of the input directory and writes it to the output directory.
+     *
+     * @param inputDirectory  the directory containing the source files for the website
+     * @param outputDirectory the directory where the generated website will be written
+     * @param condition the condition to filter the guides against
+     * @throws IOException if an I/O error occurs during generation
+     */
+    void generate(
+        @NonNull @NotNull File inputDirectory,
+        @NonNull @NotNull File outputDirectory,
+        @Nullable Predicate<Guide> condition) throws IOException;
 }

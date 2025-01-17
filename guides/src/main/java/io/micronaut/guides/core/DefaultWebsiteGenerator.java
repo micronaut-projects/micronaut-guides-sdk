@@ -18,6 +18,7 @@ package io.micronaut.guides.core;
 import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.guides.core.asciidoc.AsciidocConfiguration;
 import io.micronaut.guides.core.asciidoc.AsciidocConverter;
 import io.micronaut.guides.core.asciidoc.GuideRenderAttributesProvider;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * Default implementation of the {@link WebsiteGenerator} interface.
@@ -110,9 +112,17 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.categoriesIndexGenerator = categoriesIndexGenerator;
         this.asciidocConfiguration = asciidocConfiguration;
     }
-
     @Override
     public void generate(@NonNull @NotNull File inputDirectory, @NonNull @NotNull File outputDirectory) throws IOException {
+        generate(inputDirectory, outputDirectory, null);
+    }
+
+    @Override
+    public void generate(
+        @NonNull @NotNull File inputDirectory,
+        @NonNull @NotNull File outputDirectory,
+        @Nullable Predicate<Guide> condition) throws IOException {
+
         File guidesInputDirectory = new File(inputDirectory, guidesConfiguration.getGuidesDir());
         if (!guidesInputDirectory.exists()) {
             throw new ConfigurationException("Guides directory " + guidesInputDirectory.getAbsolutePath() + " not found");
@@ -121,6 +131,9 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
             throw new ConfigurationException("Guides path " + guidesInputDirectory.getAbsolutePath() + " is not a directory");
         }
         List<? extends Guide> guides = guideParser.parseGuidesMetadata(guidesInputDirectory);
+        if (condition != null) {
+            guides = guides.stream().filter(condition).toList();
+        }
         for (Guide guide : guides) {
             if (guide.isPublish()) {
                 File guideInputDirectory = guide.getFolder();
