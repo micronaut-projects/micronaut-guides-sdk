@@ -15,10 +15,14 @@
  */
 package io.micronaut.guides.core;
 
+import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
+
 /**
  * Encapsulate a guide and its options for rendering.
- * @param guide Guide
+ *
+ * @param guide  Guide
  * @param option Guide Option
  */
-public record GuideRender(Guide guide, GuidesOption option) {
+public record GuideRender(@NonNull Guide guide, @Nullable GuidesOption option) {
 }

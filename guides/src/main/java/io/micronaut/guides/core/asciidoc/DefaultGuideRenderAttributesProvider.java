@@ -21,7 +21,8 @@ import io.micronaut.guides.core.GuideRender;
 import io.micronaut.guides.core.GuidesOption;
 import jakarta.inject.Singleton;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Internal
 @Singleton
@@ -41,14 +42,17 @@ class DefaultGuideRenderAttributesProvider implements GuideRenderAttributesProvi
         Guide guide = guideRender.guide();
         attributes.put(ATTRIBUTE_GUIDE, guide);
         GuidesOption guidesOption = guideRender.option();
-        attributes.put(ATTRIBUTE_GUIDE_OPTION, guidesOption);
+        if (guidesOption != null) {
+            attributes.put(ATTRIBUTE_GUIDE_OPTION, guidesOption);
+            attributes.put(ATTRIBUTE_LANGUAGE, guidesOption.getLanguage());
+            attributes.put(ATTRIBUTE_TEST_FRAMEWORK, guidesOption.getTestFramework());
+            attributes.put(ATTRIBUTE_BUILD_TOOL, guidesOption.getBuildTool());
+        }
         if (guide.getCloud() != null) {
             attributes.put(ATTRIBUTE_CLOUD, guide.getCloud().getAccronym());
         }
 
-        attributes.put(ATTRIBUTE_LANGUAGE, guidesOption.getLanguage());
-        attributes.put(ATTRIBUTE_TEST_FRAMEWORK, guidesOption.getTestFramework());
-        attributes.put(ATTRIBUTE_BUILD_TOOL, guidesOption.getBuildTool());
+
         attributes.put(ATTRIBUTE_INTRO, guide.getIntro());
         attributes.put(ATTRIBUTE_TITLE, guide.getTitle());
         return attributes;

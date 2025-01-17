@@ -25,9 +25,6 @@ import io.micronaut.guides.core.html.CategoriesIndexGenerator;
 import io.micronaut.guides.core.html.GuideMatrixGenerator;
 import io.micronaut.guides.core.html.GuidePageGenerator;
 import io.micronaut.guides.core.html.IndexGenerator;
-import io.micronaut.starter.api.TestFramework;
-import io.micronaut.starter.options.BuildTool;
-import io.micronaut.starter.options.Language;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -75,22 +72,22 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
     @SuppressWarnings("checkstyle:ParameterNumber")
     public DefaultWebsiteGenerator(GuideRenderAttributesProvider guideRenderAttributesProvider, GuideParser guideParser,
-                            GuideProjectGenerator guideProjectGenerator,
-                            JsonFeedGenerator jsonFeedGenerator,
-                            RssFeedGenerator rssFeedGenerator,
-                            FilesTransferUtility filesTransferUtility,
-                            TestScriptGenerator testScriptGenerator,
-                            MacroSubstitution macroSubstitution,
-                            AsciidocConverter asciidocConverter,
-                            IndexGenerator indexGenerator,
-                            GuideMatrixGenerator guideMatrixGenerator,
-                            GuideProjectZipper guideProjectZipper,
-                            RssFeedConfiguration rssFeedConfiguration,
-                            JsonFeedConfiguration jsonFeedConfiguration,
-                            GuidePageGenerator guidePageGenerator,
-                            AsciidocConfiguration asciidocConfiguration,
-                            GuidesConfiguration guidesConfiguration,
-                            CategoriesIndexGenerator categoriesIndexGenerator) {
+                                   GuideProjectGenerator guideProjectGenerator,
+                                   JsonFeedGenerator jsonFeedGenerator,
+                                   RssFeedGenerator rssFeedGenerator,
+                                   FilesTransferUtility filesTransferUtility,
+                                   TestScriptGenerator testScriptGenerator,
+                                   MacroSubstitution macroSubstitution,
+                                   AsciidocConverter asciidocConverter,
+                                   IndexGenerator indexGenerator,
+                                   GuideMatrixGenerator guideMatrixGenerator,
+                                   GuideProjectZipper guideProjectZipper,
+                                   RssFeedConfiguration rssFeedConfiguration,
+                                   JsonFeedConfiguration jsonFeedConfiguration,
+                                   GuidePageGenerator guidePageGenerator,
+                                   AsciidocConfiguration asciidocConfiguration,
+                                   GuidesConfiguration guidesConfiguration,
+                                   CategoriesIndexGenerator categoriesIndexGenerator) {
         this.guideRenderAttributesProvider = guideRenderAttributesProvider;
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
@@ -122,42 +119,41 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         }
         List<? extends Guide> guides = guideParser.parseGuidesMetadata(guidesInputDirectory);
         for (Guide guide : guides) {
-            if (guide.isPublish()) {
-                File guideInputDirectory = guide.getFolder();
-                File asciidocFile = new File(guideInputDirectory, guide.getAsciidoctor());
-                if (!asciidocFile.exists()) {
-                    throw new ConfigurationException("asciidoc file not found for " + guide.getSlug());
+            File guideInputDirectory = guide.getFolder();
+            File guideOutput = new File(outputDirectory, guide.getSlug());
+
+            if (guide.getApps().isEmpty()) {
+                if (guide.isPublish()) {
+                    renderHtml(guide, null, inputDirectory, outputDirectory, guide.getSlug(), guideInputDirectory);
+                }
+            } else {
+                guideOutput.mkdir();
+                guideProjectGenerator.generate(guideOutput, guide);
+                filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
+
+                // Test script generation
+                String testScript = testScriptGenerator.generateTestScript(outputDirectory, new ArrayList<>(List.of(guide)));
+                saveToFile(testScript, guideOutput, FILENAME_TEST_SH, true);
+
+                // Native Test script generation
+                String nativeTestScript = testScriptGenerator.generateNativeTestScript(outputDirectory, new ArrayList<>(List.of(guide)));
+                saveToFile(nativeTestScript, guideOutput, FILENAME_NATIVE_TEST_SH, true);
+
+                List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
+                for (GuidesOption guidesOption : guideOptions) {
+                    String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
+                    zipGuide(outputDirectory, guideOutput, name);
+                    if (guide.isPublish()) {
+                        renderHtml(guide, guidesOption, inputDirectory, outputDirectory, name, guideOutput);
+                    }
                 }
 
-                String asciidoc = readFile(asciidocFile);
-
-                if (guide.getApps().isEmpty()) {
-                    renderHtml(asciidoc, new GuideRender(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)), inputDirectory, outputDirectory, guide.getSlug(), guideInputDirectory);
-                } else {
-                    File guideOutput = new File(outputDirectory, guide.getSlug());
-                    guideOutput.mkdir();
-                    guideProjectGenerator.generate(guideOutput, guide);
-                    filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
-
-                    // Test script generation
-                    String testScript = testScriptGenerator.generateTestScript(outputDirectory, new ArrayList<>(List.of(guide)));
-                    saveToFile(testScript, guideOutput, FILENAME_TEST_SH, true);
-
-                    // Native Test script generation
-                    String nativeTestScript = testScriptGenerator.generateNativeTestScript(outputDirectory, new ArrayList<>(List.of(guide)));
-                    saveToFile(nativeTestScript, guideOutput, FILENAME_NATIVE_TEST_SH, true);
-
-                    List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
-                    for (GuidesOption guidesOption : guideOptions) {
-                        String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
-                        zipGuide(outputDirectory, guideOutput, name);
-                        renderHtml(asciidoc, new GuideRender(guide, guidesOption), inputDirectory, outputDirectory, name, guideOutput);
-                    }
-
+                if (guide.isPublish()) {
                     String guideMatrixHtml = guideMatrixGenerator.renderIndex(guide);
                     saveToFile(guideMatrixHtml, outputDirectory, guide.getSlug() + ".html");
                 }
             }
+
         }
 
         guides = guides.stream().filter(Guide::isPublish).toList();
@@ -186,10 +182,9 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     }
 
     /**
-     *
      * @param outputDirectory Output Directory
-     * @param guideOutput Guide Output
-     * @param name Guide Option name
+     * @param guideOutput     Guide Output
+     * @param name            Guide Option name
      * @throws IOException if an I/O error occurs during zipping
      */
     protected void zipGuide(File outputDirectory, File guideOutput, String name) throws IOException {
@@ -217,16 +212,28 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         });
     }
 
-    private void renderHtml(String asciidoc, GuideRender guideRender, File inputDirectory, File outputDirectory, String name, File guideOutput) throws IOException {
+    private void renderHtml(Guide guide, GuidesOption option, File inputDirectory, File outputDirectory, String fileName, File guideOutput) throws IOException {
+        GuideRender guideRender = new GuideRender(guide, option);
+
+        File guideInputDirectory = guide.getFolder();
+        File asciidocFile = new File(guideInputDirectory, guide.getAsciidoctor());
+
+        String asciidoc = readFile(asciidocFile);
+
+
+        if (!asciidocFile.exists()) {
+            throw new ConfigurationException("asciidoc file not found for " + guide.getSlug());
+        }
+
         // Macro substitution
         String optionAsciidoc = macroSubstitution.substitute(asciidoc, guideRender);
 
         // HTML rendering
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("sourcedir", outputDirectory.getAbsolutePath());
-        attributes.put("guidesourcedir", new File(guideOutput, name).getAbsolutePath());
+        attributes.put("guidesourcedir", new File(guideOutput, fileName).getAbsolutePath());
         attributes.putAll(guideRenderAttributesProvider.attributes(guideRender));
-        String guideOptionHtmlFileName = name + ".html";
+        String guideOptionHtmlFileName = fileName + ".html";
         String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, () -> attributes);
         if (!asciidocConfiguration.isHeaderFooter()) {
             List<String> extractedToc = extractToc(optionHtml);
@@ -241,7 +248,6 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
                 }
             }
 
-            Guide guide = guideRender.guide();
             optionHtml = guidePageGenerator.render(tocHtml, optionHtml);
             optionHtml = optionHtml.replace("{title}", guide.getTitle());
             if (guide.getCategories().isEmpty()) {
