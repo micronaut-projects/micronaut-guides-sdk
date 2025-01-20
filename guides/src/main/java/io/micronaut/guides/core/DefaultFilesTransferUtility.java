@@ -77,22 +77,13 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
     /**
      * Copies guide source files from the input directory to the destination path.
      *
-     * @param inputDir                 the input directory
-     * @param destinationPath          the destination path
-     * @param appName                  the application name
-     * @param language                 the programming language
-     * @param ignoreMissingDirectories whether to ignore missing directories
+     * @param inputDir        the input directory
+     * @param destinationPath the destination path
+     * @param appName         the application name
+     * @param language        the programming language
      * @throws IOException if an I/O error occurs during file copy
      */
-    private static void copyGuideSourceFiles(File inputDir, Path destinationPath, String appName, String language, boolean ignoreMissingDirectories) throws IOException {
-
-        // look for a common 'src' directory shared by multiple languages and copy those files first
-        final String srcFolder = "src";
-        Path srcPath = Paths.get(inputDir.getAbsolutePath(), appName, srcFolder);
-        if (Files.exists(srcPath)) {
-            Files.walkFileTree(srcPath, new CopyFileVisitor(Paths.get(destinationPath.toString(), srcFolder)));
-        }
-
+    private static void copyGuideSourceFiles(File inputDir, Path destinationPath, String appName, String language) throws IOException {
         Path sourcePath = Paths.get(inputDir.getAbsolutePath(), appName, language);
 
         if (Files.exists(sourcePath)) {
@@ -163,8 +154,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
             for (App app : guide.getApps()) {
                 String appName = guide.getApps().size() > 1 ? app.getName() : EMPTY_STRING;
                 String folder = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
-                String module = guide.getSourceModule() != null ? guide.getSourceModule() : "";
-                Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, module);
+                Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName);
                 File destination = destinationPath.toFile();
 
                 if (guide.getBase() != null) {
@@ -173,10 +163,10 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                             .findFirst()
                             .ifPresent(parentGuide -> {
                                 File baseDir = parentGuide.getFolder();
-                                String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
+                                String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : "";
                                 Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
                                 try {
-                                    copyGuideSourceFiles(baseDir, baseDestinationPath, appName, guidesOption.getLanguage().toString(), true);
+                                    copyGuideSourceFiles(baseDir, baseDestinationPath, appName, guidesOption.getLanguage().toString());
                                 } catch (IOException e) {
                                     throw new RuntimeException(e);
                                 }
@@ -184,26 +174,26 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
 
                 }
 
-                copyGuideSourceFiles(inputDirectory, destinationPath, appName, guidesOption.getLanguage().toString(), false);
+                copyGuideSourceFiles(inputDirectory, destinationPath, appName, guidesOption.getLanguage().toString());
 
                 if (app.getExcludeSource() != null) {
-                    deleteFiles(app.getExcludeSource(), destination, app, guidesOption, guidesConfiguration, "main");
+                    deleteFiles(app.getExcludeSource(), destination, app, guidesOption, "main");
                 }
 
                 if (app.getExcludeBaseSource() != null) {
-                    String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
+                    String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : "";
                     Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
-                    deleteFiles(app.getExcludeBaseSource(), baseDestinationPath.toFile(), app, guidesOption, guidesConfiguration, "main");
+                    deleteFiles(app.getExcludeBaseSource(), baseDestinationPath.toFile(), app, guidesOption, "main");
                 }
 
                 if (app.getExcludeTest() != null) {
-                    deleteFiles(app.getExcludeTest(), destination, app, guidesOption, guidesConfiguration, "test");
+                    deleteFiles(app.getExcludeTest(), destination, app, guidesOption, "test");
                 }
 
                 if (app.getExcludeBaseTest() != null) {
-                    String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
+                    String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : "";
                     Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
-                    deleteFiles(app.getExcludeBaseTest(), baseDestinationPath.toFile(), app, guidesOption, guidesConfiguration, "test");
+                    deleteFiles(app.getExcludeBaseTest(), baseDestinationPath.toFile(), app, guidesOption, "test");
                 }
 
 
@@ -221,7 +211,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         }
     }
 
-    private void deleteFiles(List<String> sources, File destination, App app, GuidesOption guidesOption, GuidesConfiguration guidesConfiguration, String pathType) {
+    private void deleteFiles(List<String> sources, File destination, App app, GuidesOption guidesOption, String pathType) {
         if (sources.size() == 1 && sources.get(0).equals("*")) {
             File destinationFolder = new File(destination, "src/" + pathType);
             //delete all files in the destination folder and its subfolders
