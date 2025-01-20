@@ -84,6 +84,13 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      * @throws IOException if an I/O error occurs during file copy
      */
     private static void copyGuideSourceFiles(File inputDir, Path destinationPath, String appName, String language) throws IOException {
+        // look for a common 'src' directory shared by multiple languages and copy those files first
+        final String srcFolder = "src";
+        Path srcPath = Paths.get(inputDir.getAbsolutePath(), appName, srcFolder);
+        if (Files.exists(srcPath)) {
+            Files.walkFileTree(srcPath, new CopyFileVisitor(Paths.get(destinationPath.toString(), srcFolder)));
+        }
+
         Path sourcePath = Paths.get(inputDir.getAbsolutePath(), appName, language);
 
         if (Files.exists(sourcePath)) {
