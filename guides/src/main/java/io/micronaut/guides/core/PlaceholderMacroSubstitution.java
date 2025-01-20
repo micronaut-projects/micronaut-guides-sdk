@@ -47,7 +47,7 @@ public class PlaceholderMacroSubstitution implements MacroSubstitution {
     /**
      * Substitutes placeholders in the given string with values from the guide and option.
      *
-     * @param str    the string containing placeholders
+     * @param str         the string containing placeholders
      * @param guideRender Guide
      * @return the string with placeholders substituted
      */
@@ -56,17 +56,19 @@ public class PlaceholderMacroSubstitution implements MacroSubstitution {
         Guide guide = guideRender.guide();
         GuidesOption option = guideRender.option();
         str = str.replace("{githubSlug}", guide.getSlug());
-        str = str.replace("@language@", StringUtils.capitalize(option.getLanguage().toString()));
+        if (option != null) {
+            str = str.replace("@language@", StringUtils.capitalize(option.getLanguage().toString()));
+            str = str.replace("@lang@", option.getLanguage().toString());
+            str = str.replace("@build@", option.getBuildTool().toString());
+            str = str.replace("@testFramework@", option.getTestFramework().toString());
+            str = str.replace("@languageextension@", option.getLanguage().getExtension());
+            str = str.replace("@testsuffix@", option.getTestFramework() == SPOCK ? "Spec" : "Test");
+            str = str.replace("@sourceDir@", MacroUtils.getSourceDir(guide.getSlug(), option));
+        }
         str = str.replace("@guideTitle@", guide.getTitle());
         str = str.replace("@guideIntro@", guide.getIntro());
         str = str.replace("@micronaut@", String.valueOf(guidesConfiguration.getVersion()));
-        str = str.replace("@lang@", option.getLanguage().toString());
-        str = str.replace("@build@", option.getBuildTool().toString());
-        str = str.replace("@testFramework@", option.getTestFramework().toString());
         str = str.replace("@authors@", String.join(", ", guide.getAuthors()));
-        str = str.replace("@languageextension@", option.getLanguage().getExtension());
-        str = str.replace("@testsuffix@", option.getTestFramework() == SPOCK ? "Spec" : "Test");
-        str = str.replace("@sourceDir@", MacroUtils.getSourceDir(guide.getSlug(), option));
         str = str.replace("@minJdk@", String.valueOf(guide.getMinimumJavaVersion() != null ? guide.getMinimumJavaVersion() : guidesConfiguration.getDefaultMinJdk()));
         str = str.replace("@api@", guidesConfiguration.getApiUrl());
 
