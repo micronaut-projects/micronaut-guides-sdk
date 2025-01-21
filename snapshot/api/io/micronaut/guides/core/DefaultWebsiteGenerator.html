@@ -136,11 +136,18 @@ implements <a href="WebsiteGenerator.html" title="interface in io.micronaut.guid
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Generates the guides website assets from the contents of the input directory and writes it to the output directory.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#zipGuide(java.io.File,java.io.File,java.lang.String)" class="member-name-link">zipGuide</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputDirectory,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#generate(java.io.File,java.io.File,java.util.function.Predicate)" class="member-name-link">generate</a><wbr>(@NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;inputDirectory,
+ @NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputDirectory,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;condition)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Generates the guides website assets from the contents of the input directory and writes it to the output directory.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#zipGuide(java.io.File,java.io.File,java.lang.String)" class="member-name-link">zipGuide</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputDirectory,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;guideOutput,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -205,6 +212,30 @@ implements <a href="WebsiteGenerator.html" title="interface in io.micronaut.guid
 <dt>Parameters:</dt>
 <dd><code>inputDirectory</code> - the directory containing the source files for the website</dd>
 <dd><code>outputDirectory</code> - the directory where the generated website will be written</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - if an I/O error occurs during generation</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="generate(java.io.File,java.io.File,java.util.function.Predicate)">
+<h3>generate</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">generate</span><wbr><span class="parameters">(@NonNull @NotNull
+ @NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;inputDirectory,
+ @NonNull @NotNull
+ @NonNull @NotNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputDirectory,
+ @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;condition)</span>
+              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="WebsiteGenerator.html#generate(java.io.File,java.io.File,java.util.function.Predicate)">WebsiteGenerator</a></code></span></div>
+<div class="block">Generates the guides website assets from the contents of the input directory and writes it to the output directory.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="WebsiteGenerator.html#generate(java.io.File,java.io.File,java.util.function.Predicate)">generate</a></code>&nbsp;in interface&nbsp;<code><a href="WebsiteGenerator.html" title="interface in io.micronaut.guides.core">WebsiteGenerator</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>inputDirectory</code> - the directory containing the source files for the website</dd>
+<dd><code>outputDirectory</code> - the directory where the generated website will be written</dd>
+<dd><code>condition</code> - the condition to filter the guides against</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - if an I/O error occurs during generation</dd>
 </dl>
