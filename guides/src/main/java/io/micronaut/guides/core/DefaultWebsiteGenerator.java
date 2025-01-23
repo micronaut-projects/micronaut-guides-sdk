@@ -277,7 +277,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         saveToFile(optionHtml, outputDirectory, guideOptionHtmlFileName);
     }
 
-    private List<String> extractToc(String html) {
+    protected List<String> extractToc(String html) {
         List<String> tocDivs = new ArrayList<>();
         String openDivPattern = "<div";
         String closeDivPattern = "</div>";
