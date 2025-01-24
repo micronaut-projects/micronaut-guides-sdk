@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"io.micronaut.guides.core"},{"l":"io.micronaut.guides.core.asciidoc"},{"l":"io.micronaut.guides.core.html"}];updateSearchResults();
