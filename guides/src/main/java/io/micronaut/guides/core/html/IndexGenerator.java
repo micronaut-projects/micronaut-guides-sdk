@@ -16,22 +16,22 @@
 package io.micronaut.guides.core.html;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.FileGenerator;
 import io.micronaut.guides.core.Guide;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.File;
 import java.util.List;
 
 /**
  * Interface for generating an index page for a list of guides.
  */
-public interface IndexGenerator {
+public interface IndexGenerator extends FileGenerator {
 
     /**
      * Renders the index page for the given list of guides.
      *
      * @param guides the list of guides to render the index for
-     * @return the rendered index as a string
      */
-    @NonNull
-    String renderIndex(@NonNull @NotNull List<? extends Guide> guides);
+    void renderIndex(@NonNull @NotNull List<? extends Guide> guides, File outputDirectory);
 }

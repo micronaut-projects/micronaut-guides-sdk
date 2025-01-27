@@ -49,9 +49,7 @@ import java.util.function.Predicate;
 @Singleton
 public class DefaultWebsiteGenerator implements WebsiteGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultWebsiteGenerator.class);
-    ;
-    private static final String FILENAME_INDEX_HTML = "index.html";
-    private static final String FILENAME_CATEGORIES_INDEX_HTML = "categories-index.html";
+
     private final GuideRenderAttributesProvider guideRenderAttributesProvider;
     private final GuideParser guideParser;
     private final GuideProjectGenerator guideProjectGenerator;
@@ -169,8 +167,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
         guides = guides.stream().filter(Guide::isPublish).toList();
 
-        String indexHtml = indexGenerator.renderIndex(guides);
-        saveToFile(indexHtml, outputDirectory, FILENAME_INDEX_HTML);
+        indexGenerator.renderIndex(guides, outputDirectory);
 
         String moduleIndexHtml = categoriesIndexGenerator.renderIndex(guides);
         saveToFile(moduleIndexHtml, outputDirectory, FILENAME_CATEGORIES_INDEX_HTML);

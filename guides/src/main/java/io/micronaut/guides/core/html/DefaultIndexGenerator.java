@@ -22,6 +22,8 @@ import io.micronaut.guides.core.GuidesConfiguration;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -31,20 +33,25 @@ import java.util.List;
 @Singleton
 public class DefaultIndexGenerator implements IndexGenerator {
     private final GuidesConfiguration guidesConfiguration;
+    private static final String FILENAME_INDEX_HTML = "index.html";
 
     DefaultIndexGenerator(GuidesConfiguration guidesConfiguration) {
         this.guidesConfiguration = guidesConfiguration;
     }
 
     @Override
-    @NonNull
-    public String renderIndex(@NonNull @NotNull List<? extends Guide> guides) {
+    public void renderIndex(@NonNull @NotNull List<? extends Guide> guides, File outputDirectory) {
         String content = "";
         if (StringUtils.isNotEmpty(guidesConfiguration.getTitle())) {
             content += "<h1>" + guidesConfiguration.getTitle() + "</h1>";
         }
         content += guidesContent(guides);
-        return HtmlUtils.html5(guidesConfiguration.getTitle(), content);
+        String html = HtmlUtils.html5(guidesConfiguration.getTitle(), content);
+        try {
+            saveFile(html, outputDirectory, FILENAME_INDEX_HTML);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
