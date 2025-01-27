@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -64,9 +65,9 @@ class DefaultGuideMatrixGenerator implements GuideMatrixGenerator {
             sb.append("</body></html>");
             try {
                 if (guidesConfiguration.getUseIndex()) {
-                    saveFile(sb.toString(), new File(outputDirectory, guide.getSlug()), "index.html");
+                    saveFile(sb.toString(), new File(outputDirectory, Path.of(guide.getUrl(), guide.getSlug()).toString()), "index.html");
                 } else {
-                    saveFile(sb.toString(), outputDirectory, guide.getSlug() + ".html");
+                    saveFile(sb.toString(), new File(outputDirectory, Path.of(guide.getUrl()).toString()), guide.getSlug() + ".html");
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
