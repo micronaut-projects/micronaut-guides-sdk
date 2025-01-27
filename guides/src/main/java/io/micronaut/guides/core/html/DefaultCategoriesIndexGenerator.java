@@ -21,6 +21,8 @@ import io.micronaut.guides.core.Guide;
 import io.micronaut.guides.core.GuidesConfiguration;
 import jakarta.inject.Singleton;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -28,6 +30,7 @@ import java.util.List;
  */
 @Singleton
 public class DefaultCategoriesIndexGenerator implements CategoriesIndexGenerator {
+    private static final String FILENAME_CATEGORIES_INDEX_HTML = "categories-index.html";
 
     private final GuidesConfiguration guidesConfiguration;
 
@@ -36,13 +39,18 @@ public class DefaultCategoriesIndexGenerator implements CategoriesIndexGenerator
     }
 
     @Override
-    public String renderIndex(List<? extends Guide> guides) {
+    public void renderIndex(List<? extends Guide> guides, File outputDirectory) {
         String content = "";
         if (StringUtils.isNotEmpty(guidesConfiguration.getTitle())) {
             content += "<h1>" + guidesConfiguration.getTitle() + "<h1>";
         }
         content += guidesContent(guides);
-        return HtmlUtils.html5(guidesConfiguration.getTitle(), content);
+        String html = HtmlUtils.html5(guidesConfiguration.getTitle(), content);
+        try {
+            saveFile(html, outputDirectory, FILENAME_CATEGORIES_INDEX_HTML);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

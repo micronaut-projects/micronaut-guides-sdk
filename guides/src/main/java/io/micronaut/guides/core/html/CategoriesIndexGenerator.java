@@ -16,15 +16,16 @@
 package io.micronaut.guides.core.html;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.FileGenerator;
 import io.micronaut.guides.core.Guide;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.File;
 import java.util.List;
 
 /**
  * Generates a category index.
  */
-public interface CategoriesIndexGenerator {
-    @NonNull
-    String renderIndex(@NonNull @NotNull List<? extends Guide> guides);
+public interface CategoriesIndexGenerator extends FileGenerator {
+    void renderIndex(@NonNull @NotNull List<? extends Guide> guides, @NonNull @NotNull File outputDirectory);
 }

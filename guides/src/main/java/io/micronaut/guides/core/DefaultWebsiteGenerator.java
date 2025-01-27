@@ -169,8 +169,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
         indexGenerator.renderIndex(guides, outputDirectory);
 
-        String moduleIndexHtml = categoriesIndexGenerator.renderIndex(guides);
-        saveToFile(moduleIndexHtml, outputDirectory, FILENAME_CATEGORIES_INDEX_HTML);
+        categoriesIndexGenerator.renderIndex(guides, outputDirectory);
 
         String rss = rssFeedGenerator.rssFeed(guides);
         saveToFile(rss, outputDirectory, rssFeedConfiguration.getFilename());
