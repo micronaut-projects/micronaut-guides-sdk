@@ -6,6 +6,7 @@ import jakarta.inject.Inject;
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
@@ -25,10 +26,16 @@ class JsonFeedGeneratorTest {
     JsonFeedGenerator jsonFeedGenerator;
 
     @Inject
+    JsonFeedConfiguration jsonFeedConfiguration;
+
+    @Inject
     GuidesConfiguration guidesConfiguration;
 
     @Inject
     GuideMerger guideMerger;
+
+    @TempDir
+    File tempDir;
 
     private List<? extends Guide> guides;
 
@@ -42,7 +49,8 @@ class JsonFeedGeneratorTest {
 
     @Test
     public void testJsonFeed() throws IOException, JSONException {
-        String feed = jsonFeedGenerator.jsonFeedString(guides);
+        jsonFeedGenerator.jsonFeedString(guides, tempDir);
+        String feed = TestUtils.readFile(new File(tempDir, jsonFeedConfiguration.getFilename()));
         String expected = """
                 {
                   "version" : "https://jsonfeed.org/version/1.1",

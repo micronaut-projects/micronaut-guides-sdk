@@ -22,6 +22,7 @@ import io.micronaut.rss.RssItem;
 import io.micronaut.rss.language.RssLanguage;
 import jakarta.inject.Singleton;
 
+import java.io.File;
 import java.io.StringWriter;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -34,14 +35,16 @@ import java.util.List;
 @Singleton
 public class DefaultRssFeedGenerator implements RssFeedGenerator {
     private final GuidesConfiguration guidesConfiguration;
+    private final RssFeedConfiguration rssFeedConfiguration;
 
     /**
      * Constructs a new DefaultRssFeedGenerator.
      *
      * @param guidesConfiguration the configuration for guides
      */
-    public DefaultRssFeedGenerator(GuidesConfiguration guidesConfiguration) {
+    public DefaultRssFeedGenerator(GuidesConfiguration guidesConfiguration, RssFeedConfiguration rssFeedConfiguration) {
         this.guidesConfiguration = guidesConfiguration;
+        this.rssFeedConfiguration = rssFeedConfiguration;
     }
 
     /**
@@ -51,7 +54,7 @@ public class DefaultRssFeedGenerator implements RssFeedGenerator {
      * @return the generated RSS feed as a string
      */
     @NonNull
-    public String rssFeed(@NonNull List<? extends Guide> metadatas) {
+    public void rssFeed(@NonNull List<? extends Guide> metadatas, File outputDirectory) {
         RssChannel.Builder rssBuilder = rssBuilder();
         for (Guide metadata : metadatas) {
             rssBuilder.item(rssFeedElement(metadata));
@@ -59,7 +62,12 @@ public class DefaultRssFeedGenerator implements RssFeedGenerator {
         DefaultRssFeedRenderer rssFeedRenderer = new DefaultRssFeedRenderer();
         StringWriter writer = new StringWriter();
         rssFeedRenderer.render(writer, rssBuilder.build());
-        return writer.toString();
+        String rss = writer.toString();
+        try {
+            saveFile(rss, outputDirectory, rssFeedConfiguration.getFilename());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private RssChannel.Builder rssBuilder() {

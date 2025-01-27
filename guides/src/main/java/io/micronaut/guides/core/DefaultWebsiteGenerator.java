@@ -62,8 +62,6 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final IndexGenerator indexGenerator;
     private final GuideMatrixGenerator guideMatrixGenerator;
     private final GuideProjectZipper guideProjectZipper;
-    private final RssFeedConfiguration rssFeedConfiguration;
-    private final JsonFeedConfiguration jsonFeedConfiguration;
     private final GuidesConfiguration guidesConfiguration;
     private final GuidePageGenerator guidePageGenerator;
     private final CategoriesIndexGenerator categoriesIndexGenerator;
@@ -81,8 +79,6 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
                                    IndexGenerator indexGenerator,
                                    GuideMatrixGenerator guideMatrixGenerator,
                                    GuideProjectZipper guideProjectZipper,
-                                   RssFeedConfiguration rssFeedConfiguration,
-                                   JsonFeedConfiguration jsonFeedConfiguration,
                                    GuidePageGenerator guidePageGenerator,
                                    AsciidocConfiguration asciidocConfiguration,
                                    GuidesConfiguration guidesConfiguration,
@@ -99,8 +95,6 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.indexGenerator = indexGenerator;
         this.guideMatrixGenerator = guideMatrixGenerator;
         this.guideProjectZipper = guideProjectZipper;
-        this.rssFeedConfiguration = rssFeedConfiguration;
-        this.jsonFeedConfiguration = jsonFeedConfiguration;
         this.guidesConfiguration = guidesConfiguration;
         this.guidePageGenerator = guidePageGenerator;
         this.categoriesIndexGenerator = categoriesIndexGenerator;
@@ -171,11 +165,9 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
         categoriesIndexGenerator.renderIndex(guides, outputDirectory);
 
-        String rss = rssFeedGenerator.rssFeed(guides);
-        saveToFile(rss, outputDirectory, rssFeedConfiguration.getFilename());
+        rssFeedGenerator.rssFeed(guides, outputDirectory);
 
-        String json = jsonFeedGenerator.jsonFeedString(guides);
-        saveToFile(json, outputDirectory, jsonFeedConfiguration.getFilename());
+        jsonFeedGenerator.jsonFeedString(guides, outputDirectory);
 
         File imagesFolder = new File(inputDirectory, asciidocConfiguration.getImagesdir());
         if (imagesFolder.exists()) {

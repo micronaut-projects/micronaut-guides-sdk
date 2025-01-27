@@ -23,6 +23,7 @@ import io.micronaut.rss.jsonfeed.JsonFeedItem;
 import io.micronaut.rss.language.RssLanguage;
 import jakarta.inject.Singleton;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -73,10 +74,14 @@ public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
      * @throws IOException if an I/O error occurs during JSON serialization
      */
     @Override
-    @NonNull
-    public String jsonFeedString(@NonNull List<? extends Guide> metadatas) throws IOException {
+    public void jsonFeedString(@NonNull List<? extends Guide> metadatas, File outputDirectory) throws IOException {
         JsonFeed jsonFeed = jsonFeed(metadatas);
-        return jsonMapper.writeValueAsString(jsonFeed);
+        String json = jsonMapper.writeValueAsString(jsonFeed);
+        try {
+            saveFile(json, outputDirectory, jsonFeedConfiguration.getFilename());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private JsonFeed.Builder jsonFeedBuilder() {
