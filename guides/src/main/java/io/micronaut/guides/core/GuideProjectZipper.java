@@ -16,8 +16,8 @@
 package io.micronaut.guides.core;
 
 import io.micronaut.core.annotation.NonNull;
-import jakarta.validation.constraints.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -28,9 +28,19 @@ public interface GuideProjectZipper {
     /**
      * Zips the contents of the specified source directory into the specified output file.
      *
-     * @param sourceDir  the path to the source directory to be zipped
-     * @param outputFile the path to the output file where the zipped content will be written
+     * @param guide           the guide to zip
+     * @param outputDirectory the output directory
      * @throws IOException if an I/O error occurs during zipping
      */
-    void zipDirectory(@NonNull @NotNull String sourceDir, @NonNull @NotNull String outputFile) throws IOException;
+    void zipGuide(@NonNull Guide guide, @NonNull File guideOutput, @NonNull File outputDirectory) throws IOException;
+
+
+    /**
+     * Returns the name of the zip file for the given guide.
+     *
+     * @param guide   the guide
+     * @param options the options
+     * @return the name of the zip file
+     */
+    String getZipFileName(@NonNull Guide guide, @NonNull GuidesOption options);
 }
