@@ -50,6 +50,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private static final List<Language> JAVA_KOTLIN_GROOVY = List.of(Language.JAVA, Language.GROOVY, Language.KOTLIN);
     private static final List<String> DEFAULT_ZIP_INCLUDES_EXTENSIONS = List.of(".sh", ".bat");
     private final boolean DEFAULT_VALIDATE_METADATA = true;
+    private final boolean DEFAULT_USE_INDEX = false;
     private String guidesDir = DEFAULT_GUIDES_DIR;
     private String title = "Micronaut Guides";
     private String homePageUrl = GUIDES_URL;
@@ -66,6 +67,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private boolean validateMetadata = DEFAULT_VALIDATE_METADATA;
     private List<Language> defaultLanguages = JAVA_KOTLIN_GROOVY;
     private String defaultAppName = DEFAULT_APP_NAME;
+    private boolean useIndex = DEFAULT_USE_INDEX;
     private List<String> zipIncludesExtensions = DEFAULT_ZIP_INCLUDES_EXTENSIONS;
 
     /**
@@ -78,6 +80,15 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     @Override
     public List<String> getZipIncludesExtensions() {
         return zipIncludesExtensions;
+    }
+
+    @Override
+    public boolean getUseIndex() {
+        return useIndex;
+    }
+
+    public void setUseIndex(boolean useIndex) {
+        this.useIndex = useIndex;
     }
 
     /**

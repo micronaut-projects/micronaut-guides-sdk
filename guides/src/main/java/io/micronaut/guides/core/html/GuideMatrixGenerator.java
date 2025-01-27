@@ -16,14 +16,17 @@
 package io.micronaut.guides.core.html;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.FileGenerator;
 import io.micronaut.guides.core.Guide;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.File;
+
 /**
  * Interface for generating a matrix for guides.
  */
-public interface GuideMatrixGenerator {
+public interface GuideMatrixGenerator extends FileGenerator {
     /**
      * Renders the index for the given guide.
      *
@@ -31,5 +34,5 @@ public interface GuideMatrixGenerator {
      * @return the rendered index as a string
      */
     @NonNull
-    String renderIndex(@NonNull @NotNull @Valid Guide guide);
+    void renderIndex(@NonNull @NotNull @Valid Guide guide, @NonNull @NotNull File outputDirectory);
 }

@@ -17,11 +17,15 @@ package io.micronaut.guides.core.html;
 
 import io.micronaut.guides.core.Guide;
 import io.micronaut.guides.core.GuideGenerationUtils;
+import io.micronaut.guides.core.GuidesConfiguration;
 import io.micronaut.guides.core.GuidesOption;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -32,28 +36,41 @@ import java.util.List;
 class DefaultGuideMatrixGenerator implements GuideMatrixGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGuideMatrixGenerator.class);
 
+    @Inject
+    GuidesConfiguration guidesConfiguration;
+
     @Override
-    public String renderIndex(Guide guide) {
-        StringBuilder sb = new StringBuilder();
-        List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
-        sb.append("<!DOCTYPE html><html><head></head><body>");
-        sb.append("<h1>");
-        sb.append(guide.getTitle());
-        sb.append("</h1>");
-        sb.append("<ul>");
-        for (GuidesOption guideOption : guideOptions) {
-            String href = guide.getSlug() + "-" + guideOption.getBuildTool() + "-" + guideOption.getLanguage() + ".html";
-            String title = guideOption.getBuildTool() + " " + guideOption.getLanguage();
-            sb.append("<li>");
-            sb.append("<a href=\"");
-            sb.append(href);
-            sb.append("\">");
-            sb.append(title);
-            sb.append("</a>");
-            sb.append("</li>");
+    public void renderIndex(Guide guide, File outputDirectory) {
+        if (guide.isPublish()) {
+            StringBuilder sb = new StringBuilder();
+            List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
+            sb.append("<!DOCTYPE html><html><head></head><body>");
+            sb.append("<h1>");
+            sb.append(guide.getTitle());
+            sb.append("</h1>");
+            sb.append("<ul>");
+            for (GuidesOption guideOption : guideOptions) {
+                String href = guide.getSlug() + "-" + guideOption.getBuildTool() + "-" + guideOption.getLanguage() + ".html";
+                String title = guideOption.getBuildTool() + " " + guideOption.getLanguage();
+                sb.append("<li>");
+                sb.append("<a href=\"");
+                sb.append(href);
+                sb.append("\">");
+                sb.append(title);
+                sb.append("</a>");
+                sb.append("</li>");
+            }
+            sb.append("</ul>");
+            sb.append("</body></html>");
+            try {
+                if (guidesConfiguration.getUseIndex()) {
+                    saveFile(sb.toString(), new File(outputDirectory, guide.getSlug()), "index.html");
+                } else {
+                    saveFile(sb.toString(), outputDirectory, guide.getSlug() + ".html");
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-        sb.append("</ul>");
-        sb.append("</body></html>");
-        return sb.toString();
     }
 }

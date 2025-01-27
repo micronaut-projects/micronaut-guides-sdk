@@ -160,10 +160,9 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
                     }
                 }
 
-                if (guide.isPublish()) {
-                    String guideMatrixHtml = guideMatrixGenerator.renderIndex(guide);
-                    saveToFile(guideMatrixHtml, outputDirectory, guide.getSlug() + ".html");
-                }
+
+                guideMatrixGenerator.renderIndex(guide, outputDirectory);
+
             }
 
         }

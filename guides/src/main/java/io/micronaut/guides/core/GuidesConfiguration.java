@@ -148,11 +148,12 @@ public interface GuidesConfiguration {
     String getSysPropMicronautGuide();
 
     /**
-     *
      * @return Whether the Guide metadata should be validated against the JSON Schema
      */
     boolean isValidateMetadata();
 
     @NonNull
     List<String> getZipIncludesExtensions();
+
+    boolean getUseIndex();
 }

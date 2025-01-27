@@ -13,6 +13,7 @@ public interface FileGenerator {
     }
 
     default void saveFile(String content, File outputDirectory, String filename, boolean executable) throws IOException {
+        outputDirectory.mkdirs();
         Path filePath = Paths.get(outputDirectory.getAbsolutePath(), filename);
         Files.write(filePath, content.getBytes());
         if (executable) {
