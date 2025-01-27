@@ -73,6 +73,11 @@ public class DefaultGuideProjectGenerator implements GuideProjectGenerator {
      */
     @Override
     public void generate(@NotNull @NonNull File outputDirectory, @NotNull @NonNull Guide guide) throws IOException {
+        //skip for text-only guides
+        if (guide.getApps().isEmpty()) {
+            return;
+        }
+
         if (!outputDirectory.exists()) {
             throw new ConfigurationException("Output directory does not exist");
         }

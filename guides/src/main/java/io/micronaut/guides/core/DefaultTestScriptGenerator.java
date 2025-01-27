@@ -229,6 +229,11 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
      */
     @Override
     public void generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide) {
+        //skip for text-only guides
+        if (guide.getApps().isEmpty()) {
+            return;
+        }
+
         String script = generateScript(outputDirectory, List.of(guide), false, true);
         try {
             saveFile(script, new File(outputDirectory, guide.getSlug()), FILENAME_NATIVE_TEST_SH, true);
@@ -261,6 +266,11 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
      */
     @Override
     public void generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide) {
+        //skip for text-only guides
+        if (guide.getApps().isEmpty()) {
+            return;
+        }
+
         String script = generateScript(outputDirectory, List.of(guide), false, false);
         try {
             saveFile(script, new File(outputDirectory, guide.getSlug()), FILENAME_TEST_SH);

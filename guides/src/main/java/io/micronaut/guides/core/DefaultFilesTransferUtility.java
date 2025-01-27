@@ -158,6 +158,11 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                               @NotNull @NonNull File outputDirectory,
                               @NotNull @NonNull Guide guide,
                               @NotNull @NonNull List<? extends Guide> guides) throws IOException {
+        //skip for text-only guides
+        if (guide.getApps().isEmpty()) {
+            return;
+        }
+
         List<GuidesOption> guidesOptionList = GuideGenerationUtils.guidesOptions(guide, LOG);
         for (GuidesOption guidesOption : guidesOptionList) {
             for (App app : guide.getApps()) {
