@@ -53,7 +53,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      * @param licenseLoader       the license loader
      * @param guidesConfiguration the guides configuration
      */
-    DefaultFilesTransferUtility(LicenseLoader licenseLoader, GuidesConfiguration guidesConfiguration) {
+    protected DefaultFilesTransferUtility(LicenseLoader licenseLoader, GuidesConfiguration guidesConfiguration) {
         this.licenseLoader = licenseLoader;
         this.guidesConfiguration = guidesConfiguration;
     }
@@ -65,7 +65,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      * @param text the text to look for
      * @return true if the file contains the text, false otherwise
      */
-    private static boolean fileContainsText(File file, String text) {
+    protected static boolean fileContainsText(File file, String text) {
         try {
             return new String(Files.readAllBytes(file.toPath())).contains(text);
         } catch (IOException e) {
@@ -84,7 +84,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      * @param ignoreMissingDirectories whether to ignore missing directories
      * @throws IOException if an I/O error occurs during file copy
      */
-    private static void copyGuideSourceFiles(File inputDir, Path destinationPath, String appName, String language, boolean ignoreMissingDirectories) throws IOException {
+    protected static void copyGuideSourceFiles(File inputDir, Path destinationPath, String appName, String language, boolean ignoreMissingDirectories) throws IOException {
 
         // look for a common 'src' directory shared by multiple languages and copy those files first
         final String srcFolder = "src";
@@ -108,7 +108,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      * @param path        the path of the file to delete
      * @return the file to delete
      */
-    private static File fileToDelete(File destination, String path) {
+    protected static File fileToDelete(File destination, String path) {
         return Paths.get(destination.getAbsolutePath(), path).toFile();
     }
 
@@ -120,7 +120,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      * @param filePath        the file path
      * @throws IOException if an I/O error occurs during file copy
      */
-    private static void copyFile(File inputDir, File destinationRoot, String filePath) throws IOException {
+    protected static void copyFile(File inputDir, File destinationRoot, String filePath) throws IOException {
         File sourceFile = new File(inputDir, filePath);
         copyFile(inputDir, destinationRoot, sourceFile);
     }
@@ -133,7 +133,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      * @param sourceFile      sourceFile
      * @throws IOException if an I/O error occurs during file copy
      */
-    private static void copyFile(File inputDir, File destinationRoot, File sourceFile) throws IOException {
+    protected static void copyFile(File inputDir, File destinationRoot, File sourceFile) throws IOException {
         String filePath = sourceFile.getAbsolutePath().substring(inputDir.getAbsolutePath().length());
         File destinationFile = new File(destinationRoot, filePath);
 
@@ -226,7 +226,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         }
     }
 
-    private void deleteFiles(List<String> sources, File destination, App app, GuidesOption guidesOption, GuidesConfiguration guidesConfiguration, String pathType) {
+    protected void deleteFiles(List<String> sources, File destination, App app, GuidesOption guidesOption, GuidesConfiguration guidesConfiguration, String pathType) {
         if (sources.size() == 1 && sources.get(0).equals("*")) {
             File destinationFolder = new File(destination, "src/" + pathType);
             //delete all files in the destination folder and its subfolders
@@ -261,7 +261,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         }
     }
 
-    private List<File> walkZipIncludeExtensions(File dir) {
+    protected List<File> walkZipIncludeExtensions(File dir) {
         List<File> result = new ArrayList<>();
         File[] list = dir.listFiles();
         if (ArrayUtils.isEmpty(list)) {
@@ -287,10 +287,10 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      * @return the generated path
      */
     @NonNull
-    static String pathByFolder(@NonNull App app,
-                               @NonNull String fileName,
-                               @NonNull String folder,
-                               @NonNull GuidesOption option) {
+    protected static String pathByFolder(@NonNull App app,
+                                         @NonNull String fileName,
+                                         @NonNull String folder,
+                                         @NonNull GuidesOption option) {
         Path path = Path.of(
                 "src",
                 folder,
@@ -305,7 +305,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      *
      * @param folder the folder containing the files to which license headers will be added
      */
-    void addLicenses(File folder) {
+    protected void addLicenses(File folder) {
         String licenseHeader = licenseLoader.getLicenseHeaderText();
         Arrays.stream(folder.listFiles()).forEach(file -> {
             if ((file.getPath().endsWith(EXTENSION_JAVA) || file.getPath().endsWith(EXTENSION_GROOVY) || file.getPath().endsWith(EXTENSION_KT))

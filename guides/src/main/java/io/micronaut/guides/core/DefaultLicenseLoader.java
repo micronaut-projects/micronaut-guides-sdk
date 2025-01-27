@@ -61,7 +61,7 @@ public class DefaultLicenseLoader implements LicenseLoader {
      * @param inputStream the input stream to read from
      * @return the license header text
      */
-    private String readLicenseHeader(InputStream inputStream) {
+    protected String readLicenseHeader(InputStream inputStream) {
         return headerByYear.computeIfAbsent(LocalDate.now().getYear(), year -> {
             StringBuilder sb = new StringBuilder();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {

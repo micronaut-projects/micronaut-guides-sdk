@@ -19,7 +19,6 @@ import io.micronaut.guides.core.Guide;
 import io.micronaut.guides.core.GuideGenerationUtils;
 import io.micronaut.guides.core.GuidesConfiguration;
 import io.micronaut.guides.core.GuidesOption;
-import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +36,11 @@ import java.util.List;
 class DefaultGuideMatrixGenerator implements GuideMatrixGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGuideMatrixGenerator.class);
 
-    @Inject
-    GuidesConfiguration guidesConfiguration;
+    private final GuidesConfiguration guidesConfiguration;
+
+    protected DefaultGuideMatrixGenerator(GuidesConfiguration guidesConfiguration) {
+        this.guidesConfiguration = guidesConfiguration;
+    }
 
     @Override
     public void renderIndex(Guide guide, File outputDirectory) {

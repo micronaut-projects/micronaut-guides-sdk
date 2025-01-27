@@ -34,7 +34,7 @@ public class DefaultCategoriesIndexGenerator implements CategoriesIndexGenerator
 
     private final GuidesConfiguration guidesConfiguration;
 
-    DefaultCategoriesIndexGenerator(GuidesConfiguration guidesConfiguration) {
+    protected DefaultCategoriesIndexGenerator(GuidesConfiguration guidesConfiguration) {
         this.guidesConfiguration = guidesConfiguration;
     }
 

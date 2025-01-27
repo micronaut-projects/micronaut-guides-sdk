@@ -46,7 +46,7 @@ public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
      * @param jsonFeedConfiguration the configuration for JSON feed
      * @param jsonMapper            the JSON mapper
      */
-    public DefaultJsonFeedGenerator(GuidesConfiguration guidesConfiguration, JsonFeedConfiguration jsonFeedConfiguration, JsonMapper jsonMapper) {
+    protected DefaultJsonFeedGenerator(GuidesConfiguration guidesConfiguration, JsonFeedConfiguration jsonFeedConfiguration, JsonMapper jsonMapper) {
         this.guidesConfiguration = guidesConfiguration;
         this.jsonFeedConfiguration = jsonFeedConfiguration;
         this.jsonMapper = jsonMapper;
@@ -84,7 +84,7 @@ public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
         }
     }
 
-    private JsonFeed.Builder jsonFeedBuilder() {
+    protected JsonFeed.Builder jsonFeedBuilder() {
         return JsonFeed.builder()
                 .version(JsonFeed.VERSION_JSON_FEED_1_1)
                 .title(guidesConfiguration.getTitle())
@@ -92,7 +92,7 @@ public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
                 .feedUrl(jsonFeedConfiguration.getFeedUrl());
     }
 
-    private JsonFeedItem jsonFeedItem(Guide metadata) {
+    protected JsonFeedItem jsonFeedItem(Guide metadata) {
         JsonFeedItem.Builder jsonFeedItemBuilder = JsonFeedItem.builder()
                 .id(metadata.getSlug())
                 .title(metadata.getTitle())

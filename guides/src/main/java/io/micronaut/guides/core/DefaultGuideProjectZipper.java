@@ -49,7 +49,7 @@ public class DefaultGuideProjectZipper implements GuideProjectZipper {
      * @param out       the {@link ZipArchiveOutputStream} to write the compressed data
      * @throws IOException if an I/O error occurs during compression
      */
-    private static void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipArchiveOutputStream out) throws IOException {
+    protected static void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipArchiveOutputStream out) throws IOException {
         for (File file : new File(sourceDir).listFiles()) {
             if (EXCLUDED_FILES.contains(file.getName())) {
                 continue;
