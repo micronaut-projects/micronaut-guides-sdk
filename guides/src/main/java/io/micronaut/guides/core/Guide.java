@@ -126,6 +126,10 @@ public class Guide {
     @Nullable
     private File folder;
 
+    @JsonPropertyDescription("The base url of the guide. The final url will be the base url followed by the guide slug. Used to generate the correct website structure.")
+    @Nullable
+    private String url;
+
     @JsonPropertyDescription("Whether the guide should be published, it defaults to true. You can set it to false for draft or base guides")
     @Nullable
     @JsonProperty(defaultValue = StringUtils.TRUE)
@@ -594,7 +598,6 @@ public class Guide {
     }
 
     /**
-     *
      * @return Base Source Module
      */
     @Nullable
@@ -603,7 +606,6 @@ public class Guide {
     }
 
     /**
-     *
      * @param baseSourceModule Base Source Module
      */
     @Nullable
@@ -612,7 +614,6 @@ public class Guide {
     }
 
     /**
-     *
      * @return Source Module
      */
     @Nullable
@@ -621,7 +622,6 @@ public class Guide {
     }
 
     /**
-     *
      * @param sourceModule Source Module
      */
     public void setSourceModule(@Nullable String sourceModule) {
