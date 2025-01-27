@@ -627,4 +627,12 @@ public class Guide {
     public void setSourceModule(@Nullable String sourceModule) {
         this.sourceModule = sourceModule;
     }
+
+    public @NonNull String getUrl() {
+        return url != null ? url : "";
+    }
+
+    public void setUrl(@Nullable String url) {
+        this.url = url;
+    }
 }
