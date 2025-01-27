@@ -60,8 +60,6 @@ public interface TestScriptGenerator extends FileGenerator {
      * @param outputDirectory the output directory
      * @param metadatas       the list of guides metadata
      */
-    @NonNull
-    @NotNull
     void generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas);
 
     /**
@@ -70,8 +68,6 @@ public interface TestScriptGenerator extends FileGenerator {
      * @param outputDirectory the output directory
      * @param guide           the guide metadata
      */
-    @NonNull
-    @NotNull
     void generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
 
     /**
@@ -80,8 +76,6 @@ public interface TestScriptGenerator extends FileGenerator {
      * @param outputDirectory the output directory
      * @param metadatas       the list of guides metadata
      */
-    @NonNull
-    @NotNull
     void generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas);
 
     /**
@@ -90,8 +84,6 @@ public interface TestScriptGenerator extends FileGenerator {
      * @param outputDirectory the output directory
      * @param guide           the guide metadata
      */
-    @NonNull
-    @NotNull
     void generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
 
 }

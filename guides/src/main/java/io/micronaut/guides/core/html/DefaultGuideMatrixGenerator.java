@@ -43,7 +43,7 @@ class DefaultGuideMatrixGenerator implements GuideMatrixGenerator {
     @Override
     public void renderIndex(Guide guide, File outputDirectory) {
         //skip for text-only guides
-        if (guide.getApps().isEmpty()) {
+        if (guide.getApps().isEmpty() || !guide.isPublish()) {
             return;
         }
 

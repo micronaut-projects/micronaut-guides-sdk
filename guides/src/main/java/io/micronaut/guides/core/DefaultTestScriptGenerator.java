@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -209,7 +210,6 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
      * Generates a script for running native tests for the given guides metadata.
      *
      * @param metadatas the list of guides metadata
-     * @return the generated script as a string
      */
     @Override
     public void generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas) {
@@ -234,7 +234,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
             return;
         }
 
-        String script = generateScript(outputDirectory, List.of(guide), false, true);
+        String script = generateScript(outputDirectory, new ArrayList<>(List.of(guide)), false, true);
         try {
             saveFile(script, new File(outputDirectory, guide.getSlug()), FILENAME_NATIVE_TEST_SH, true);
         } catch (IOException e) {
@@ -246,7 +246,6 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
      * Generates a script for running tests for the given guides metadata.
      *
      * @param metadatas the list of guides metadata
-     * @return the generated script as a string
      */
     @Override
     public void generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas) {
@@ -271,7 +270,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
             return;
         }
 
-        String script = generateScript(outputDirectory, List.of(guide), false, false);
+        String script = generateScript(outputDirectory, new ArrayList<>(List.of(guide)), false, false);
         try {
             saveFile(script, new File(outputDirectory, guide.getSlug()), FILENAME_TEST_SH);
         } catch (IOException e) {
