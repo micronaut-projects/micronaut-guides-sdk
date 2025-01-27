@@ -27,7 +27,7 @@ import java.util.List;
  * This interface provides methods to check if an app or language supports native tests,
  * if an app uses the Micronaut framework, and to generate scripts for running tests.
  */
-public interface TestScriptGenerator {
+public interface TestScriptGenerator extends FileGenerator {
 
     /**
      * Checks if the given app supports native tests.
@@ -58,23 +58,40 @@ public interface TestScriptGenerator {
      * Generates a script for running native tests for the given guides.
      *
      * @param outputDirectory the output directory
-     * @param metadatas the list of guides metadata
-     * @return the generated script as a string
+     * @param metadatas       the list of guides metadata
      */
     @NonNull
     @NotNull
-    String generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas);
+    void generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas);
 
     /**
+     * Generates a script for running native tests for the given guide.
      *
+     * @param outputDirectory the output directory
+     * @param guide           the guide metadata
+     */
+    @NonNull
+    @NotNull
+    void generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
+
+    /**
      * Generates a script for running tests for the given guides.
      *
      * @param outputDirectory the output directory
-     * @param metadatas the list of guides metadata
-     * @return the generated script as a string
+     * @param metadatas       the list of guides metadata
      */
     @NonNull
     @NotNull
-    String generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas);
+    void generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas);
+
+    /**
+     * Generates a script for running tests for the given guides.
+     *
+     * @param outputDirectory the output directory
+     * @param guide           the guide metadata
+     */
+    @NonNull
+    @NotNull
+    void generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
 
 }

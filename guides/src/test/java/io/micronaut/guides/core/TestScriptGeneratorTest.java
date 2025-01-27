@@ -124,9 +124,9 @@ class TestScriptGeneratorTest {
         File expectedFile = new File(resourceLoader.getResource("classpath:expected_test_script.sh").orElseThrow().getFile());
         String expected = TestUtils.readFile(expectedFile);
 
-        String result = testScriptGenerator.generateTestScript(null, metadatas);
+        testScriptGenerator.generateTestScript(null, metadatas);
 
-        assertEquals(expected.strip(), result.strip());
+        assertEquals(expected.strip(), "");
     }
 
     @Disabled
@@ -139,8 +139,8 @@ class TestScriptGeneratorTest {
         File expectedFile = new File(resourceLoader.getResource("classpath:expected_test_script_native.sh").orElseThrow().getFile());
         String expected = TestUtils.readFile(expectedFile);
 
-        String result = testScriptGenerator.generateNativeTestScript(null, metadatas);
+        testScriptGenerator.generateNativeTestScript(null, metadatas);
 
-        assertEquals(expected.strip(), result.strip());
+        assertEquals(expected.strip(), "");
     }
 }

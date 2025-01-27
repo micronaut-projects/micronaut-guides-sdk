@@ -49,8 +49,7 @@ import java.util.function.Predicate;
 @Singleton
 public class DefaultWebsiteGenerator implements WebsiteGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultWebsiteGenerator.class);
-    private static final String FILENAME_TEST_SH = "test.sh";
-    private static final String FILENAME_NATIVE_TEST_SH = "native-test.sh";
+    ;
     private static final String FILENAME_INDEX_HTML = "index.html";
     private static final String FILENAME_CATEGORIES_INDEX_HTML = "categories-index.html";
     private final GuideRenderAttributesProvider guideRenderAttributesProvider;
@@ -147,12 +146,10 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
                 filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
 
                 // Test script generation
-                String testScript = testScriptGenerator.generateTestScript(outputDirectory, new ArrayList<>(List.of(guide)));
-                saveToFile(testScript, guideOutput, FILENAME_TEST_SH, true);
+                testScriptGenerator.generateTestScript(outputDirectory, guide);
 
                 // Native Test script generation
-                String nativeTestScript = testScriptGenerator.generateNativeTestScript(outputDirectory, new ArrayList<>(List.of(guide)));
-                saveToFile(nativeTestScript, guideOutput, FILENAME_NATIVE_TEST_SH, true);
+                testScriptGenerator.generateNativeTestScript(outputDirectory, guide);
 
                 List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
                 for (GuidesOption guidesOption : guideOptions) {
