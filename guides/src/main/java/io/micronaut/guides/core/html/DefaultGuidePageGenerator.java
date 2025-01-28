@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.html;
 
 import io.micronaut.context.exceptions.ConfigurationException;
+import io.micronaut.guides.core.*;
 import io.micronaut.guides.core.asciidoc.AsciidocConfiguration;
 import io.micronaut.guides.core.asciidoc.AsciidocConverter;
 import io.micronaut.guides.core.asciidoc.GuideRenderAttributesProvider;
-import io.micronaut.guides.core.html.HtmlUtils;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
