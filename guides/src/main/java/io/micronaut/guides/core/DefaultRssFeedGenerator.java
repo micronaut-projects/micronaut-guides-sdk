@@ -40,7 +40,8 @@ public class DefaultRssFeedGenerator implements RssFeedGenerator {
     /**
      * Constructs a new DefaultRssFeedGenerator.
      *
-     * @param guidesConfiguration the configuration for guides
+     * @param guidesConfiguration  the configuration for guides
+     * @param rssFeedConfiguration the configuration for RSS feed
      */
     public DefaultRssFeedGenerator(GuidesConfiguration guidesConfiguration, RssFeedConfiguration rssFeedConfiguration) {
         this.guidesConfiguration = guidesConfiguration;
@@ -50,8 +51,8 @@ public class DefaultRssFeedGenerator implements RssFeedGenerator {
     /**
      * Generates an RSS feed from the provided list of guide metadata.
      *
-     * @param metadatas the list of guide metadata
-     * @return the generated RSS feed as a string
+     * @param metadatas       the list of guide metadata
+     * @param outputDirectory the directory to which the RSS feed should be written
      */
     @NonNull
     public void rssFeed(@NonNull List<? extends Guide> metadatas, File outputDirectory) {

@@ -628,10 +628,20 @@ public class Guide {
         this.sourceModule = sourceModule;
     }
 
+    /**
+     * Gets the URL for the guide.
+     *
+     * @return The URL for the guide.
+     */
     public @NonNull String getUrl() {
         return url != null ? url : "";
     }
 
+    /**
+     * Sets the URL for the guide.
+     *
+     * @param url The URL to set.
+     */
     public void setUrl(@Nullable String url) {
         this.url = url;
     }

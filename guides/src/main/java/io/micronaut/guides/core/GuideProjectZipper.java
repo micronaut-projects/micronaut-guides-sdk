@@ -29,6 +29,7 @@ public interface GuideProjectZipper {
      * Zips the contents of the specified source directory into the specified output file.
      *
      * @param guide           the guide to zip
+     * @param guideOutput     the guide output directory
      * @param outputDirectory the output directory
      * @throws IOException if an I/O error occurs during zipping
      */

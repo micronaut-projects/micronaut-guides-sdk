@@ -31,7 +31,8 @@ public interface IndexGenerator extends FileGenerator {
     /**
      * Renders the index page for the given list of guides.
      *
-     * @param guides the list of guides to render the index for
+     * @param guides          the list of guides to render the index for
+     * @param outputDirectory the directory to which the index should be written
      */
     void renderIndex(@NonNull @NotNull List<? extends Guide> guides, File outputDirectory);
 }

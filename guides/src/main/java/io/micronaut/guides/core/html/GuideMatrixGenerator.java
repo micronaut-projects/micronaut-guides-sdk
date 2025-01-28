@@ -29,7 +29,8 @@ public interface GuideMatrixGenerator extends FileGenerator {
     /**
      * Renders the index for the given guide.
      *
-     * @param guide the guide to render the index for
+     * @param guide           the guide to render the index for
+     * @param outputDirectory the directory to which the index should be written
      */
     void renderIndex(@NonNull @NotNull Guide guide, @NonNull @NotNull File outputDirectory);
 }

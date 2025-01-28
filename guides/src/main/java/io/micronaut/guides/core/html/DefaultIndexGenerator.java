@@ -32,8 +32,8 @@ import java.util.List;
  */
 @Singleton
 public class DefaultIndexGenerator implements IndexGenerator {
-    private final GuidesConfiguration guidesConfiguration;
     private static final String FILENAME_INDEX_HTML = "index.html";
+    private final GuidesConfiguration guidesConfiguration;
 
     DefaultIndexGenerator(GuidesConfiguration guidesConfiguration) {
         this.guidesConfiguration = guidesConfiguration;

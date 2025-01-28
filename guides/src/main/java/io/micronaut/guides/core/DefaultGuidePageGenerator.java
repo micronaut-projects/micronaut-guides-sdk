@@ -33,6 +33,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Default implementation of the {@link GuidePageGenerator} interface.
+ * This class is responsible for generating the HTML pages for guides.
+ */
 @Singleton
 public class DefaultGuidePageGenerator implements GuidePageGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGuidePageGenerator.class);
@@ -41,7 +46,6 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
     private final MacroSubstitution macroSubstitution;
     private final AsciidocConverter asciidocConverter;
     private final AsciidocConfiguration asciidocConfiguration;
-
 
     protected DefaultGuidePageGenerator(GuidesConfiguration guidesConfiguration,
                                         MacroSubstitution macroSubstitution,
@@ -72,6 +76,17 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
         }
     }
 
+    /**
+     * Renders the HTML for the given guide.
+     *
+     * @param guide           The guide
+     * @param option          The option
+     * @param inputDirectory  The input directory
+     * @param outputDirectory The output directory
+     * @param fileName        The file name
+     * @param guideOutput     The guide output
+     * @throws IOException If an error occurs
+     */
     protected void renderHtml(Guide guide, GuidesOption option, File inputDirectory, File outputDirectory, String fileName, File guideOutput) throws IOException {
         GuideRender guideRender = new GuideRender(guide, option);
 
@@ -125,10 +140,23 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
 
     }
 
+    /**
+     * Applies the HTML template to the given table of contents (TOC) and HTML content.
+     *
+     * @param toc  The table of contents as a string.
+     * @param html The HTML content as a string.
+     * @return The combined HTML content with the TOC applied.
+     */
     protected String applyTemplate(String toc, String html) {
         return HtmlUtils.html5(guidesConfiguration.getTitle(), toc + html);
     }
 
+    /**
+     * Extracts the table of contents (TOC) from the given HTML content.
+     *
+     * @param html The HTML content as a string.
+     * @return A list of strings representing the TOC div elements found in the HTML.
+     */
     protected List<String> extractToc(String html) {
         List<String> tocDivs = new ArrayList<>();
         String openDivPattern = "<div";
@@ -203,6 +231,13 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
         return tocDivs;
     }
 
+    /**
+     * Reads the content of a file and returns it as a string.
+     *
+     * @param file The file to read.
+     * @return The content of the file as a string.
+     * @throws IOException If an I/O error occurs reading from the file.
+     */
     protected static String readFile(File file) throws IOException {
         Path path = file.toPath();
         return new String(Files.readAllBytes(path));

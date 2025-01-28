@@ -70,7 +70,6 @@ public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
      * Generates a JSON string representation of the JsonFeed from the provided list of guide metadata.
      *
      * @param metadatas the list of guide metadata
-     * @return the JSON string representation of the JsonFeed
      * @throws IOException if an I/O error occurs during JSON serialization
      */
     @Override

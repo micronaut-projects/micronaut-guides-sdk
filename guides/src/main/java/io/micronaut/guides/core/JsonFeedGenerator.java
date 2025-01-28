@@ -29,7 +29,8 @@ public interface JsonFeedGenerator extends FileGenerator {
     /**
      * Generates a JSON feed string from the provided list of Guide metadata objects.
      *
-     * @param metadatas the list of Guide metadata objects
+     * @param metadatas       the list of Guide metadata objects
+     * @param outputDirectory the directory to which the JSON feed should be written
      * @throws IOException if an I/O error occurs during the generation of the JSON feed
      */
     void jsonFeedString(@NonNull List<? extends Guide> metadatas, File outputDirectory) throws IOException;

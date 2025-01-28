@@ -27,7 +27,8 @@ public interface RssFeedGenerator extends FileGenerator {
     /**
      * Generates an RSS feed from the given list of guide metadata.
      *
-     * @param metadatas the list of guide metadata
+     * @param metadatas       the list of guide metadata
+     * @param outputDirectory the directory to which the RSS feed should be written
      */
     void rssFeed(@NonNull List<? extends Guide> metadatas, File outputDirectory);
 }
