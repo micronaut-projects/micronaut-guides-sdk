@@ -91,7 +91,9 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
         // HTML rendering
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("sourcedir", outputDirectory.getAbsolutePath());
-        attributes.put("guidesourcedir", new File(guideOutput, fileName).getAbsolutePath());
+        if (option != null) {
+            attributes.put("guidesourcedir", new File(guideOutput, MacroUtils.getSourceDir(guide.getSlug(), option)).getAbsolutePath());
+        }
         attributes.putAll(guideRenderAttributesProvider.attributes(guideRender));
         String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, () -> attributes);
         if (!asciidocConfiguration.isHeaderFooter()) {
