@@ -1,10 +1,12 @@
 package io.micronaut.guides.core.html;
 
 import io.micronaut.guides.core.Guide;
+import jakarta.inject.Singleton;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 public class DefaultTocGenerator implements TocGenerator {
 
     @Override
