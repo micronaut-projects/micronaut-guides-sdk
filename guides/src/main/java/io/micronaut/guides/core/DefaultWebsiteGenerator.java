@@ -25,8 +25,6 @@ import io.micronaut.guides.core.html.GuideMatrixGenerator;
 import io.micronaut.guides.core.html.IndexGenerator;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,8 +40,6 @@ import java.util.function.Predicate;
 @Internal
 @Singleton
 public class DefaultWebsiteGenerator implements WebsiteGenerator {
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultWebsiteGenerator.class);
-
     private final GuideParser guideParser;
     private final GuideProjectGenerator guideProjectGenerator;
     private final JsonFeedGenerator jsonFeedGenerator;

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Default implementation of the {@link GuideProjectZipper} interface.
@@ -50,7 +51,7 @@ public class DefaultGuideProjectZipper implements GuideProjectZipper {
      * @throws IOException if an I/O error occurs during compression
      */
     private static void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipArchiveOutputStream out) throws IOException {
-        for (File file : new File(sourceDir).listFiles()) {
+        for (File file : Objects.requireNonNull(new File(sourceDir).listFiles())) {
             if (EXCLUDED_FILES.contains(file.getName())) {
                 continue;
             }

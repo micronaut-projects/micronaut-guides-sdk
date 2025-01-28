@@ -191,23 +191,23 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                 copyGuideSourceFiles(inputDirectory, destinationPath, appName, guidesOption.getLanguage().toString(), false);
 
                 if (app.getExcludeSource() != null) {
-                    deleteFiles(app.getExcludeSource(), destination, app, guidesOption, guidesConfiguration, "main");
+                    deleteFiles(app.getExcludeSource(), destination, app, guidesOption, "main");
                 }
 
                 if (app.getExcludeBaseSource() != null) {
                     String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
                     Path baseDestinationPath = Paths.get(guide.getOutputDirectory(outputDirectory, guidesOption).getAbsolutePath(), appName, baseModule);
-                    deleteFiles(app.getExcludeBaseSource(), baseDestinationPath.toFile(), app, guidesOption, guidesConfiguration, "main");
+                    deleteFiles(app.getExcludeBaseSource(), baseDestinationPath.toFile(), app, guidesOption, "main");
                 }
 
                 if (app.getExcludeTest() != null) {
-                    deleteFiles(app.getExcludeTest(), destination, app, guidesOption, guidesConfiguration, "test");
+                    deleteFiles(app.getExcludeTest(), destination, app, guidesOption, "test");
                 }
 
                 if (app.getExcludeBaseTest() != null) {
                     String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
                     Path baseDestinationPath = Paths.get(guide.getOutputDirectory(outputDirectory, guidesOption).getAbsolutePath(), appName, baseModule);
-                    deleteFiles(app.getExcludeBaseTest(), baseDestinationPath.toFile(), app, guidesOption, guidesConfiguration, "test");
+                    deleteFiles(app.getExcludeBaseTest(), baseDestinationPath.toFile(), app, guidesOption, "test");
                 }
 
 
@@ -225,12 +225,12 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         }
     }
 
-    private void deleteFiles(List<String> sources, File destination, App app, GuidesOption guidesOption, GuidesConfiguration guidesConfiguration, String pathType) {
+    private void deleteFiles(List<String> sources, File destination, App app, GuidesOption guidesOption, String pathType) {
         if (sources.size() == 1 && sources.get(0).equals("*")) {
             File destinationFolder = new File(destination, "src/" + pathType);
             //delete all files in the destination folder and its subfolders
             if (destinationFolder.exists()) {
-                Arrays.stream(destinationFolder.listFiles()).forEach(file -> {
+                Arrays.stream(Objects.requireNonNull(destinationFolder.listFiles())).forEach(file -> {
                     if (file.isDirectory()) {
                         try {
                             Files.walk(file.toPath())
@@ -306,7 +306,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
      */
     void addLicenses(File folder) {
         String licenseHeader = licenseLoader.getLicenseHeaderText();
-        Arrays.stream(folder.listFiles()).forEach(file -> {
+        Arrays.stream(Objects.requireNonNull(folder.listFiles())).forEach(file -> {
             if ((file.getPath().endsWith(EXTENSION_JAVA) || file.getPath().endsWith(EXTENSION_GROOVY) || file.getPath().endsWith(EXTENSION_KT))
                     && !fileContainsText(file, "Licensed under")) {
                 try {
