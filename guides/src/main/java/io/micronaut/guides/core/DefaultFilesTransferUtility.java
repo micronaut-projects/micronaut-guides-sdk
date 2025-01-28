@@ -167,9 +167,8 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         for (GuidesOption guidesOption : guidesOptionList) {
             for (App app : guide.getApps()) {
                 String appName = guide.getApps().size() > 1 ? app.getName() : EMPTY_STRING;
-                String folder = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
                 String module = guide.getSourceModule() != null ? guide.getSourceModule() : "";
-                Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, module);
+                Path destinationPath = Paths.get(guide.getOutputDirectory(outputDirectory, guidesOption).getAbsolutePath(), appName, module);
                 File destination = destinationPath.toFile();
 
                 if (guide.getBase() != null) {
@@ -179,7 +178,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                             .ifPresent(parentGuide -> {
                                 File baseDir = parentGuide.getFolder();
                                 String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
-                                Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
+                                Path baseDestinationPath = Paths.get(guide.getOutputDirectory(outputDirectory, guidesOption).getAbsolutePath(), appName, baseModule);
                                 try {
                                     copyGuideSourceFiles(baseDir, baseDestinationPath, appName, guidesOption.getLanguage().toString(), true);
                                 } catch (IOException e) {
@@ -197,7 +196,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
 
                 if (app.getExcludeBaseSource() != null) {
                     String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
-                    Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
+                    Path baseDestinationPath = Paths.get(guide.getOutputDirectory(outputDirectory, guidesOption).getAbsolutePath(), appName, baseModule);
                     deleteFiles(app.getExcludeBaseSource(), baseDestinationPath.toFile(), app, guidesOption, guidesConfiguration, "main");
                 }
 
@@ -207,12 +206,12 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
 
                 if (app.getExcludeBaseTest() != null) {
                     String baseModule = guide.getBaseSourceModule() != null ? guide.getBaseSourceModule() : module;
-                    Path baseDestinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, baseModule);
+                    Path baseDestinationPath = Paths.get(guide.getOutputDirectory(outputDirectory, guidesOption).getAbsolutePath(), appName, baseModule);
                     deleteFiles(app.getExcludeBaseTest(), baseDestinationPath.toFile(), app, guidesOption, guidesConfiguration, "test");
                 }
 
 
-                File destinationRoot = new File(outputDirectory.getAbsolutePath(), folder);
+                File destinationRoot = new File(guide.getOutputDirectory(outputDirectory, guidesOption).getAbsolutePath());
                 if (guide.getZipIncludes() != null) {
                     for (String zipInclude : guide.getZipIncludes()) {
                         copyFile(inputDirectory, destinationRoot, zipInclude);
@@ -221,7 +220,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
                 for (File f : walkZipIncludeExtensions(inputDirectory)) {
                     copyFile(inputDirectory, destinationRoot, f);
                 }
-                addLicenses(new File(outputDirectory.getAbsolutePath(), folder));
+                addLicenses(new File(guide.getOutputDirectory(outputDirectory, guidesOption).getAbsolutePath()));
             }
         }
     }

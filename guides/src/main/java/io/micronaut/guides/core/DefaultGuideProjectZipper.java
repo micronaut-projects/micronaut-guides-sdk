@@ -76,7 +76,7 @@ public class DefaultGuideProjectZipper implements GuideProjectZipper {
     }
 
     @Override
-    public void zipGuide(Guide guide, File guideOutput, File outputDirectory) throws IOException {
+    public void zipGuide(Guide guide, File outputDirectory) throws IOException {
         //skip for text-only guides
         if (guide.getApps().isEmpty() || !guide.isPublish()) {
             return;
@@ -84,9 +84,8 @@ public class DefaultGuideProjectZipper implements GuideProjectZipper {
 
         List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
         for (GuidesOption guidesOption : guideOptions) {
-            String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
             File zipFile = new File(outputDirectory, getZipFileName(guide, guidesOption) + ".zip");
-            File folderFile = new File(guideOutput, name);
+            File folderFile = guide.getOutputDirectory(outputDirectory, guidesOption);
             ZipArchiveOutputStream zipOutputStream = new ZipArchiveOutputStream(new FileOutputStream(zipFile));
             compressDirectoryToZipfile(folderFile.getAbsolutePath(), folderFile.getAbsolutePath(), zipOutputStream);
             IOUtils.closeQuietly(zipOutputStream);

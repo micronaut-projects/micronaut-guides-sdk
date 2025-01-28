@@ -115,21 +115,20 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
         for (Guide guide : guides) {
             File guideInputDirectory = guide.getFolder();
-            File guideOutput = new File(outputDirectory, guide.getSlug());
-
+            File guideOutput = guide.getOutputDirectory(outputDirectory);
             guideOutput.mkdir();
-            guideProjectGenerator.generate(guideOutput, guide);
-            filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
 
-            // Test script generation
+            guideProjectGenerator.generate(outputDirectory, guide);
+
+            filesTransferUtility.transferFiles(guideInputDirectory, outputDirectory, guide, guides);
+
             testScriptGenerator.generateTestScript(outputDirectory, guide);
 
-            // Native Test script generation
             testScriptGenerator.generateNativeTestScript(outputDirectory, guide);
 
-            guideProjectZipper.zipGuide(guide, guideOutput, outputDirectory);
+            guideProjectZipper.zipGuide(guide, outputDirectory);
 
-            guidePageGenerator.generatePage(guide, inputDirectory, outputDirectory, guideOutput);
+            guidePageGenerator.generatePage(guide, inputDirectory, outputDirectory);
 
             guideMatrixGenerator.renderIndex(guide, outputDirectory);
         }

@@ -60,18 +60,18 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
     }
 
     @Override
-    public void generatePage(Guide guide, File inputDirectory, File outputDirectory, File guideOutput) throws IOException {
+    public void generatePage(Guide guide, File inputDirectory, File outputDirectory) throws IOException {
         if (!guide.isPublish()) {
             return;
         }
 
         if (guide.getApps().isEmpty()) {
-            renderHtml(guide, null, inputDirectory, outputDirectory, guide.getSlug(), guideOutput);
+            renderHtml(guide, null, inputDirectory, outputDirectory, guide.getSlug());
         } else {
             List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
             for (GuidesOption guidesOption : guideOptions) {
                 String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
-                renderHtml(guide, guidesOption, inputDirectory, outputDirectory, name, guideOutput);
+                renderHtml(guide, guidesOption, inputDirectory, outputDirectory, name);
             }
         }
     }
@@ -84,10 +84,9 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
      * @param inputDirectory  The input directory
      * @param outputDirectory The output directory
      * @param fileName        The file name
-     * @param guideOutput     The guide output
      * @throws IOException If an error occurs
      */
-    protected void renderHtml(Guide guide, GuidesOption option, File inputDirectory, File outputDirectory, String fileName, File guideOutput) throws IOException {
+    protected void renderHtml(Guide guide, GuidesOption option, File inputDirectory, File outputDirectory, String fileName) throws IOException {
         GuideRender guideRender = new GuideRender(guide, option);
 
         File guideInputDirectory = guide.getFolder();
@@ -107,7 +106,7 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("sourcedir", outputDirectory.getAbsolutePath());
         if (option != null) {
-            attributes.put("guidesourcedir", new File(guideOutput, MacroUtils.getSourceDir(guide.getSlug(), option)).getAbsolutePath());
+            attributes.put("guidesourcedir", guide.getOutputDirectory(outputDirectory, option).getAbsolutePath());
         }
         attributes.putAll(guideRenderAttributesProvider.attributes(guideRender));
         String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, () -> attributes);
@@ -137,7 +136,6 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
         }
 
         saveFile(optionHtml, new File(outputDirectory, Path.of(guide.getUrl()).toString()), fileName + ".html");
-
     }
 
     /**

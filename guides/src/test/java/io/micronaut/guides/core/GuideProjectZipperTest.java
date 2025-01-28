@@ -38,7 +38,7 @@ public class GuideProjectZipperTest {
         Guide guide = guideParser.parseGuidesMetadata(new File(projectDir)).stream().filter(g -> g.getSlug().equals("creating-your-first-micronaut-app")).findFirst().get();
         GuidesOption guidesOption = new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT);
 
-        guideProjectZipper.zipGuide(guide, new File(outputDir), new File(outputDir));
+        guideProjectZipper.zipGuide(guide, new File(outputDir));
 
         List<String> expected = List.of("creating-your-first-micronaut-app.adoc", "metadata.json");
         List<String> result = new LinkedList<>();

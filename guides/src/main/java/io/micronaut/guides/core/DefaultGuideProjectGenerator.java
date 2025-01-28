@@ -39,8 +39,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -132,11 +130,9 @@ public class DefaultGuideProjectGenerator implements GuideProjectGenerator {
         }
 
         // typical guides use 'default' as name, multi-project guides have different modules
-        String folder = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
+        File guideOutputDirectory = guide.getOutputDirectory(outputDirectory, guidesOption);
 
-        Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder,
-                guide.getApps().size() > 1 ? app.getName() : EMPTY_STRING);
-        File destination = destinationPath.toFile();
+        File destination = new File(guideOutputDirectory, guide.getApps().size() > 1 ? app.getName() : EMPTY_STRING);
         destination.mkdir();
 
         String packageAndName = app.getPackageName() + '.' + app.getName();

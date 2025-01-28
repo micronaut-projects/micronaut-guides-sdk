@@ -645,4 +645,25 @@ public class Guide {
     public void setUrl(@Nullable String url) {
         this.url = url;
     }
+
+    /**
+     * Gets the output directory for the guide.
+     *
+     * @param outputDirectory The output directory.
+     * @return The output directory for the guide.
+     */
+    public File getOutputDirectory(File outputDirectory) {
+        return new File(outputDirectory, getSlug());
+    }
+
+    /**
+     * Gets the output directory for the guide.
+     *
+     * @param outputDirectory The output directory.
+     * @param option          The guides option.
+     * @return The output directory for the guide for a certain build tool - language combination.
+     */
+    public File getOutputDirectory(File outputDirectory, GuidesOption option) {
+        return new File(outputDirectory, MacroUtils.getSourceDir(getSlug(), option));
+    }
 }
