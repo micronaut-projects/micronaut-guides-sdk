@@ -22,6 +22,7 @@ import io.micronaut.core.annotation.Nullable;
 import io.micronaut.guides.core.asciidoc.AsciidocConfiguration;
 import io.micronaut.guides.core.html.CategoriesIndexGenerator;
 import io.micronaut.guides.core.html.GuideMatrixGenerator;
+import io.micronaut.guides.core.html.GuidePageGenerator;
 import io.micronaut.guides.core.html.IndexGenerator;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
