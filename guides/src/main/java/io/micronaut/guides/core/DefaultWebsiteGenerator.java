@@ -155,7 +155,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         }
     }
 
-    protected static void copyFolder(Path source, Path destination) throws IOException {
+    private static void copyFolder(Path source, Path destination) throws IOException {
         Files.walkFileTree(source, new SimpleFileVisitor<>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {

@@ -53,10 +53,10 @@ public class DefaultGuideParser implements GuideParser {
      * @param jsonMapper          the JSON mapper
      * @param guideMerger         the guide merger
      */
-    protected DefaultGuideParser(GuidesConfiguration guidesConfiguration,
-                                 JsonSchemaProvider jsonSchemaProvider,
-                                 JsonMapper jsonMapper,
-                                 GuideMerger guideMerger) {
+    public DefaultGuideParser(GuidesConfiguration guidesConfiguration,
+                              JsonSchemaProvider jsonSchemaProvider,
+                              JsonMapper jsonMapper,
+                              GuideMerger guideMerger) {
         this.guidesConfiguration = guidesConfiguration;
         this.jsonSchema = guidesConfiguration.isValidateMetadata() ? jsonSchemaProvider.getSchema() : null;
         this.jsonMapper = jsonMapper;
@@ -82,7 +82,7 @@ public class DefaultGuideParser implements GuideParser {
         return metadatas;
     }
 
-    protected List<File> walk(String path) {
+    private List<File> walk(String path) {
         List<File> result = new ArrayList<>();
         File root = new File(path);
         File[] list = root.listFiles();

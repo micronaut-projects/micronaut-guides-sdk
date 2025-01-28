@@ -96,7 +96,7 @@ public class DefaultGuideMerger implements GuideMerger {
         }
     }
 
-    protected <T extends App> List<T> mergeApps(List<T> base, List<T> guide) {
+    private <T extends App> List<T> mergeApps(List<T> base, List<T> guide) {
         Map<String, T> baseApps = base.stream()
                 .collect(Collectors.toMap(App::getName, app -> app));
 
@@ -130,7 +130,7 @@ public class DefaultGuideMerger implements GuideMerger {
         return merged;
     }
 
-    protected boolean isOfType(Field field, String type) {
+    private boolean isOfType(Field field, String type) {
         ParameterizedType stringListType = (ParameterizedType) field.getGenericType();
         Type actualTypeArgument = stringListType.getActualTypeArguments()[0];
 

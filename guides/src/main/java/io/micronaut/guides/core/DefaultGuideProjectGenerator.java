@@ -59,7 +59,7 @@ public class DefaultGuideProjectGenerator implements GuideProjectGenerator {
     private final GuidesConfiguration guidesConfiguration;
     private final ProjectGenerator projectGenerator;
 
-    protected DefaultGuideProjectGenerator(GuidesConfiguration guidesConfiguration, ProjectGenerator projectGenerator) {
+    DefaultGuideProjectGenerator(GuidesConfiguration guidesConfiguration, ProjectGenerator projectGenerator) {
         this.guidesConfiguration = guidesConfiguration;
         this.projectGenerator = projectGenerator;
     }
@@ -159,7 +159,7 @@ public class DefaultGuideProjectGenerator implements GuideProjectGenerator {
         }
     }
 
-    protected GeneratorContext createProjectGeneratorContext(ApplicationType type, @Pattern(regexp = "[\\w\\d-_\\.]+") String packageAndName, @Nullable String framework, @Nullable List<String> features, @Nullable BuildTool buildTool, @Nullable TestFramework testFramework, @Nullable Language lang, @Nullable JdkVersion javaVersion) throws IllegalArgumentException {
+    private GeneratorContext createProjectGeneratorContext(ApplicationType type, @Pattern(regexp = "[\\w\\d-_\\.]+") String packageAndName, @Nullable String framework, @Nullable List<String> features, @Nullable BuildTool buildTool, @Nullable TestFramework testFramework, @Nullable Language lang, @Nullable JdkVersion javaVersion) throws IllegalArgumentException {
         Project project;
         try {
             project = NameUtils.parse(packageAndName);

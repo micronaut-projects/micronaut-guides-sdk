@@ -35,7 +35,7 @@ public class DefaultIndexGenerator implements IndexGenerator {
     private final GuidesConfiguration guidesConfiguration;
     private static final String FILENAME_INDEX_HTML = "index.html";
 
-    protected DefaultIndexGenerator(GuidesConfiguration guidesConfiguration) {
+    DefaultIndexGenerator(GuidesConfiguration guidesConfiguration) {
         this.guidesConfiguration = guidesConfiguration;
     }
 

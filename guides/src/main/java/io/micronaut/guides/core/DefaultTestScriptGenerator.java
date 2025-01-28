@@ -51,12 +51,12 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
     private final GuidesConfiguration guidesConfiguration;
     private final GuideParser guideParser;
 
-    protected DefaultTestScriptGenerator(GuidesConfiguration guidesConfiguration, GuideParser guideParser) {
+    DefaultTestScriptGenerator(GuidesConfiguration guidesConfiguration, GuideParser guideParser) {
         this.guidesConfiguration = guidesConfiguration;
         this.guideParser = guideParser;
     }
 
-    protected static List<String> guidesChanged(List<String> changedFiles) {
+    private static List<String> guidesChanged(List<String> changedFiles) {
         return changedFiles.stream()
                 .filter(path -> path.startsWith("guides"))
                 .map(path -> {
@@ -67,28 +67,28 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
                 .collect(Collectors.toList());
     }
 
-    protected static boolean changesMicronautVersion(List<String> changedFiles) {
+    private static boolean changesMicronautVersion(List<String> changedFiles) {
         return changedFiles.stream().anyMatch(file -> file.contains("version.txt"));
     }
 
-    protected static boolean changesDependencies(List<String> changedFiles, List<String> changedGuides) {
+    private static boolean changesDependencies(List<String> changedFiles, List<String> changedGuides) {
         if (!changedGuides.isEmpty()) {
             return false;
         }
         return changedFiles.stream().anyMatch(file -> file.contains("pom.xml"));
     }
 
-    protected static boolean changesBuildScr(List<String> changedFiles) {
+    private static boolean changesBuildScr(List<String> changedFiles) {
         return changedFiles.stream().anyMatch(file -> file.contains("buildSrc"));
     }
 
-    protected static String scriptForFolder(String nestedFolder,
-                                            String folder,
-                                            boolean stopIfFailure,
-                                            BuildTool buildTool,
-                                            boolean noDaemon,
-                                            boolean nativeTest,
-                                            boolean validateLicense) {
+    private static String scriptForFolder(String nestedFolder,
+                                          String folder,
+                                          boolean stopIfFailure,
+                                          BuildTool buildTool,
+                                          boolean noDaemon,
+                                          boolean nativeTest,
+                                          boolean validateLicense) {
         String testCopy = nativeTest ? "native tests" : "tests";
         StringBuilder bashScript = new StringBuilder(String.format(
                 """
@@ -153,10 +153,10 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
         return bashScript.toString();
     }
 
-    protected static boolean shouldSkip(Guide metadata,
-                                        List<String> guidesChanged,
-                                        boolean forceExecuteEveryTest,
-                                        GuidesConfiguration guidesConfiguration) {
+    private static boolean shouldSkip(Guide metadata,
+                                      List<String> guidesChanged,
+                                      boolean forceExecuteEveryTest,
+                                      GuidesConfiguration guidesConfiguration) {
 
         if (!GuideGenerationUtils.process(metadata, false, guidesConfiguration)) {
             return true;
