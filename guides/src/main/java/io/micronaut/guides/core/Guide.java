@@ -664,6 +664,6 @@ public class Guide {
      * @return The output directory for the guide for a certain build tool - language combination.
      */
     public File getOutputDirectory(File outputDirectory, GuidesOption option) {
-        return new File(outputDirectory, MacroUtils.getSourceDir(getSlug(), option));
+        return new File(getOutputDirectory(outputDirectory), MacroUtils.getSourceDir(getSlug(), option));
     }
 }
