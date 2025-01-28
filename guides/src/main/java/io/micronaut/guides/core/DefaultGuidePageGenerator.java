@@ -120,11 +120,9 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
                 optionHtml = optionHtml.replace("{section-link}", "https://graal.cloud/gdk/docs/gdk-modules/" + guide.getCategories().get(0).toLowerCase() + "/");
             }
         }
-        if (guidesConfiguration.getUseIndex()) {
-            saveFile(optionHtml, new File(outputDirectory, Path.of(guide.getUrl(), fileName).toString()), "index.html");
-        } else {
-            saveFile(optionHtml, new File(outputDirectory, Path.of(guide.getUrl()).toString()), fileName + ".html");
-        }
+
+        saveFile(optionHtml, new File(outputDirectory, Path.of(guide.getUrl()).toString()), fileName + ".html");
+
     }
 
     protected String applyTemplate(String toc, String html) {

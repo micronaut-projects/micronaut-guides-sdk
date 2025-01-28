@@ -154,6 +154,4 @@ public interface GuidesConfiguration {
 
     @NonNull
     List<String> getZipIncludesExtensions();
-
-    boolean getUseIndex();
 }
