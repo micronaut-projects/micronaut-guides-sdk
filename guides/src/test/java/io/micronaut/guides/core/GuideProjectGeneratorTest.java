@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -125,7 +124,8 @@ public class GuideProjectGeneratorTest {
         assertDoesNotThrow(() -> guideProjectGenerator.generate(outputDirectory, guide));
 
         for (App app : guide.getApps()) {
-            File dest = Paths.get(outputDirectory.getAbsolutePath(), MacroUtils.getSourceDir(guide.getSlug(), new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)), app.getName()).toFile();
+            File outputDir = guide.getOutputDirectory(outputDirectory, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT));
+            File dest = new File(outputDir, app.getName());
             assertTrue(new File(dest, "build.gradle").exists());
             assertTrue(new File(dest, "gradlew.bat").exists());
             assertTrue(new File(dest, "gradlew").exists());
