@@ -59,10 +59,6 @@ public final class GuideGenerationUtils {
 
         for (BuildTool buildTool : buildTools) {
             for (Language language : Language.values()) {
-                if (guideMetadata.shouldSkip(buildTool)) {
-                    logger.info("Skipping index guide for {} and {}", buildTool, language);
-                    continue;
-                }
                 if (languages.contains(language)) {
                     guidesOptionList.add(new GuidesOption(buildTool, language, testFrameworkOption(language, testFramework)));
                 }
