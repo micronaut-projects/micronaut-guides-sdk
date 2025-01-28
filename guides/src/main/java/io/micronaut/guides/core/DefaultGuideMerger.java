@@ -47,7 +47,13 @@ public class DefaultGuideMerger implements GuideMerger {
         metadatas.addAll(metadatasByDirectory.values());
     }
 
-    private <T extends Guide> void mergeMetadataMap(Map<String, T> metadatasByDirectory) {
+    /**
+     * Merges a map of guide metadata.
+     *
+     * @param metadatasByDirectory The map of guide metadata to be merged.
+     * @param <T>                  The type of the guide metadata objects.
+     */
+    protected <T extends Guide> void mergeMetadataMap(Map<String, T> metadatasByDirectory) {
         List<String> dirs = new ArrayList<>(metadatasByDirectory.keySet());
 
         for (String dir : dirs) {
@@ -96,7 +102,15 @@ public class DefaultGuideMerger implements GuideMerger {
         }
     }
 
-    private <T extends App> List<T> mergeApps(List<T> base, List<T> guide) {
+    /**
+     * Merges two lists of apps.
+     *
+     * @param base  The base list of apps.
+     * @param guide The list of apps to merge into the base.
+     * @param <T>   The type of the apps.
+     * @return The merged list of apps.
+     */
+    protected <T extends App> List<T> mergeApps(List<T> base, List<T> guide) {
         Map<String, T> baseApps = base.stream()
                 .collect(Collectors.toMap(App::getName, app -> app));
 
@@ -130,7 +144,14 @@ public class DefaultGuideMerger implements GuideMerger {
         return merged;
     }
 
-    private boolean isOfType(Field field, String type) {
+    /**
+     * Determines if a field is of a specific type.
+     *
+     * @param field The field to check.
+     * @param type  The type to check against.
+     * @return True if the field is of the specified type.
+     */
+    protected boolean isOfType(Field field, String type) {
         ParameterizedType stringListType = (ParameterizedType) field.getGenericType();
         Type actualTypeArgument = stringListType.getActualTypeArguments()[0];
 

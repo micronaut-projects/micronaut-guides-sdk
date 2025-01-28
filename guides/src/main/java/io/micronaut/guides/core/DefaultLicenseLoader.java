@@ -46,8 +46,8 @@ public class DefaultLicenseLoader implements LicenseLoader {
      * @param guidesConfiguration the configuration for guides
      * @param resourceLoader      the resource loader to load the license file
      */
-    public DefaultLicenseLoader(GuidesConfiguration guidesConfiguration,
-                                ResourceLoader resourceLoader) {
+    protected DefaultLicenseLoader(GuidesConfiguration guidesConfiguration,
+                                   ResourceLoader resourceLoader) {
         Optional<InputStream> resourceAsStreamOptional = resourceLoader.getResourceAsStream(guidesConfiguration.getLicensePath());
         this.licenseHeaderText = resourceAsStreamOptional.map(this::readLicenseHeader).orElse("");
         this.numberOfLines = StringUtils.isEmpty(licenseHeaderText)
@@ -61,7 +61,7 @@ public class DefaultLicenseLoader implements LicenseLoader {
      * @param inputStream the input stream to read from
      * @return the license header text
      */
-    private String readLicenseHeader(InputStream inputStream) {
+    protected String readLicenseHeader(InputStream inputStream) {
         return headerByYear.computeIfAbsent(LocalDate.now().getYear(), year -> {
             StringBuilder sb = new StringBuilder();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {

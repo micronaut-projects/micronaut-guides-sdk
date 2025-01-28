@@ -42,7 +42,7 @@ import static io.micronaut.starter.options.BuildTool.MAVEN;
  */
 @Singleton
 @Internal
-class DefaultTestScriptGenerator implements TestScriptGenerator {
+public class DefaultTestScriptGenerator implements TestScriptGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultTestScriptGenerator.class);
 
     private static final String FILENAME_TEST_SH = "test.sh";
@@ -51,12 +51,12 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
     private final GuidesConfiguration guidesConfiguration;
     private final GuideParser guideParser;
 
-    DefaultTestScriptGenerator(GuidesConfiguration guidesConfiguration, GuideParser guideParser) {
+    protected DefaultTestScriptGenerator(GuidesConfiguration guidesConfiguration, GuideParser guideParser) {
         this.guidesConfiguration = guidesConfiguration;
         this.guideParser = guideParser;
     }
 
-    private static List<String> guidesChanged(List<String> changedFiles) {
+    protected static List<String> guidesChanged(List<String> changedFiles) {
         return changedFiles.stream()
                 .filter(path -> path.startsWith("guides"))
                 .map(path -> {
@@ -67,28 +67,28 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
                 .collect(Collectors.toList());
     }
 
-    private static boolean changesMicronautVersion(List<String> changedFiles) {
+    protected static boolean changesMicronautVersion(List<String> changedFiles) {
         return changedFiles.stream().anyMatch(file -> file.contains("version.txt"));
     }
 
-    private static boolean changesDependencies(List<String> changedFiles, List<String> changedGuides) {
+    protected static boolean changesDependencies(List<String> changedFiles, List<String> changedGuides) {
         if (!changedGuides.isEmpty()) {
             return false;
         }
         return changedFiles.stream().anyMatch(file -> file.contains("pom.xml"));
     }
 
-    private static boolean changesBuildScr(List<String> changedFiles) {
+    protected static boolean changesBuildScr(List<String> changedFiles) {
         return changedFiles.stream().anyMatch(file -> file.contains("buildSrc"));
     }
 
-    private static String scriptForFolder(String nestedFolder,
-                                          String folder,
-                                          boolean stopIfFailure,
-                                          BuildTool buildTool,
-                                          boolean noDaemon,
-                                          boolean nativeTest,
-                                          boolean validateLicense) {
+    protected static String scriptForFolder(String nestedFolder,
+                                            String folder,
+                                            boolean stopIfFailure,
+                                            BuildTool buildTool,
+                                            boolean noDaemon,
+                                            boolean nativeTest,
+                                            boolean validateLicense) {
         String testCopy = nativeTest ? "native tests" : "tests";
         StringBuilder bashScript = new StringBuilder(String.format(
                 """
@@ -153,10 +153,10 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
         return bashScript.toString();
     }
 
-    private static boolean shouldSkip(Guide metadata,
-                                      List<String> guidesChanged,
-                                      boolean forceExecuteEveryTest,
-                                      GuidesConfiguration guidesConfiguration) {
+    protected static boolean shouldSkip(Guide metadata,
+                                        List<String> guidesChanged,
+                                        boolean forceExecuteEveryTest,
+                                        GuidesConfiguration guidesConfiguration) {
 
         if (!GuideGenerationUtils.process(metadata, false, guidesConfiguration)) {
             return true;
@@ -281,6 +281,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
     /**
      * Generates a script for running tests based on the changed files.
      *
+     * @param outputDirectory    the output directory
      * @param guidesFolder       the folder containing the guides
      * @param metadataConfigName the name of the metadata configuration
      * @param stopIfFailure      whether to stop if a test fails

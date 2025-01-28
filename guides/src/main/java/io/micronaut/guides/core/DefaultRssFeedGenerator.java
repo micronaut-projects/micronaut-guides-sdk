@@ -43,7 +43,7 @@ public class DefaultRssFeedGenerator implements RssFeedGenerator {
      * @param guidesConfiguration  the configuration for guides
      * @param rssFeedConfiguration the configuration for RSS feed
      */
-    public DefaultRssFeedGenerator(GuidesConfiguration guidesConfiguration, RssFeedConfiguration rssFeedConfiguration) {
+    protected DefaultRssFeedGenerator(GuidesConfiguration guidesConfiguration, RssFeedConfiguration rssFeedConfiguration) {
         this.guidesConfiguration = guidesConfiguration;
         this.rssFeedConfiguration = rssFeedConfiguration;
     }
@@ -71,7 +71,12 @@ public class DefaultRssFeedGenerator implements RssFeedGenerator {
         }
     }
 
-    private RssChannel.Builder rssBuilder() {
+    /**
+     * Creates a new RssChannel.Builder instance with the configured properties.
+     *
+     * @return a RssChannel.Builder instance
+     */
+    protected RssChannel.Builder rssBuilder() {
         return RssChannel.builder(
                         guidesConfiguration.getTitle(),
                         guidesConfiguration.getHomePageUrl(),
@@ -79,7 +84,13 @@ public class DefaultRssFeedGenerator implements RssFeedGenerator {
                 .language(RssLanguage.LANG_ENGLISH);
     }
 
-    private RssItem rssFeedElement(Guide metadata) {
+    /**
+     * Creates a new RssItem instance from the provided guide metadata.
+     *
+     * @param metadata the guide metadata
+     * @return a RssItem instance
+     */
+    protected RssItem rssFeedElement(Guide metadata) {
         RssItem.Builder rssItemBuilder = RssItem.builder()
                 .guid(metadata.getSlug())
                 .title(metadata.getTitle())

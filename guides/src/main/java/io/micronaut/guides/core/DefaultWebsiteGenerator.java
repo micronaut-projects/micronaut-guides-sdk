@@ -59,19 +59,19 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final AsciidocConfiguration asciidocConfiguration;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
-    public DefaultWebsiteGenerator(GuideParser guideParser,
-                                   GuideProjectGenerator guideProjectGenerator,
-                                   JsonFeedGenerator jsonFeedGenerator,
-                                   RssFeedGenerator rssFeedGenerator,
-                                   FilesTransferUtility filesTransferUtility,
-                                   TestScriptGenerator testScriptGenerator,
-                                   IndexGenerator indexGenerator,
-                                   GuideMatrixGenerator guideMatrixGenerator,
-                                   GuideProjectZipper guideProjectZipper,
-                                   GuidePageGenerator guidePageGenerator,
-                                   AsciidocConfiguration asciidocConfiguration,
-                                   GuidesConfiguration guidesConfiguration,
-                                   CategoriesIndexGenerator categoriesIndexGenerator) {
+    protected DefaultWebsiteGenerator(GuideParser guideParser,
+                                      GuideProjectGenerator guideProjectGenerator,
+                                      JsonFeedGenerator jsonFeedGenerator,
+                                      RssFeedGenerator rssFeedGenerator,
+                                      FilesTransferUtility filesTransferUtility,
+                                      TestScriptGenerator testScriptGenerator,
+                                      IndexGenerator indexGenerator,
+                                      GuideMatrixGenerator guideMatrixGenerator,
+                                      GuideProjectZipper guideProjectZipper,
+                                      GuidePageGenerator guidePageGenerator,
+                                      AsciidocConfiguration asciidocConfiguration,
+                                      GuidesConfiguration guidesConfiguration,
+                                      CategoriesIndexGenerator categoriesIndexGenerator) {
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
         this.jsonFeedGenerator = jsonFeedGenerator;
@@ -155,7 +155,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         }
     }
 
-    private static void copyFolder(Path source, Path destination) throws IOException {
+    protected static void copyFolder(Path source, Path destination) throws IOException {
         Files.walkFileTree(source, new SimpleFileVisitor<>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {

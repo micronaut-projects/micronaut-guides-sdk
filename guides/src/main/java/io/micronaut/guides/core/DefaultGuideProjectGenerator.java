@@ -59,7 +59,7 @@ public class DefaultGuideProjectGenerator implements GuideProjectGenerator {
     private final GuidesConfiguration guidesConfiguration;
     private final ProjectGenerator projectGenerator;
 
-    DefaultGuideProjectGenerator(GuidesConfiguration guidesConfiguration, ProjectGenerator projectGenerator) {
+    protected DefaultGuideProjectGenerator(GuidesConfiguration guidesConfiguration, ProjectGenerator projectGenerator) {
         this.guidesConfiguration = guidesConfiguration;
         this.projectGenerator = projectGenerator;
     }
@@ -159,7 +159,21 @@ public class DefaultGuideProjectGenerator implements GuideProjectGenerator {
         }
     }
 
-    private GeneratorContext createProjectGeneratorContext(ApplicationType type, @Pattern(regexp = "[\\w\\d-_\\.]+") String packageAndName, @Nullable String framework, @Nullable List<String> features, @Nullable BuildTool buildTool, @Nullable TestFramework testFramework, @Nullable Language lang, @Nullable JdkVersion javaVersion) throws IllegalArgumentException {
+    /**
+     * Creates a new GeneratorContext instance with the specified parameters.
+     *
+     * @param type           the application type
+     * @param packageAndName the package and name of the project, must match the specified pattern
+     * @param framework      the framework to be used, can be null
+     * @param features       the list of features to be included, can be null
+     * @param buildTool      the build tool to be used, can be null
+     * @param testFramework  the test framework to be used, can be null
+     * @param lang           the programming language to be used, can be null
+     * @param javaVersion    the JDK version to be used, can be null
+     * @return a GeneratorContext instance
+     * @throws IllegalArgumentException if the project name is invalid
+     */
+    protected GeneratorContext createProjectGeneratorContext(ApplicationType type, @Pattern(regexp = "[\\w\\d-_\\.]+") String packageAndName, @Nullable String framework, @Nullable List<String> features, @Nullable BuildTool buildTool, @Nullable TestFramework testFramework, @Nullable Language lang, @Nullable JdkVersion javaVersion) throws IllegalArgumentException {
         Project project;
         try {
             project = NameUtils.parse(packageAndName);
