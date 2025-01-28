@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 import static io.micronaut.guides.core.TestUtils.readFile;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -44,7 +43,7 @@ public class GuideProjectGeneratorTest {
         guide.setIntro("This guide compares how to test serialization and deserialization with Micronaut Framework and Spring Boot.");
         guide.setAuthors(List.of("Sergio del Amo"));
         guide.setCategories(List.of("Boot to Micronaut Building a REST API"));
-        guide.setPublicationDate(LocalDate.of(2024,4,24));
+        guide.setPublicationDate(LocalDate.of(2024, 4, 24));
         guide.setSlug("building-a-rest-api-spring-boot-vs-micronaut-data");
         guide.setLanguages(List.of(Language.JAVA));
         guide.setBuildTools(List.of(BuildTool.GRADLE));
@@ -53,7 +52,7 @@ public class GuideProjectGeneratorTest {
 
         assertDoesNotThrow(() -> guideProjectGenerator.generate(outputDirectory, guide));
 
-        File dest = Paths.get(outputDirectory.getAbsolutePath(), MacroUtils.getSourceDir(guide.getSlug(), new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT))).toFile();
+        File dest = guide.getOutputDirectory(outputDirectory, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT));
 
         assertTrue(new File(dest, "build.gradle").exists());
         assertTrue(new File(dest, "gradlew.bat").exists());
@@ -102,13 +101,13 @@ public class GuideProjectGeneratorTest {
                     targetCompatibility = JavaVersion.toVersion("17")
                 }""") ||
                 result.contains("""
-                application {
-                    mainClass = "example.micronaut.CliCommand"
-                }
-                java {
-                    sourceCompatibility = JavaVersion.toVersion("21")
-                    targetCompatibility = JavaVersion.toVersion("21")
-                }"""));
+                        application {
+                            mainClass = "example.micronaut.CliCommand"
+                        }
+                        java {
+                            sourceCompatibility = JavaVersion.toVersion("21")
+                            targetCompatibility = JavaVersion.toVersion("21")
+                        }"""));
 
     }
 
