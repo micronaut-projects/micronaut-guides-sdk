@@ -33,7 +33,7 @@ import java.util.List;
  * This class is responsible for generating a matrix index for guides.
  */
 @Singleton
-class DefaultGuideMatrixGenerator implements GuideMatrixGenerator {
+public class DefaultGuideMatrixGenerator implements GuideMatrixGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGuideMatrixGenerator.class);
 
     private final GuidesConfiguration guidesConfiguration;
