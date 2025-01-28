@@ -21,6 +21,7 @@ import io.micronaut.guides.core.Guide;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * GuidePageGenerator is an interface for generating guide pages.
@@ -30,9 +31,10 @@ public interface GuidePageGenerator extends FileGenerator {
      * Generates a guide page in the specified output directory.
      *
      * @param guide           the guide containing the page details
+     * @param guides          The list of all the guides
      * @param inputDirectory  the directory containing the page files
      * @param outputDirectory the directory where the page will be generated
      * @throws IOException if an I/O error occurs during page generation
      */
-    void generatePage(@NonNull Guide guide, @NonNull File inputDirectory, @NonNull File outputDirectory) throws IOException;
+    void generatePage(@NonNull Guide guide, @NonNull List<? extends Guide> guides, @NonNull File inputDirectory, @NonNull File outputDirectory) throws IOException;
 }

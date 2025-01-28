@@ -28,7 +28,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,32 +45,35 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
     private final MacroSubstitution macroSubstitution;
     private final AsciidocConverter asciidocConverter;
     private final AsciidocConfiguration asciidocConfiguration;
+    private final TocGenerator tocGenerator;
 
     protected DefaultGuidePageGenerator(GuidesConfiguration guidesConfiguration,
                                         MacroSubstitution macroSubstitution,
                                         AsciidocConverter asciidocConverter,
                                         AsciidocConfiguration asciidocConfiguration,
-                                        GuideRenderAttributesProvider guideRenderAttributesProvider) {
+                                        GuideRenderAttributesProvider guideRenderAttributesProvider,
+                                        TocGenerator tocGenerator) {
         this.guidesConfiguration = guidesConfiguration;
         this.guideRenderAttributesProvider = guideRenderAttributesProvider;
         this.macroSubstitution = macroSubstitution;
         this.asciidocConverter = asciidocConverter;
         this.asciidocConfiguration = asciidocConfiguration;
+        this.tocGenerator = tocGenerator;
     }
 
     @Override
-    public void generatePage(Guide guide, File inputDirectory, File outputDirectory) throws IOException {
+    public void generatePage(Guide guide, List<? extends Guide> guides, File inputDirectory, File outputDirectory) throws IOException {
         if (!guide.isPublish()) {
             return;
         }
 
         if (guide.getApps().isEmpty()) {
-            renderHtml(guide, null, inputDirectory, outputDirectory, guide.getSlug());
+            renderHtml(guide, guides, null, inputDirectory, outputDirectory, guide.getSlug());
         } else {
             List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
             for (GuidesOption guidesOption : guideOptions) {
                 String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
-                renderHtml(guide, guidesOption, inputDirectory, outputDirectory, name);
+                renderHtml(guide, guides, guidesOption, inputDirectory, outputDirectory, name);
             }
         }
     }
@@ -80,13 +82,14 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
      * Renders the HTML for the given guide.
      *
      * @param guide           The guide
+     * @param guides          The list of all the guides
      * @param option          The option
      * @param inputDirectory  The input directory
      * @param outputDirectory The output directory
      * @param fileName        The file name
      * @throws IOException If an error occurs
      */
-    protected void renderHtml(Guide guide, GuidesOption option, File inputDirectory, File outputDirectory, String fileName) throws IOException {
+    protected void renderHtml(Guide guide, List<? extends Guide> guides, GuidesOption option, File inputDirectory, File outputDirectory, String fileName) throws IOException {
         GuideRender guideRender = new GuideRender(guide, option);
 
         File guideInputDirectory = guide.getFolder();
@@ -111,28 +114,15 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
         attributes.putAll(guideRenderAttributesProvider.attributes(guideRender));
         String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, () -> attributes);
         if (!asciidocConfiguration.isHeaderFooter()) {
-            List<String> extractedToc = extractToc(optionHtml);
-            String tocHtml;
 
-            if (extractedToc.isEmpty()) {
-                tocHtml = "";
-            } else {
-                tocHtml = extractedToc.get(0);
-                for (String toc : extractedToc) {
-                    optionHtml = optionHtml.replace(toc + "\n", "");
-                }
+            List<String> extractedToc = tocGenerator.generateToc(guide, guides, optionHtml);
+
+            for (String toc : extractedToc) {
+                optionHtml = optionHtml.replace(toc + "\n", "");
             }
 
-            optionHtml = applyTemplate(tocHtml, optionHtml);
+            optionHtml = applyTemplate(extractedToc.get(0), optionHtml);
             optionHtml = optionHtml.replace("{title}", guide.getTitle());
-            if (guide.getCategories().isEmpty()) {
-                optionHtml = optionHtml.replace("{section}", "");
-                optionHtml = optionHtml.replace("{section-link}", "");
-
-            } else {
-                optionHtml = optionHtml.replace("{section}", guide.getCategories().get(0));
-                optionHtml = optionHtml.replace("{section-link}", "https://graal.cloud/gdk/docs/gdk-modules/" + guide.getCategories().get(0).toLowerCase() + "/");
-            }
         }
 
         saveFile(optionHtml, new File(outputDirectory, Path.of(guide.getUrl()).toString()), fileName + ".html");
@@ -149,85 +139,6 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
         return HtmlUtils.html5(guidesConfiguration.getTitle(), toc + html);
     }
 
-    /**
-     * Extracts the table of contents (TOC) from the given HTML content.
-     *
-     * @param html The HTML content as a string.
-     * @return A list of strings representing the TOC div elements found in the HTML.
-     */
-    protected List<String> extractToc(String html) {
-        List<String> tocDivs = new ArrayList<>();
-        String openDivPattern = "<div";
-        String closeDivPattern = "</div>";
-        String classAttribute = "class=\"toc-floating\"";
-        String idAttribute = "id=\"toc\"";
-
-        int startIndex = html.indexOf(openDivPattern + " " + classAttribute);
-        if (startIndex != -1) {
-            int openingTagEnd = html.indexOf(">", startIndex);
-            if (openingTagEnd != -1) {
-                int nestedDivCount = 0;
-                int currentIndex = openingTagEnd + 1;
-
-                while (currentIndex < html.length()) {
-                    int nextOpenDiv = html.indexOf(openDivPattern, currentIndex);
-                    int nextCloseDiv = html.indexOf(closeDivPattern, currentIndex);
-
-                    if (nextCloseDiv == -1) {
-                        break;
-                    }
-
-                    if (nextOpenDiv != -1 && nextOpenDiv < nextCloseDiv) {
-                        nestedDivCount++;
-                        currentIndex = nextOpenDiv + openDivPattern.length();
-                    } else {
-                        if (nestedDivCount == 0) {
-                            tocDivs.add(html.substring(startIndex, nextCloseDiv + closeDivPattern.length()));
-                            break;
-                        }
-                        nestedDivCount--;
-                        currentIndex = nextCloseDiv + closeDivPattern.length();
-                    }
-                }
-            }
-        }
-
-        startIndex = html.indexOf(openDivPattern + " " + idAttribute);
-        if (startIndex == -1) {
-            startIndex = html.indexOf(openDivPattern + " id='toc'");
-        }
-
-        if (startIndex != -1) {
-            int openingTagEnd = html.indexOf(">", startIndex);
-            if (openingTagEnd != -1) {
-                int nestedDivCount = 0;
-                int currentIndex = openingTagEnd + 1;
-
-                while (currentIndex < html.length()) {
-                    int nextOpenDiv = html.indexOf(openDivPattern, currentIndex);
-                    int nextCloseDiv = html.indexOf(closeDivPattern, currentIndex);
-
-                    if (nextCloseDiv == -1) {
-                        break;
-                    }
-
-                    if (nextOpenDiv != -1 && nextOpenDiv < nextCloseDiv) {
-                        nestedDivCount++;
-                        currentIndex = nextOpenDiv + openDivPattern.length();
-                    } else {
-                        if (nestedDivCount == 0) {
-                            tocDivs.add(html.substring(startIndex, nextCloseDiv + closeDivPattern.length()));
-                            break;
-                        }
-                        nestedDivCount--;
-                        currentIndex = nextCloseDiv + closeDivPattern.length();
-                    }
-                }
-            }
-        }
-
-        return tocDivs;
-    }
 
     /**
      * Reads the content of a file and returns it as a string.

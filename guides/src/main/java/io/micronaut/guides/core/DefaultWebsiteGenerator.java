@@ -125,7 +125,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
             guideProjectZipper.zipGuide(guide, outputDirectory);
 
-            guidePageGenerator.generatePage(guide, inputDirectory, outputDirectory);
+            guidePageGenerator.generatePage(guide, guides, inputDirectory, outputDirectory);
 
             guideMatrixGenerator.renderIndex(guide, outputDirectory);
         }
