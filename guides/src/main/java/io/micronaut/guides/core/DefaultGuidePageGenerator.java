@@ -43,11 +43,11 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
     private final AsciidocConfiguration asciidocConfiguration;
 
 
-    DefaultGuidePageGenerator(GuidesConfiguration guidesConfiguration,
-                              MacroSubstitution macroSubstitution,
-                              AsciidocConverter asciidocConverter,
-                              AsciidocConfiguration asciidocConfiguration,
-                              GuideRenderAttributesProvider guideRenderAttributesProvider) {
+    protected DefaultGuidePageGenerator(GuidesConfiguration guidesConfiguration,
+                                        MacroSubstitution macroSubstitution,
+                                        AsciidocConverter asciidocConverter,
+                                        AsciidocConfiguration asciidocConfiguration,
+                                        GuideRenderAttributesProvider guideRenderAttributesProvider) {
         this.guidesConfiguration = guidesConfiguration;
         this.guideRenderAttributesProvider = guideRenderAttributesProvider;
         this.macroSubstitution = macroSubstitution;
@@ -95,7 +95,6 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
             attributes.put("guidesourcedir", new File(guideOutput, MacroUtils.getSourceDir(guide.getSlug(), option)).getAbsolutePath());
         }
         attributes.putAll(guideRenderAttributesProvider.attributes(guideRender));
-        String guideOptionHtmlFileName = fileName + ".html";
         String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, () -> attributes);
         if (!asciidocConfiguration.isHeaderFooter()) {
             List<String> extractedToc = extractToc(optionHtml);
@@ -110,7 +109,7 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
                 }
             }
 
-            optionHtml = HtmlUtils.html5(guidesConfiguration.getTitle(), tocHtml + optionHtml);
+            optionHtml = applyTemplate(tocHtml, optionHtml);
             optionHtml = optionHtml.replace("{title}", guide.getTitle());
             if (guide.getCategories().isEmpty()) {
                 optionHtml = optionHtml.replace("{section}", "");
@@ -122,10 +121,14 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
             }
         }
         if (guidesConfiguration.getUseIndex()) {
-            saveFile(optionHtml, new File(outputDirectory, Path.of(guide.getUrl(), guideOptionHtmlFileName).toString()), "index.html");
+            saveFile(optionHtml, new File(outputDirectory, Path.of(guide.getUrl(), fileName).toString()), "index.html");
         } else {
-            saveFile(optionHtml, new File(outputDirectory, Path.of(guide.getUrl()).toString()), guideOptionHtmlFileName + ".html");
+            saveFile(optionHtml, new File(outputDirectory, Path.of(guide.getUrl()).toString()), fileName + ".html");
         }
+    }
+
+    protected String applyTemplate(String toc, String html) {
+        return HtmlUtils.html5(guidesConfiguration.getTitle(), toc + html);
     }
 
     protected List<String> extractToc(String html) {
