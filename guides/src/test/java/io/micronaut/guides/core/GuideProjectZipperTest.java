@@ -47,7 +47,7 @@ public class GuideProjectZipperTest {
 
         GuidesOption guidesOption = new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT);
 
-        guideProjectZipper.zipGuide(metadatas.get(0), outputDirectory, outputDirectory);
+        guideProjectZipper.zipGuide(metadatas.get(0), outputDirectory);
 
         List<String> expected = List.of(
                 ".gitignore",
