@@ -13,14 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.rss;
 
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.Guide;
+import io.micronaut.guides.core.GuidesConfiguration;
 import io.micronaut.rss.DefaultRssFeedRenderer;
 import io.micronaut.rss.RssChannel;
 import io.micronaut.rss.RssItem;
 import io.micronaut.rss.language.RssLanguage;
 import jakarta.inject.Singleton;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.StringWriter;
 import java.time.LocalTime;
@@ -32,26 +37,22 @@ import java.util.List;
  * Class that provides RSS feed generation functionality.
  */
 @Singleton
-public class DefaultRssFeedGenerator implements RssFeedGenerator {
+@Internal
+class DefaultRssFeedGenerator implements RssFeedGenerator {
     private final GuidesConfiguration guidesConfiguration;
 
     /**
      * Constructs a new DefaultRssFeedGenerator.
      *
-     * @param guidesConfiguration the configuration for guides
+     * @param guidesConfiguration  the configuration for guides
      */
-    public DefaultRssFeedGenerator(GuidesConfiguration guidesConfiguration) {
+    DefaultRssFeedGenerator(GuidesConfiguration guidesConfiguration) {
         this.guidesConfiguration = guidesConfiguration;
     }
 
-    /**
-     * Generates an RSS feed from the provided list of guide metadata.
-     *
-     * @param metadatas the list of guide metadata
-     * @return the generated RSS feed as a string
-     */
+    @Override
     @NonNull
-    public String rssFeed(@NonNull List<? extends Guide> metadatas) {
+    public String rssFeed(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas) {
         RssChannel.Builder rssBuilder = rssBuilder();
         for (Guide metadata : metadatas) {
             rssBuilder.item(rssFeedElement(metadata));

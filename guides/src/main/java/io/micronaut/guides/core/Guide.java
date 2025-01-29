@@ -594,7 +594,6 @@ public class Guide {
     }
 
     /**
-     *
      * @return Base Source Module
      */
     @Nullable
@@ -603,7 +602,6 @@ public class Guide {
     }
 
     /**
-     *
      * @param baseSourceModule Base Source Module
      */
     @Nullable
@@ -612,7 +610,6 @@ public class Guide {
     }
 
     /**
-     *
      * @return Source Module
      */
     @Nullable
@@ -621,7 +618,6 @@ public class Guide {
     }
 
     /**
-     *
      * @param sourceModule Source Module
      */
     public void setSourceModule(@Nullable String sourceModule) {

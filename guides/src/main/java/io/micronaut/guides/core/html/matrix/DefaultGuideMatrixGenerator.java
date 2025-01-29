@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core.html;
+package io.micronaut.guides.core.html.matrix;
 
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.guides.core.Guide;
 import io.micronaut.guides.core.GuideGenerationUtils;
 import io.micronaut.guides.core.GuidesOption;
+import io.micronaut.guides.core.html.HtmlUtils;
 import jakarta.inject.Singleton;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,10 +37,14 @@ class DefaultGuideMatrixGenerator implements GuideMatrixGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGuideMatrixGenerator.class);
 
     @Override
-    public String renderIndex(Guide guide) {
-        StringBuilder sb = new StringBuilder();
+    @NonNull
+    public String renderMatrix(@NonNull @NotNull @Valid Guide guide) {
+        return HtmlUtils.html5(guide.getTitle(), content(guide));
+    }
+
+    private String content(Guide guide) {
         List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
-        sb.append("<!DOCTYPE html><html><head></head><body>");
+        StringBuilder sb = new StringBuilder();
         sb.append("<h1>");
         sb.append(guide.getTitle());
         sb.append("</h1>");
@@ -53,7 +61,6 @@ class DefaultGuideMatrixGenerator implements GuideMatrixGenerator {
             sb.append("</li>");
         }
         sb.append("</ul>");
-        sb.append("</body></html>");
         return sb.toString();
     }
 }

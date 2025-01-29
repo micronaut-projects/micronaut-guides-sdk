@@ -13,13 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.zip;
 
+import io.micronaut.guides.core.Guide;
+import io.micronaut.guides.core.GuideGenerationUtils;
+import io.micronaut.guides.core.GuidesOption;
+import io.micronaut.guides.core.MacroUtils;
 import jakarta.inject.Singleton;
 import org.apache.commons.compress.archivers.zip.UnixStat;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.utils.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,6 +43,7 @@ import java.util.List;
 public class DefaultGuideProjectZipper implements GuideProjectZipper {
     private static final List<String> EXCLUDED_FILES = List.of(".idea", ".DS_Store");
     private static final List<String> EXECUTABLES = List.of("gradlew", "gradlew.bat", "mvnw", "mvnw.bat");
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultGuideProjectZipper.class);
 
     /**
      * Compresses the contents of the specified source directory into a zip file.
@@ -73,9 +80,24 @@ public class DefaultGuideProjectZipper implements GuideProjectZipper {
     }
 
     @Override
-    public void zipDirectory(String sourceDir, String outputFile) throws IOException {
-        ZipArchiveOutputStream zipOutputStream = new ZipArchiveOutputStream(new FileOutputStream(outputFile));
-        compressDirectoryToZipfile(sourceDir, sourceDir, zipOutputStream);
+    public void zipGuide(Guide guide, File guideOutput, File outputDirectory) throws IOException {
+        List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
+        for (GuidesOption guidesOption : guideOptions) {
+            String name = getZipFileName(guide, guidesOption);
+            File zipFile = new File(outputDirectory, getZipFileName(guide, guidesOption) + ".zip");
+            File folderFile = new File(guideOutput, name);
+            zipDirectory(zipFile, folderFile);
+        }
+    }
+
+    private void zipDirectory(File zipFile, File folderFile) throws IOException {
+        ZipArchiveOutputStream zipOutputStream = new ZipArchiveOutputStream(new FileOutputStream(zipFile));
+        compressDirectoryToZipfile(folderFile.getAbsolutePath(), folderFile.getAbsolutePath(), zipOutputStream);
         IOUtils.closeQuietly(zipOutputStream);
+    }
+
+    @Override
+    public String getZipFileName(Guide guide, GuidesOption options) {
+        return MacroUtils.getSourceDir(guide.getSlug(), options);
     }
 }

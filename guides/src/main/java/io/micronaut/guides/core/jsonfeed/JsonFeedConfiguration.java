@@ -13,18 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core.html;
-
-import io.micronaut.core.annotation.NonNull;
-import io.micronaut.guides.core.Guide;
-import jakarta.validation.constraints.NotNull;
-
-import java.util.List;
+package io.micronaut.guides.core.jsonfeed;
 
 /**
- * Generates a category index.
+ * Interface for configuring JSON feed settings.
  */
-public interface CategoriesIndexGenerator {
-    @NonNull
-    String renderIndex(@NonNull @NotNull List<? extends Guide> guides);
+public interface JsonFeedConfiguration {
+
+    /**
+     * Returns the URL of the feed.
+     *
+     * @return the feed URL
+     */
+    String getFeedUrl();
+
+    /**
+     * Returns the filename for the feed.
+     *
+     * @return the filename
+     */
+    String getFilename();
 }

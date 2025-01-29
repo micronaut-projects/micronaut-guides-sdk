@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.html.index;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.Guide;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 /**
- * RssFeedGenerator is an interface that defines a method to generate an RSS feed from a list of guides.
+ * Interface for generating an index page for a list of guides.
  */
-public interface RssFeedGenerator {
+@FunctionalInterface
+public interface IndexGenerator {
+
     /**
-     * Generates an RSS feed from the given list of guide metadata.
+     * Renders the index page for the given list of guides.
      *
-     * @param metadatas the list of guide metadata
-     * @return the generated RSS feed as a string
+     * @param guides          the list of guides to render the index for
+     * @return HTML String representing the index page
      */
     @NonNull
-    String rssFeed(@NonNull List<? extends Guide> metadatas);
+    String renderIndex(@NonNull @NotNull @NotEmpty List<? extends Guide> guides);
 }

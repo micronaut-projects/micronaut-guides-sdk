@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.test;
 
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.*;
 import io.micronaut.starter.api.TestFramework;
 import io.micronaut.starter.options.BuildTool;
 import io.micronaut.starter.options.Language;
@@ -26,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -53,13 +55,13 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
 
     private static List<String> guidesChanged(List<String> changedFiles) {
         return changedFiles.stream()
-            .filter(path -> path.startsWith("guides"))
-            .map(path -> {
-                String guideFolder = path.substring("guides/".length());
-                return guideFolder.substring(0, guideFolder.indexOf('/'));
-            })
-            .distinct()
-            .collect(Collectors.toList());
+                .filter(path -> path.startsWith("guides"))
+                .map(path -> {
+                    String guideFolder = path.substring("guides/".length());
+                    return guideFolder.substring(0, guideFolder.indexOf('/'));
+                })
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private static boolean changesMicronautVersion(List<String> changedFiles) {
@@ -86,12 +88,12 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
                                           boolean validateLicense) {
         String testCopy = nativeTest ? "native tests" : "tests";
         StringBuilder bashScript = new StringBuilder(String.format(
-            """
-                    cd %s
-                    echo "-------------------------------------------------"
-                    echo "Executing '%s' %s"
-                    """,
-            nestedFolder, folder, testCopy
+                """
+                        cd %s
+                        echo "-------------------------------------------------"
+                        echo "Executing '%s' %s"
+                        """,
+                nestedFolder, folder, testCopy
         ));
 
         if (noDaemon) {
@@ -100,19 +102,19 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
 
         if (nativeTest) {
             bashScript.append(String.format(
-                "%s || EXIT_STATUS=$?\n",
-                buildTool == BuildTool.MAVEN ? "./mvnw -Pnative test" : "./gradlew nativeTest"
+                    "%s || EXIT_STATUS=$?\n",
+                    buildTool == BuildTool.MAVEN ? "./mvnw -Pnative test" : "./gradlew nativeTest"
             ));
         } else {
             String mavenCommand = validateLicense ? "./mvnw -q test spotless:check" : "./mvnw -q test";
             bashScript.append(String.format(
-                """
-                        %s || EXIT_STATUS=$?
-                        echo "Stopping shared test resources service (if created)"
-                        %s > /dev/null 2>&1 || true
-                        """,
-                buildTool == BuildTool.MAVEN ? mavenCommand : "./gradlew -q check",
-                buildTool == BuildTool.MAVEN ? "./mvnw -q mn:stop-testresources-service" : "./gradlew -q stopTestResourcesService"
+                    """
+                            %s || EXIT_STATUS=$?
+                            echo "Stopping shared test resources service (if created)"
+                            %s > /dev/null 2>&1 || true
+                            """,
+                    buildTool == BuildTool.MAVEN ? mavenCommand : "./gradlew -q check",
+                    buildTool == BuildTool.MAVEN ? "./mvnw -q mn:stop-testresources-service" : "./gradlew -q stopTestResourcesService"
             ));
         }
 
@@ -124,24 +126,24 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
 
         if (stopIfFailure) {
             bashScript.append(String.format(
-                """
-                        if [ $EXIT_STATUS -ne 0 ]; then
-                          echo "'%s' %s failed => exit $EXIT_STATUS"
-                          exit $EXIT_STATUS
-                        fi
-                        """,
-                folder, testCopy
+                    """
+                            if [ $EXIT_STATUS -ne 0 ]; then
+                              echo "'%s' %s failed => exit $EXIT_STATUS"
+                              exit $EXIT_STATUS
+                            fi
+                            """,
+                    folder, testCopy
             ));
         } else {
             bashScript.append(String.format(
-                """
-                        if [ $EXIT_STATUS -ne 0 ]; then
-                          FAILED_PROJECTS=("${FAILED_PROJECTS[@]}" %s)
-                          echo "'%s' %s failed => exit $EXIT_STATUS"
-                        fi
-                        EXIT_STATUS=0
-                        """,
-                folder, folder, testCopy
+                    """
+                            if [ $EXIT_STATUS -ne 0 ]; then
+                              FAILED_PROJECTS=("${FAILED_PROJECTS[@]}" %s)
+                              echo "'%s' %s failed => exit $EXIT_STATUS"
+                            fi
+                            EXIT_STATUS=0
+                            """,
+                    folder, folder, testCopy
             ));
         }
 
@@ -174,9 +176,9 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
     @Override
     public boolean supportsNativeTest(App app, GuidesOption guidesOption) {
         return isMicronautFramework(app) &&
-            guidesOption.getBuildTool() == GRADLE &&
-            supportsNativeTest(guidesOption.getLanguage()) &&
-            guidesOption.getTestFramework() == TestFramework.JUNIT;
+                guidesOption.getBuildTool() == GRADLE &&
+                supportsNativeTest(guidesOption.getLanguage()) &&
+                guidesOption.getTestFramework() == TestFramework.JUNIT;
     }
 
     /**
@@ -202,25 +204,25 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
     }
 
     /**
-     * Generates a script for running native tests for the given guides metadata.
+     * Generates a script for running native tests for the given guide.
      *
-     * @param metadatas the list of guides metadata
-     * @return the generated script as a string
+     * @param outputDirectory the output directory
+     * @param guide           the guide metadata
      */
     @Override
-    public String generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas) {
-        return generateScript(outputDirectory, metadatas, false, true);
+    public String generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide) {
+        return generateScript(outputDirectory, List.of(guide), false, true);
     }
 
     /**
-     * Generates a script for running tests for the given guides metadata.
+     * Generates a script for running tests for the given guides.
      *
-     * @param metadatas the list of guides metadata
-     * @return the generated script as a string
+     * @param outputDirectory the output directory
+     * @param guide           the guide metadata
      */
     @Override
-    public String generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas) {
-        return generateScript(outputDirectory, metadatas, false, false);
+    public String generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide) {
+        return generateScript(outputDirectory, List.of(guide), false, false);
     }
 
     /**
@@ -239,16 +241,16 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
                                  List<String> changedFiles) {
         List<String> slugsChanged = guidesChanged(changedFiles);
         boolean forceExecuteEveryTest = changesMicronautVersion(changedFiles) ||
-            changesDependencies(changedFiles, slugsChanged) ||
-            changesBuildScr(changedFiles) ||
-            (System.getenv(guidesConfiguration.getEnvGithubWorkflow()) != null &&
-                !System.getenv(guidesConfiguration.getEnvGithubWorkflow()).equals(guidesConfiguration.getGithubWorkflowJavaCi())) ||
-            (changedFiles.isEmpty() && System.getenv(guidesConfiguration.getEnvGithubWorkflow()) == null);
+                changesDependencies(changedFiles, slugsChanged) ||
+                changesBuildScr(changedFiles) ||
+                (System.getenv(guidesConfiguration.getEnvGithubWorkflow()) != null &&
+                        !System.getenv(guidesConfiguration.getEnvGithubWorkflow()).equals(guidesConfiguration.getGithubWorkflowJavaCi())) ||
+                (changedFiles.isEmpty() && System.getenv(guidesConfiguration.getEnvGithubWorkflow()) == null);
 
         List<? extends Guide> metadatas = guideParser.parseGuidesMetadata(guidesFolder, metadataConfigName);
         metadatas = metadatas.stream()
-            .filter(metadata -> !shouldSkip(metadata, slugsChanged, forceExecuteEveryTest, guidesConfiguration))
-            .collect(Collectors.toList());
+                .filter(metadata -> !shouldSkip(metadata, slugsChanged, forceExecuteEveryTest, guidesConfiguration))
+                .collect(Collectors.toList());
         return generateScript(outputDirectory, metadatas, stopIfFailure, false);
     }
 
@@ -279,7 +281,6 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
                 }""");
 
 
-
         metadatas.sort(Comparator.comparing(Guide::getSlug));
         for (Guide metadata : metadatas) {
             bashScript.append("\ncd " + outputFolder.getAbsolutePath() + "/" + metadata.getSlug() + "\n\n");
@@ -293,7 +294,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
                         continue;
                     }
                     Optional<? extends App> appOptional = metadata.getApps().stream()
-                        .findFirst();
+                            .findFirst();
                     if (appOptional.isPresent()) {
                         App defaultApp = appOptional.get();
                         if (!nativeTest || supportsNativeTest(defaultApp, guidesOption)) {

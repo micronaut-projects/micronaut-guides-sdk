@@ -13,22 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.rss;
 
 /**
- * Interface for configuring JSON feed settings.
+ * Interface for RSS feed configuration.
  */
-public interface JsonFeedConfiguration {
+public interface RssFeedConfiguration {
 
     /**
-     * Returns the URL of the feed.
-     *
-     * @return the feed URL
-     */
-    String getFeedUrl();
-
-    /**
-     * Returns the filename for the feed.
+     * Gets the filename for the RSS feed.
      *
      * @return the filename
      */

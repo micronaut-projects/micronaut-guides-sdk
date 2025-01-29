@@ -13,15 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.jsonfeed;
 
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.*;
 import io.micronaut.json.JsonMapper;
 import io.micronaut.rss.jsonfeed.JsonFeed;
 import io.micronaut.rss.jsonfeed.JsonFeedAuthor;
 import io.micronaut.rss.jsonfeed.JsonFeedItem;
 import io.micronaut.rss.language.RssLanguage;
 import jakarta.inject.Singleton;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.IOException;
 import java.time.LocalTime;
@@ -33,7 +37,8 @@ import java.util.List;
  * Class that implements the JsonFeedGenerator interface.
  */
 @Singleton
-public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
+@Internal
+class DefaultJsonFeedGenerator implements JsonFeedGenerator {
     private final GuidesConfiguration guidesConfiguration;
     private final JsonFeedConfiguration jsonFeedConfiguration;
     private final JsonMapper jsonMapper;
@@ -45,10 +50,23 @@ public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
      * @param jsonFeedConfiguration the configuration for JSON feed
      * @param jsonMapper            the JSON mapper
      */
-    public DefaultJsonFeedGenerator(GuidesConfiguration guidesConfiguration, JsonFeedConfiguration jsonFeedConfiguration, JsonMapper jsonMapper) {
+    DefaultJsonFeedGenerator(GuidesConfiguration guidesConfiguration, JsonFeedConfiguration jsonFeedConfiguration, JsonMapper jsonMapper) {
         this.guidesConfiguration = guidesConfiguration;
         this.jsonFeedConfiguration = jsonFeedConfiguration;
         this.jsonMapper = jsonMapper;
+    }
+
+    /**
+     * Generates a JSON string representation of the JsonFeed from the provided list of guide metadata.
+     *
+     * @param metadatas the list of guide metadata
+     * @throws IOException if an I/O error occurs during JSON serialization
+     */
+    @Override
+    @NonNull
+    public String jsonFeedString(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas) throws IOException {
+        JsonFeed jsonFeed = jsonFeed(metadatas);
+        return jsonMapper.writeValueAsString(jsonFeed);
     }
 
     /**
@@ -57,26 +75,12 @@ public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
      * @param metadatas the list of guide metadata
      * @return the generated JsonFeed
      */
-    public JsonFeed jsonFeed(List<? extends Guide> metadatas) {
+    private JsonFeed jsonFeed(List<? extends Guide> metadatas) {
         JsonFeed.Builder jsonFeedBuilder = jsonFeedBuilder();
         for (Guide metadata : metadatas) {
             jsonFeedBuilder.item(jsonFeedItem(metadata));
         }
         return jsonFeedBuilder.build();
-    }
-
-    /**
-     * Generates a JSON string representation of the JsonFeed from the provided list of guide metadata.
-     *
-     * @param metadatas the list of guide metadata
-     * @return the JSON string representation of the JsonFeed
-     * @throws IOException if an I/O error occurs during JSON serialization
-     */
-    @Override
-    @NonNull
-    public String jsonFeedString(@NonNull List<? extends Guide> metadatas) throws IOException {
-        JsonFeed jsonFeed = jsonFeed(metadatas);
-        return jsonMapper.writeValueAsString(jsonFeed);
     }
 
     private JsonFeed.Builder jsonFeedBuilder() {

@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.html.categories;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.Guide;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.io.IOException;
+import java.util.List;
 
 /**
- * Interface for zipping a directory into a single output file.
+ * Generates a category index.
  */
-public interface GuideProjectZipper {
-
+public interface CategoriesIndexGenerator {
     /**
-     * Zips the contents of the specified source directory into the specified output file.
      *
-     * @param sourceDir  the path to the source directory to be zipped
-     * @param outputFile the path to the output file where the zipped content will be written
-     * @throws IOException if an I/O error occurs during zipping
+     * @param guides Guides
+     * @return HTML content for the Guides categories
      */
-    void zipDirectory(@NonNull @NotNull String sourceDir, @NonNull @NotNull String outputFile) throws IOException;
+    @NonNull
+    String renderIndex(@NonNull @NotNull @NotEmpty List<? extends Guide> guides);
 }

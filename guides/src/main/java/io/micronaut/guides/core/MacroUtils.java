@@ -41,7 +41,7 @@ public final class MacroUtils {
      * @return the source directory name
      */
     @NonNull
-    static String getSourceDir(@NonNull String slug, @NonNull GuidesOption option) {
+    public static String getSourceDir(@NonNull String slug, @NonNull GuidesOption option) {
         return slug + "-" + option.getBuildTool() + "-" + option.getLanguage();
     }
 

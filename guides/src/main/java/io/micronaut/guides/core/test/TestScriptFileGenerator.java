@@ -13,25 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core.html;
+package io.micronaut.guides.core.test;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.FileGenerator;
 import io.micronaut.guides.core.Guide;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.List;
+import java.io.File;
 
-/**
- * Interface for generating an index page for a list of guides.
- */
-public interface IndexGenerator {
+public interface TestScriptFileGenerator extends FileGenerator {
+    /**
+     * Save a script for running native tests for the given guide.
+     *
+     * @param outputDirectory the output directory
+     * @param guide           the guide metadata
+     */
+    void saveNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
 
     /**
-     * Renders the index page for the given list of guides.
+     * Save a script for running tests for the given guides.
      *
-     * @param guides the list of guides to render the index for
-     * @return the rendered index as a string
+     * @param outputDirectory the output directory
+     * @param guide           the guide metadata
      */
-    @NonNull
-    String renderIndex(@NonNull @NotNull List<? extends Guide> guides);
+    void saveTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
 }

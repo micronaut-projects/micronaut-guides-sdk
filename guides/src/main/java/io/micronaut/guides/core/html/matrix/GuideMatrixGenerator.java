@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core.html;
+package io.micronaut.guides.core.html.matrix;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.guides.core.Guide;
@@ -23,13 +23,14 @@ import jakarta.validation.constraints.NotNull;
 /**
  * Interface for generating a matrix for guides.
  */
+@FunctionalInterface
 public interface GuideMatrixGenerator {
     /**
      * Renders the index for the given guide.
      *
      * @param guide the guide to render the index for
-     * @return the rendered index as a string
+     * @return HTML String representing the matrix
      */
     @NonNull
-    String renderIndex(@NonNull @NotNull @Valid Guide guide);
+    String renderMatrix(@NonNull @NotNull @Valid Guide guide);
 }

@@ -13,25 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.html.matrix;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.FileGenerator;
+import io.micronaut.guides.core.Guide;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
-import java.io.IOException;
-import java.util.List;
+import java.io.File;
 
 /**
- * JsonFeedGenerator is an interface that defines a method for generating a JSON feed string
- * from a list of Guide metadata objects.
+ * Save a matrix html file for a guide.
  */
-public interface JsonFeedGenerator {
+@FunctionalInterface
+public interface GuideMatrixFileGenerator extends FileGenerator {
     /**
-     * Generates a JSON feed string from the provided list of Guide metadata objects.
+     * Renders the index for the given guide.
      *
-     * @param metadatas the list of Guide metadata objects
-     * @return the generated JSON feed string
-     * @throws IOException if an I/O error occurs during the generation of the JSON feed
+     * @param guide           the guide to render the index for
+     * @param outputDirectory the directory to which the index should be written
      */
-    @NonNull
-    String jsonFeedString(@NonNull List<? extends Guide> metadatas) throws IOException;
+    void saveMatrix(@NonNull @NotNull @Valid Guide guide,
+                    @NonNull @NotNull File outputDirectory);
 }

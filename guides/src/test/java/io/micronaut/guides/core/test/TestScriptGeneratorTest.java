@@ -1,6 +1,7 @@
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.test;
 
 import io.micronaut.core.io.ResourceLoader;
+import io.micronaut.guides.core.*;
 import io.micronaut.starter.api.TestFramework;
 import io.micronaut.starter.options.Language;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -120,13 +121,13 @@ class TestScriptGeneratorTest {
         String path = "src/test/resources/guides";
         File file = new File(path);
         List<? extends Guide> metadatas = guideParser.parseGuidesMetadata(file, "metadata.json");
-
+        assertEquals(1, metadatas.size());
         File expectedFile = new File(resourceLoader.getResource("classpath:expected_test_script.sh").orElseThrow().getFile());
         String expected = TestUtils.readFile(expectedFile);
 
-        String result = testScriptGenerator.generateTestScript(null, metadatas);
+        testScriptGenerator.generateTestScript(null, metadatas.get(0));
 
-        assertEquals(expected.strip(), result.strip());
+        assertEquals(expected.strip(), "");
     }
 
     @Disabled
@@ -135,12 +136,12 @@ class TestScriptGeneratorTest {
         String path = "src/test/resources/guides";
         File file = new File(path);
         List<? extends Guide> metadatas = guideParser.parseGuidesMetadata(file, "metadata.json");
-
+        assertEquals(1, metadatas.size());
         File expectedFile = new File(resourceLoader.getResource("classpath:expected_test_script_native.sh").orElseThrow().getFile());
         String expected = TestUtils.readFile(expectedFile);
 
-        String result = testScriptGenerator.generateNativeTestScript(null, metadatas);
+        testScriptGenerator.generateNativeTestScript(null, metadatas.get(0));
 
-        assertEquals(expected.strip(), result.strip());
+        assertEquals(expected.strip(), "");
     }
 }

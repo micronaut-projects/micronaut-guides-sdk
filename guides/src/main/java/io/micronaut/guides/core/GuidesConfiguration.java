@@ -29,6 +29,33 @@ public interface GuidesConfiguration {
     List<Language> getDefaultLanguages();
 
     /**
+     *
+     * @return Default Category Index File Name
+     */
+    @NonNull
+    String getCategoryIndexFileName();
+
+    /**
+     *
+     * @return Default Test File Name
+     */
+    @NonNull
+    String getTestFileName();
+
+    /**
+     *
+     * @return Default NativeTest File Name
+     */
+    @NonNull
+    String getNativeTestFileName();
+
+    /**
+     *
+     * @return Default Index File Name
+     */
+    String getIndexFileName();
+
+    /**
      * Returns the guides directory.
      *
      * @return the guides directory
@@ -148,7 +175,6 @@ public interface GuidesConfiguration {
     String getSysPropMicronautGuide();
 
     /**
-     *
      * @return Whether the Guide metadata should be validated against the JSON Schema
      */
     boolean isValidateMetadata();

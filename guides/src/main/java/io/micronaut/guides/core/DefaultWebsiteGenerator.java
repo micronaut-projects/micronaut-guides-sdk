@@ -19,13 +19,16 @@ import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.guides.core.asciidoc.AsciidocConfiguration;
-import io.micronaut.guides.core.asciidoc.AsciidocConverter;
-import io.micronaut.guides.core.asciidoc.GuideRenderAttributesProvider;
-import io.micronaut.guides.core.html.CategoriesIndexGenerator;
-import io.micronaut.guides.core.html.GuideMatrixGenerator;
-import io.micronaut.guides.core.html.GuidePageGenerator;
-import io.micronaut.guides.core.html.IndexGenerator;
+import io.micronaut.guides.core.html.*;
+import io.micronaut.guides.core.html.categories.CategoriesIndexFileGenerator;
+import io.micronaut.guides.core.html.index.IndexFileGenerator;
+import io.micronaut.guides.core.html.matrix.GuideMatrixFileGenerator;
+import io.micronaut.guides.core.jsonfeed.JsonFeedFileGenerator;
+import io.micronaut.guides.core.rss.RssFeedFileGenerator;
+import io.micronaut.guides.core.test.TestScriptFileGenerator;
+import io.micronaut.guides.core.zip.GuideProjectZipper;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -35,10 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 
 /**
@@ -49,64 +49,47 @@ import java.util.function.Predicate;
 @Singleton
 public class DefaultWebsiteGenerator implements WebsiteGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultWebsiteGenerator.class);
-    private static final String FILENAME_TEST_SH = "test.sh";
-    private static final String FILENAME_NATIVE_TEST_SH = "native-test.sh";
-    private static final String FILENAME_INDEX_HTML = "index.html";
-    private static final String FILENAME_CATEGORIES_INDEX_HTML = "categories-index.html";
-    private final GuideRenderAttributesProvider guideRenderAttributesProvider;
+
     private final GuideParser guideParser;
     private final GuideProjectGenerator guideProjectGenerator;
-    private final JsonFeedGenerator jsonFeedGenerator;
-    private final RssFeedGenerator rssFeedGenerator;
+    private final JsonFeedFileGenerator jsonFeedFileGenerator;
+    private final RssFeedFileGenerator rssFeedFileGenerator;
     private final FilesTransferUtility filesTransferUtility;
-    private final TestScriptGenerator testScriptGenerator;
-    private final MacroSubstitution macroSubstitution;
-    private final AsciidocConverter asciidocConverter;
-    private final IndexGenerator indexGenerator;
-    private final GuideMatrixGenerator guideMatrixGenerator;
+    private final TestScriptFileGenerator testScriptFileGenerator;
+    private final IndexFileGenerator indexFileGenerator;
+    private final GuideMatrixFileGenerator guideMatrixFileGenerator;
     private final GuideProjectZipper guideProjectZipper;
-    private final RssFeedConfiguration rssFeedConfiguration;
-    private final JsonFeedConfiguration jsonFeedConfiguration;
     private final GuidesConfiguration guidesConfiguration;
     private final GuidePageGenerator guidePageGenerator;
-    private final CategoriesIndexGenerator categoriesIndexGenerator;
+    private final CategoriesIndexFileGenerator categoriesIndexFileGenerator;
     private final AsciidocConfiguration asciidocConfiguration;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
-    public DefaultWebsiteGenerator(GuideRenderAttributesProvider guideRenderAttributesProvider, GuideParser guideParser,
+    public DefaultWebsiteGenerator(GuideParser guideParser,
                                    GuideProjectGenerator guideProjectGenerator,
-                                   JsonFeedGenerator jsonFeedGenerator,
-                                   RssFeedGenerator rssFeedGenerator,
+                                   JsonFeedFileGenerator jsonFeedFileGenerator,
+                                   RssFeedFileGenerator rssFeedFileGenerator,
                                    FilesTransferUtility filesTransferUtility,
-                                   TestScriptGenerator testScriptGenerator,
-                                   MacroSubstitution macroSubstitution,
-                                   AsciidocConverter asciidocConverter,
-                                   IndexGenerator indexGenerator,
-                                   GuideMatrixGenerator guideMatrixGenerator,
+                                   TestScriptFileGenerator testScriptFileGenerator,
+                                   IndexFileGenerator indexFileGenerator,
+                                   GuideMatrixFileGenerator guideMatrixFileGenerator,
                                    GuideProjectZipper guideProjectZipper,
-                                   RssFeedConfiguration rssFeedConfiguration,
-                                   JsonFeedConfiguration jsonFeedConfiguration,
                                    GuidePageGenerator guidePageGenerator,
                                    AsciidocConfiguration asciidocConfiguration,
                                    GuidesConfiguration guidesConfiguration,
-                                   CategoriesIndexGenerator categoriesIndexGenerator) {
-        this.guideRenderAttributesProvider = guideRenderAttributesProvider;
+                                   CategoriesIndexFileGenerator categoriesIndexFileGenerator) {
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
-        this.jsonFeedGenerator = jsonFeedGenerator;
-        this.rssFeedGenerator = rssFeedGenerator;
+        this.jsonFeedFileGenerator = jsonFeedFileGenerator;
+        this.rssFeedFileGenerator = rssFeedFileGenerator;
         this.filesTransferUtility = filesTransferUtility;
-        this.testScriptGenerator = testScriptGenerator;
-        this.macroSubstitution = macroSubstitution;
-        this.asciidocConverter = asciidocConverter;
-        this.indexGenerator = indexGenerator;
-        this.guideMatrixGenerator = guideMatrixGenerator;
+        this.testScriptFileGenerator = testScriptFileGenerator;
+        this.indexFileGenerator = indexFileGenerator;
+        this.guideMatrixFileGenerator = guideMatrixFileGenerator;
         this.guideProjectZipper = guideProjectZipper;
-        this.rssFeedConfiguration = rssFeedConfiguration;
-        this.jsonFeedConfiguration = jsonFeedConfiguration;
         this.guidesConfiguration = guidesConfiguration;
         this.guidePageGenerator = guidePageGenerator;
-        this.categoriesIndexGenerator = categoriesIndexGenerator;
+        this.categoriesIndexFileGenerator = categoriesIndexFileGenerator;
         this.asciidocConfiguration = asciidocConfiguration;
     }
 
@@ -128,62 +111,42 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         if (!guidesInputDirectory.isDirectory()) {
             throw new ConfigurationException("Guides path " + guidesInputDirectory.getAbsolutePath() + " is not a directory");
         }
+
         List<? extends Guide> guides = guideParser.parseGuidesMetadata(guidesInputDirectory);
+
         if (condition != null) {
             List<String> bases = guides.stream().filter(condition).map(Guide::getBase).toList();
             guides = guides.stream().filter(guide -> bases.contains(guide.getSlug()) || condition.test(guide)).toList();
         }
+
         for (Guide guide : guides) {
+            boolean publish = guide.isPublish();
             File guideInputDirectory = guide.getFolder();
             File guideOutput = new File(outputDirectory, guide.getSlug());
-
-            if (guide.getApps().isEmpty()) {
-                if (guide.isPublish()) {
-                    renderHtml(guide, null, inputDirectory, outputDirectory, guide.getSlug(), guideInputDirectory);
-                }
-            } else {
-                guideOutput.mkdir();
+            guideOutput.mkdir();
+            if (CollectionUtils.isNotEmpty(guide.getApps())) {
                 guideProjectGenerator.generate(guideOutput, guide);
                 filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
-
-                // Test script generation
-                String testScript = testScriptGenerator.generateTestScript(outputDirectory, new ArrayList<>(List.of(guide)));
-                saveToFile(testScript, guideOutput, FILENAME_TEST_SH, true);
-
-                // Native Test script generation
-                String nativeTestScript = testScriptGenerator.generateNativeTestScript(outputDirectory, new ArrayList<>(List.of(guide)));
-                saveToFile(nativeTestScript, guideOutput, FILENAME_NATIVE_TEST_SH, true);
-
-                List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
-                for (GuidesOption guidesOption : guideOptions) {
-                    String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
-                    zipGuide(outputDirectory, guideOutput, name);
-                    if (guide.isPublish()) {
-                        renderHtml(guide, guidesOption, inputDirectory, outputDirectory, name, guideOutput);
-                    }
-                }
-
-                if (guide.isPublish()) {
-                    String guideMatrixHtml = guideMatrixGenerator.renderIndex(guide);
-                    saveToFile(guideMatrixHtml, outputDirectory, guide.getSlug() + ".html");
+                testScriptFileGenerator.saveTestScript(outputDirectory, guide);
+                testScriptFileGenerator.saveNativeTestScript(outputDirectory, guide);
+                if (publish) {
+                    guideProjectZipper.zipGuide(guide, guideOutput, outputDirectory);
+                    guideMatrixFileGenerator.saveMatrix(guide, outputDirectory);
                 }
             }
-
+            if (publish) {
+                guidePageGenerator.generatePage(guide, inputDirectory, outputDirectory, guideOutput);
+            }
         }
 
         guides = guides.stream().filter(Guide::isPublish).toList();
 
-        String indexHtml = indexGenerator.renderIndex(guides);
-        saveToFile(indexHtml, outputDirectory, FILENAME_INDEX_HTML);
-
-        String moduleIndexHtml = categoriesIndexGenerator.renderIndex(guides);
-        saveToFile(moduleIndexHtml, outputDirectory, FILENAME_CATEGORIES_INDEX_HTML);
-
-        String rss = rssFeedGenerator.rssFeed(guides);
-        saveToFile(rss, outputDirectory, rssFeedConfiguration.getFilename());
-
-        String json = jsonFeedGenerator.jsonFeedString(guides);
-        saveToFile(json, outputDirectory, jsonFeedConfiguration.getFilename());
+        if (CollectionUtils.isNotEmpty(guides)) {
+            indexFileGenerator.renderIndex(guides, outputDirectory);
+            categoriesIndexFileGenerator.saveCategoryIndex(guides, outputDirectory);
+            rssFeedFileGenerator.saveRssFeed(guides, outputDirectory);
+            jsonFeedFileGenerator.saveJsonFeed(guides, outputDirectory);
+        }
 
         File imagesFolder = new File(inputDirectory, asciidocConfiguration.getImagesdir());
         if (imagesFolder.exists()) {
@@ -194,18 +157,6 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
             copyFolder(imagesFolder.toPath(), outputImagesFolder.toPath());
         }
-    }
-
-    /**
-     * @param outputDirectory Output Directory
-     * @param guideOutput     Guide Output
-     * @param name            Guide Option name
-     * @throws IOException if an I/O error occurs during zipping
-     */
-    protected void zipGuide(File outputDirectory, File guideOutput, String name) throws IOException {
-        File zipFile = new File(outputDirectory, name + ".zip");
-        File folderFile = new File(guideOutput, name);
-        guideProjectZipper.zipDirectory(folderFile.getAbsolutePath(), zipFile.getAbsolutePath());
     }
 
     private static void copyFolder(Path source, Path destination) throws IOException {
@@ -225,146 +176,5 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
                 return FileVisitResult.CONTINUE;
             }
         });
-    }
-
-    private void renderHtml(Guide guide, GuidesOption option, File inputDirectory, File outputDirectory, String fileName, File guideOutput) throws IOException {
-        GuideRender guideRender = new GuideRender(guide, option);
-
-        File guideInputDirectory = guide.getFolder();
-        File asciidocFile = new File(guideInputDirectory, guide.getAsciidoctor());
-
-        String asciidoc = readFile(asciidocFile);
-
-
-        if (!asciidocFile.exists()) {
-            throw new ConfigurationException("asciidoc file not found for " + guide.getSlug());
-        }
-
-        // Macro substitution
-        String optionAsciidoc = macroSubstitution.substitute(asciidoc, guideRender);
-
-        // HTML rendering
-        Map<String, Object> attributes = new HashMap<>();
-        attributes.put("sourcedir", outputDirectory.getAbsolutePath());
-        attributes.put("guidesourcedir", new File(guideOutput, fileName).getAbsolutePath());
-        attributes.putAll(guideRenderAttributesProvider.attributes(guideRender));
-        String guideOptionHtmlFileName = fileName + ".html";
-        String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, () -> attributes);
-        if (!asciidocConfiguration.isHeaderFooter()) {
-            List<String> extractedToc = extractToc(optionHtml);
-            String tocHtml;
-
-            if (extractedToc.isEmpty()) {
-                tocHtml = "";
-            } else {
-                tocHtml = extractedToc.get(0);
-                for (String toc : extractedToc) {
-                    optionHtml = optionHtml.replace(toc + "\n", "");
-                }
-            }
-
-            optionHtml = guidePageGenerator.render(tocHtml, optionHtml);
-            optionHtml = optionHtml.replace("{title}", guide.getTitle());
-            if (guide.getCategories().isEmpty()) {
-                optionHtml = optionHtml.replace("{section}", "");
-                optionHtml = optionHtml.replace("{section-link}", "");
-
-            } else {
-                optionHtml = optionHtml.replace("{section}", guide.getCategories().get(0));
-                optionHtml = optionHtml.replace("{section-link}", "https://graal.cloud/gdk/docs/gdk-modules/" + guide.getCategories().get(0).toLowerCase() + "/");
-            }
-        }
-        saveToFile(optionHtml, outputDirectory, guideOptionHtmlFileName);
-    }
-
-    protected List<String> extractToc(String html) {
-        List<String> tocDivs = new ArrayList<>();
-        String openDivPattern = "<div";
-        String closeDivPattern = "</div>";
-        String classAttribute = "class=\"toc-floating\"";
-        String idAttribute = "id=\"toc\"";
-
-        int startIndex = html.indexOf(openDivPattern + " " + classAttribute);
-        if (startIndex != -1) {
-            int openingTagEnd = html.indexOf(">", startIndex);
-            if (openingTagEnd != -1) {
-                int nestedDivCount = 0;
-                int currentIndex = openingTagEnd + 1;
-
-                while (currentIndex < html.length()) {
-                    int nextOpenDiv = html.indexOf(openDivPattern, currentIndex);
-                    int nextCloseDiv = html.indexOf(closeDivPattern, currentIndex);
-
-                    if (nextCloseDiv == -1) {
-                        break;
-                    }
-
-                    if (nextOpenDiv != -1 && nextOpenDiv < nextCloseDiv) {
-                        nestedDivCount++;
-                        currentIndex = nextOpenDiv + openDivPattern.length();
-                    } else {
-                        if (nestedDivCount == 0) {
-                            tocDivs.add(html.substring(startIndex, nextCloseDiv + closeDivPattern.length()));
-                            break;
-                        }
-                        nestedDivCount--;
-                        currentIndex = nextCloseDiv + closeDivPattern.length();
-                    }
-                }
-            }
-        }
-
-        startIndex = html.indexOf(openDivPattern + " " + idAttribute);
-        if (startIndex == -1) {
-            startIndex = html.indexOf(openDivPattern + " id='toc'");
-        }
-
-        if (startIndex != -1) {
-            int openingTagEnd = html.indexOf(">", startIndex);
-            if (openingTagEnd != -1) {
-                int nestedDivCount = 0;
-                int currentIndex = openingTagEnd + 1;
-
-                while (currentIndex < html.length()) {
-                    int nextOpenDiv = html.indexOf(openDivPattern, currentIndex);
-                    int nextCloseDiv = html.indexOf(closeDivPattern, currentIndex);
-
-                    if (nextCloseDiv == -1) {
-                        break;
-                    }
-
-                    if (nextOpenDiv != -1 && nextOpenDiv < nextCloseDiv) {
-                        nestedDivCount++;
-                        currentIndex = nextOpenDiv + openDivPattern.length();
-                    } else {
-                        if (nestedDivCount == 0) {
-                            tocDivs.add(html.substring(startIndex, nextCloseDiv + closeDivPattern.length()));
-                            break;
-                        }
-                        nestedDivCount--;
-                        currentIndex = nextCloseDiv + closeDivPattern.length();
-                    }
-                }
-            }
-        }
-
-        return tocDivs;
-    }
-
-    private void saveToFile(String content, File outputDirectory, String filename) throws IOException {
-        saveToFile(content, outputDirectory, filename, false);
-    }
-
-    private void saveToFile(String content, File outputDirectory, String filename, boolean executable) throws IOException {
-        Path filePath = Paths.get(outputDirectory.getAbsolutePath(), filename);
-        Files.write(filePath, content.getBytes());
-        if (executable) {
-            filePath.toFile().setExecutable(true);
-        }
-    }
-
-    private static String readFile(File file) throws IOException {
-        Path path = file.toPath();
-        return new String(Files.readAllBytes(path));
     }
 }

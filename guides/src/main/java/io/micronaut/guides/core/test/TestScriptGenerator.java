@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.test;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.App;
+import io.micronaut.guides.core.Guide;
+import io.micronaut.guides.core.GuidesOption;
 import io.micronaut.starter.options.Language;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * Interface for generating test scripts for guides.
@@ -55,26 +57,21 @@ public interface TestScriptGenerator {
     boolean supportsNativeTest(@NonNull @NotNull Language language);
 
     /**
-     * Generates a script for running native tests for the given guides.
+     * Generates a script for running native tests for the given guide.
      *
      * @param outputDirectory the output directory
-     * @param metadatas the list of guides metadata
-     * @return the generated script as a string
+     * @param guide           the guide metadata
+     * @return the generated script
      */
-    @NonNull
-    @NotNull
-    String generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas);
+    String generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
 
     /**
-     *
      * Generates a script for running tests for the given guides.
      *
      * @param outputDirectory the output directory
-     * @param metadatas the list of guides metadata
-     * @return the generated script as a string
+     * @param guide           the guide metadata
+     * @return the generated script
      */
-    @NonNull
-    @NotNull
-    String generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas);
+    String generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
 
 }

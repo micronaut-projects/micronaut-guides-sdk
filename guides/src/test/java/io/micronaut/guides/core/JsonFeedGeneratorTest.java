@@ -1,11 +1,14 @@
 package io.micronaut.guides.core;
 
+import io.micronaut.guides.core.jsonfeed.JsonFeedConfiguration;
+import io.micronaut.guides.core.jsonfeed.JsonFeedFileGenerator;
 import io.micronaut.json.JsonMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
@@ -22,13 +25,19 @@ class JsonFeedGeneratorTest {
     JsonSchemaProvider jsonSchemaProvider;
 
     @Inject
-    JsonFeedGenerator jsonFeedGenerator;
+    JsonFeedFileGenerator jsonFeedFileGenerator;
+
+    @Inject
+    JsonFeedConfiguration jsonFeedConfiguration;
 
     @Inject
     GuidesConfiguration guidesConfiguration;
 
     @Inject
     GuideMerger guideMerger;
+
+    @TempDir
+    File tempDir;
 
     private List<? extends Guide> guides;
 
@@ -42,7 +51,8 @@ class JsonFeedGeneratorTest {
 
     @Test
     public void testJsonFeed() throws IOException, JSONException {
-        String feed = jsonFeedGenerator.jsonFeedString(guides);
+        jsonFeedFileGenerator.saveJsonFeed(guides, tempDir);
+        String feed = TestUtils.readFile(new File(tempDir, jsonFeedConfiguration.getFilename()));
         String expected = """
                 {
                   "version" : "https://jsonfeed.org/version/1.1",
