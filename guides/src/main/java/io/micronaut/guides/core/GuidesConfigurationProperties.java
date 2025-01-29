@@ -52,6 +52,8 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private static final List<String> DEFAULT_ZIP_INCLUDES_EXTENSIONS = List.of(".sh", ".bat");
     private static final String DEFAULT_CATEGORIES_INDEX_FILE_NAME = "categories.html";
     private static final String DEFAULT_INDEX_FILE_NAME = "index.html";
+    private static final String DEFAULT_TEST_FILENAME = "test.sh";
+    private static final String DEFAULT_NATIVE_TEST_FILENAME = "native-test.sh";
     private final boolean DEFAULT_VALIDATE_METADATA = true;
     private String guidesDir = DEFAULT_GUIDES_DIR;
     private String title = "Micronaut Guides";
@@ -72,6 +74,43 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private List<String> zipIncludesExtensions = DEFAULT_ZIP_INCLUDES_EXTENSIONS;
     private String categoryIndexFileName = DEFAULT_CATEGORIES_INDEX_FILE_NAME;
     private String indexFileName = DEFAULT_INDEX_FILE_NAME;
+    private String testFileName = DEFAULT_TEST_FILENAME;
+    private String nativeTestFileName = DEFAULT_NATIVE_TEST_FILENAME;
+    /**
+     *
+     * @return Default Test File Name
+     */
+    @Override
+    @NonNull
+    public String getTestFileName() {
+        return testFileName;
+    }
+
+    /**
+     *
+     * @param testFileName Test filename
+     */
+    public void setTestFileName(String testFileName) {
+        this.testFileName = testFileName;
+    }
+
+    /**
+     *
+     * @return Default NativeTest File Name
+     */
+    @Override
+    @NonNull
+    public String getNativeTestFileName() {
+        return nativeTestFileName;
+    }
+
+    /**
+     *
+     * @param nativeTestFileName Native Test Filename
+     */
+    public void setNativeTestFileName(String nativeTestFileName) {
+        this.nativeTestFileName = nativeTestFileName;
+    }
 
     /**
      * @param indexFileName index file name
@@ -93,6 +132,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
         this.categoryIndexFileName = categoryIndexFileName;
     }
 
+    @Override
     @NonNull
     public String getCategoryIndexFileName() {
         return categoryIndexFileName;

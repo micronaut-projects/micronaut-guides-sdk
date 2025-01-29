@@ -37,6 +37,20 @@ public interface GuidesConfiguration {
 
     /**
      *
+     * @return Default Test File Name
+     */
+    @NonNull
+    String getTestFileName();
+
+    /**
+     *
+     * @return Default NativeTest File Name
+     */
+    @NonNull
+    String getNativeTestFileName();
+
+    /**
+     *
      * @return Default Index File Name
      */
     String getIndexFileName();

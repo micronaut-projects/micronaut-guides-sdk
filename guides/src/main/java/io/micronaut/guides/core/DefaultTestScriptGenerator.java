@@ -45,9 +45,6 @@ import static io.micronaut.starter.options.BuildTool.MAVEN;
 class DefaultTestScriptGenerator implements TestScriptGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultTestScriptGenerator.class);
 
-    private static final String FILENAME_TEST_SH = "test.sh";
-    private static final String FILENAME_NATIVE_TEST_SH = "native-test.sh";
-
     private final GuidesConfiguration guidesConfiguration;
     private final GuideParser guideParser;
 
@@ -215,7 +212,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
     public void generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas) {
         String script = generateScript(outputDirectory, metadatas, false, true);
         try {
-            saveFile(script, outputDirectory, FILENAME_NATIVE_TEST_SH, true);
+            saveFile(script, outputDirectory, guidesConfiguration.getNativeTestFileName(), true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -236,7 +233,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
 
         String script = generateScript(outputDirectory, new ArrayList<>(List.of(guide)), false, true);
         try {
-            saveFile(script, new File(outputDirectory, guide.getSlug()), FILENAME_NATIVE_TEST_SH, true);
+            saveFile(script, new File(outputDirectory, guide.getSlug()), guidesConfiguration.getNativeTestFileName(), true);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -251,7 +248,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
     public void generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas) {
         String script = generateScript(outputDirectory, metadatas, false, false);
         try {
-            saveFile(script, outputDirectory, FILENAME_TEST_SH);
+            saveFile(script, outputDirectory, guidesConfiguration.getTestFileName());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -272,7 +269,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
 
         String script = generateScript(outputDirectory, new ArrayList<>(List.of(guide)), false, false);
         try {
-            saveFile(script, new File(outputDirectory, guide.getSlug()), FILENAME_TEST_SH);
+            saveFile(script, new File(outputDirectory, guide.getSlug()), guidesConfiguration.getTestFileName());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -321,10 +318,10 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
         StringBuilder bashScript = new StringBuilder("""
                 #!/usr/bin/env bash
                 set -e
-                
+
                 FAILED_PROJECTS=()
                 EXIT_STATUS=0
-                
+
                 kill_kotlin_daemon () {
                   echo "Killing KotlinCompile daemon to pick up fresh properties (due to kapt and java > 17)"
                   for daemon in $(jps | grep KotlinCompile | cut -d' ' -f1); do
@@ -389,7 +386,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
                     else
                       exit 0
                     fi
-                    
+
                     """);
         }
 
