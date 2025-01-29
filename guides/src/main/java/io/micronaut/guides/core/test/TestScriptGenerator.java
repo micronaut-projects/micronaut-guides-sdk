@@ -13,9 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.test;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.App;
+import io.micronaut.guides.core.FileGenerator;
+import io.micronaut.guides.core.Guide;
+import io.micronaut.guides.core.GuidesOption;
 import io.micronaut.starter.options.Language;
 import jakarta.validation.constraints.NotNull;
 

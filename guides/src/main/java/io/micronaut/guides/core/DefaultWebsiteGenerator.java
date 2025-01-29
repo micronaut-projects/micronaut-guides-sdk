@@ -27,6 +27,7 @@ import io.micronaut.guides.core.html.index.IndexFileGenerator;
 import io.micronaut.guides.core.html.matrix.GuideMatrixFileGenerator;
 import io.micronaut.guides.core.jsonfeed.JsonFeedFileGenerator;
 import io.micronaut.guides.core.rss.RssFeedFileGenerator;
+import io.micronaut.guides.core.test.TestScriptGenerator;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;

@@ -1,6 +1,7 @@
 package io.micronaut.guides.core;
 
 import io.micronaut.core.io.ResourceLoader;
+import io.micronaut.guides.core.test.TestScriptGenerator;
 import io.micronaut.starter.api.TestFramework;
 import io.micronaut.starter.options.Language;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
