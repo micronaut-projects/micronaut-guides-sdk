@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.jsonfeed;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
+import io.micronaut.guides.core.GuidesConfigurationProperties;
 
 /**
  * Configuration properties for JSON feed.

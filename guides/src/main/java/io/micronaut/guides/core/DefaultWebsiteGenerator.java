@@ -20,10 +20,9 @@ import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.guides.core.asciidoc.AsciidocConfiguration;
-import io.micronaut.guides.core.html.CategoriesIndexGenerator;
-import io.micronaut.guides.core.html.GuideMatrixGenerator;
-import io.micronaut.guides.core.html.GuidePageGenerator;
-import io.micronaut.guides.core.html.IndexGenerator;
+import io.micronaut.guides.core.html.*;
+import io.micronaut.guides.core.jsonfeed.JsonFeedFileGenerator;
+import io.micronaut.guides.core.rss.RssFeedFileGenerator;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -56,7 +55,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final GuideProjectZipper guideProjectZipper;
     private final GuidesConfiguration guidesConfiguration;
     private final GuidePageGenerator guidePageGenerator;
-    private final CategoriesIndexGenerator categoriesIndexGenerator;
+    private final CategoriesIndexFileGenerator categoriesIndexFileGenerator;
     private final AsciidocConfiguration asciidocConfiguration;
 
     @SuppressWarnings("checkstyle:ParameterNumber")
@@ -72,7 +71,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
                                    GuidePageGenerator guidePageGenerator,
                                    AsciidocConfiguration asciidocConfiguration,
                                    GuidesConfiguration guidesConfiguration,
-                                   CategoriesIndexGenerator categoriesIndexGenerator) {
+                                   CategoriesIndexFileGenerator categoriesIndexFileGenerator) {
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
         this.jsonFeedFileGenerator = jsonFeedFileGenerator;
@@ -84,7 +83,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.guideProjectZipper = guideProjectZipper;
         this.guidesConfiguration = guidesConfiguration;
         this.guidePageGenerator = guidePageGenerator;
-        this.categoriesIndexGenerator = categoriesIndexGenerator;
+        this.categoriesIndexFileGenerator = categoriesIndexFileGenerator;
         this.asciidocConfiguration = asciidocConfiguration;
     }
 
@@ -139,7 +138,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
         indexGenerator.renderIndex(guides, outputDirectory);
 
-        categoriesIndexGenerator.renderIndex(guides, outputDirectory);
+        categoriesIndexFileGenerator.saveCategoryIndex(guides, outputDirectory);
 
         rssFeedFileGenerator.saveRssFeed(guides, outputDirectory);
 

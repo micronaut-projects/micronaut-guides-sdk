@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.rss;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
+import io.micronaut.guides.core.GuidesConfigurationProperties;
 
 /**
  * RssFeedConfigurationProperties is a configuration properties class that implements the RssFeedConfiguration interface.

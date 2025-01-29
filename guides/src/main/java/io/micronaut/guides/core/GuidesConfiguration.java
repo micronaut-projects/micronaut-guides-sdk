@@ -28,6 +28,9 @@ public interface GuidesConfiguration {
     @NonNull
     List<Language> getDefaultLanguages();
 
+    @NonNull
+    String getCategoryIndexFileName();
+
     /**
      * Returns the guides directory.
      *

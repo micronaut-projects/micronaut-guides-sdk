@@ -13,24 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
-
-import io.micronaut.core.annotation.NonNull;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-
-import java.util.List;
+package io.micronaut.guides.core.rss;
 
 /**
- * RssFeedGenerator is an interface that defines a method to generate an RSS feed from a list of guides.
+ * Interface for RSS feed configuration.
  */
-public interface RssFeedGenerator {
+public interface RssFeedConfiguration {
+
     /**
-     * Generates an RSS feed from the given list of guide metadata.
+     * Gets the filename for the RSS feed.
      *
-     * @param metadatas       the list of guide metadata
-     * @return RSS Feed
+     * @return the filename
      */
-    @NonNull
-    String rssFeed(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas);
+    String getFilename();
 }

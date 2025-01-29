@@ -15,23 +15,23 @@
  */
 package io.micronaut.guides.core.html;
 
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.guides.core.Guide;
 import io.micronaut.guides.core.GuidesConfiguration;
 import jakarta.inject.Singleton;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**
  * Default implementation of {@link CategoriesIndexGenerator}.
  */
 @Singleton
-public class DefaultCategoriesIndexGenerator implements CategoriesIndexGenerator {
-    private static final String FILENAME_CATEGORIES_INDEX_HTML = "categories-index.html";
-
+@Internal
+class DefaultCategoriesIndexGenerator implements CategoriesIndexGenerator {
     private final GuidesConfiguration guidesConfiguration;
 
     DefaultCategoriesIndexGenerator(GuidesConfiguration guidesConfiguration) {
@@ -39,25 +39,20 @@ public class DefaultCategoriesIndexGenerator implements CategoriesIndexGenerator
     }
 
     @Override
-    public void renderIndex(List<? extends Guide> guides, File outputDirectory) {
+    public String renderIndex(@NonNull @NotNull @NotEmpty List<? extends Guide> guides) {
         String content = "";
         if (StringUtils.isNotEmpty(guidesConfiguration.getTitle())) {
             content += "<h1>" + guidesConfiguration.getTitle() + "<h1>";
         }
         content += guidesContent(guides);
-        String html = HtmlUtils.html5(guidesConfiguration.getTitle(), content);
-        try {
-            saveFile(html, outputDirectory, FILENAME_CATEGORIES_INDEX_HTML);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return HtmlUtils.html5(guidesConfiguration.getTitle(), content);
     }
 
     /**
      * @param guides Guides
      * @return HTML content for the guides list
      */
-    protected String guidesContent(@NonNull List<? extends Guide> guides) {
+    private String guidesContent(@NonNull List<? extends Guide> guides) {
         StringBuilder sb = new StringBuilder();
         List<String> modules = guides.stream()
                 .flatMap(g -> g.getCategories().stream())
@@ -83,7 +78,7 @@ public class DefaultCategoriesIndexGenerator implements CategoriesIndexGenerator
      * @param guide Guide
      * @return HTML content for an individual guide
      */
-    protected String guideContent(@NonNull Guide guide) {
+    private String guideContent(@NonNull Guide guide) {
         StringBuilder sb = new StringBuilder();
         String href = guide.getSlug() + ".html";
         String title = guide.getTitle();

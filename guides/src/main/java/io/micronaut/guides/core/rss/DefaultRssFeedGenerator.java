@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.rss;
 
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.Guide;
+import io.micronaut.guides.core.GuidesConfiguration;
 import io.micronaut.rss.DefaultRssFeedRenderer;
 import io.micronaut.rss.RssChannel;
 import io.micronaut.rss.RssItem;
@@ -25,7 +27,6 @@ import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.io.File;
 import java.io.StringWriter;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -37,20 +38,16 @@ import java.util.List;
  */
 @Singleton
 @Internal
-class DefaultRssFeedGenerator implements RssFeedGenerator, RssFeedFileGenerator {
+class DefaultRssFeedGenerator implements RssFeedGenerator {
     private final GuidesConfiguration guidesConfiguration;
-    private final RssFeedConfiguration rssFeedConfiguration;
 
     /**
      * Constructs a new DefaultRssFeedGenerator.
      *
      * @param guidesConfiguration  the configuration for guides
-     * @param rssFeedConfiguration the configuration for RSS feed
      */
-    DefaultRssFeedGenerator(GuidesConfiguration guidesConfiguration,
-                            RssFeedConfiguration rssFeedConfiguration) {
+    DefaultRssFeedGenerator(GuidesConfiguration guidesConfiguration) {
         this.guidesConfiguration = guidesConfiguration;
-        this.rssFeedConfiguration = rssFeedConfiguration;
     }
 
     @Override
@@ -64,18 +61,6 @@ class DefaultRssFeedGenerator implements RssFeedGenerator, RssFeedFileGenerator 
         StringWriter writer = new StringWriter();
         rssFeedRenderer.render(writer, rssBuilder.build());
         return writer.toString();
-    }
-
-    @Override
-    @NonNull
-    public void saveRssFeed(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas,
-                            @NonNull @NotNull File outputDirectory) {
-        try {
-            String rss = rssFeed(metadatas);
-            saveFile(rss, outputDirectory, rssFeedConfiguration.getFilename());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private RssChannel.Builder rssBuilder() {

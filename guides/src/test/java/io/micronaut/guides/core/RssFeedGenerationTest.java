@@ -1,5 +1,7 @@
 package io.micronaut.guides.core;
 
+import io.micronaut.guides.core.rss.RssFeedConfiguration;
+import io.micronaut.guides.core.rss.RssFeedFileGenerator;
 import io.micronaut.json.JsonMapper;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;

@@ -16,6 +16,7 @@
 package io.micronaut.guides.core;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.starter.options.JdkVersion;
 import io.micronaut.starter.options.Language;
 
@@ -49,6 +50,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private static final String DEFAULT_GUIDES_DIR = "guides";
     private static final List<Language> JAVA_KOTLIN_GROOVY = List.of(Language.JAVA, Language.GROOVY, Language.KOTLIN);
     private static final List<String> DEFAULT_ZIP_INCLUDES_EXTENSIONS = List.of(".sh", ".bat");
+    private static final String DEFAULT_CATEGORIES_INDEX_FILE_NAME = "categories.html";
     private final boolean DEFAULT_VALIDATE_METADATA = true;
     private String guidesDir = DEFAULT_GUIDES_DIR;
     private String title = "Micronaut Guides";
@@ -67,6 +69,19 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private List<Language> defaultLanguages = JAVA_KOTLIN_GROOVY;
     private String defaultAppName = DEFAULT_APP_NAME;
     private List<String> zipIncludesExtensions = DEFAULT_ZIP_INCLUDES_EXTENSIONS;
+    private String categoryIndexFileName = DEFAULT_CATEGORIES_INDEX_FILE_NAME;
+
+    /**
+     * @param categoryIndexFileName Category index file name
+     */
+    public void setCategoryIndexFileName(String categoryIndexFileName) {
+        this.categoryIndexFileName = categoryIndexFileName;
+    }
+
+    @NonNull
+    public String getCategoryIndexFileName() {
+        return categoryIndexFileName;
+    }
 
     /**
      * @param zipIncludesExtensions File extensions to be zip included by default

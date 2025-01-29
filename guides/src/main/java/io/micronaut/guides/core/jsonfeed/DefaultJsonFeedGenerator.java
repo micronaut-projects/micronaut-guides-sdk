@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.jsonfeed;
 
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.*;
 import io.micronaut.json.JsonMapper;
 import io.micronaut.rss.jsonfeed.JsonFeed;
 import io.micronaut.rss.jsonfeed.JsonFeedAuthor;
@@ -26,7 +27,6 @@ import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
@@ -38,7 +38,7 @@ import java.util.List;
  */
 @Singleton
 @Internal
-class DefaultJsonFeedGenerator implements JsonFeedFileGenerator, JsonFeedGenerator {
+class DefaultJsonFeedGenerator implements JsonFeedGenerator {
     private final GuidesConfiguration guidesConfiguration;
     private final JsonFeedConfiguration jsonFeedConfiguration;
     private final JsonMapper jsonMapper;
@@ -67,24 +67,6 @@ class DefaultJsonFeedGenerator implements JsonFeedFileGenerator, JsonFeedGenerat
     public String jsonFeedString(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas) throws IOException {
         JsonFeed jsonFeed = jsonFeed(metadatas);
         return jsonMapper.writeValueAsString(jsonFeed);
-    }
-
-    /**
-     * Generates a JSON string representation of the JsonFeed from the provided list of guide metadata.
-     *
-     * @param metadatas the list of guide metadata
-     * @param outputDirectory Output directory
-     * @throws IOException if an I/O error occurs during JSON serialization
-     */
-    @Override
-    public void saveJsonFeed(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas,
-                      @NonNull @NotNull File outputDirectory) throws IOException {
-        String json = jsonFeedString(metadatas);
-        try {
-            saveFile(json, outputDirectory, jsonFeedConfiguration.getFilename());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     /**

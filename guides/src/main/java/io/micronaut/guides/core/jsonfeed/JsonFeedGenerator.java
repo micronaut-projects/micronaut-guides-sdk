@@ -13,26 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.jsonfeed;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.Guide;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
- * API to save an RSS File into an output directory. The RSS feed will be generated based on a list of guides.
- * To generate the RSS Feed {@link RssFeedGenerator} can be used.
+ * JsonFeedGenerator is an interface that defines a method for generating a JSON feed string
+ * from a list of Guide metadata objects.
  */
-public interface RssFeedFileGenerator extends FileGenerator {
+public interface JsonFeedGenerator {
     /**
-     * Saves an RSS feed, based on a list of guides, into an output directory.
+     * Generates a JSON feed string from the provided list of Guide metadata objects.
      *
-     * @param metadatas       the list of guide metadata
-     * @param outputDirectory the directory to which the RSS feed should be written
+     * @param metadatas       the list of Guide metadata objects
+     * @throws IOException if an I/O error occurs during the generation of the JSON feed
+     * @return JSON Feed
      */
-    void saveRssFeed(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas,
-                     @NotNull File outputDirectory);
+    @NonNull
+    String jsonFeedString(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas) throws IOException;
 }
