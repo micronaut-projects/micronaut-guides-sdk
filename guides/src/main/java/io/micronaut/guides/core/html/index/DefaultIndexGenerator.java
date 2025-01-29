@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core.html;
+package io.micronaut.guides.core.html.index;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.guides.core.Guide;
 import io.micronaut.guides.core.GuidesConfiguration;
+import io.micronaut.guides.core.html.HtmlUtils;
 import jakarta.inject.Singleton;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -40,18 +40,15 @@ public class DefaultIndexGenerator implements IndexGenerator {
     }
 
     @Override
-    public void renderIndex(@NonNull @NotNull List<? extends Guide> guides, File outputDirectory) {
+    @NonNull
+    public String renderIndex(@NonNull @NotNull @NotEmpty List<? extends Guide> guides) {
         String content = "";
         if (StringUtils.isNotEmpty(guidesConfiguration.getTitle())) {
             content += "<h1>" + guidesConfiguration.getTitle() + "</h1>";
         }
         content += guidesContent(guides);
-        String html = HtmlUtils.html5(guidesConfiguration.getTitle(), content);
-        try {
-            saveFile(html, outputDirectory, FILENAME_INDEX_HTML);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return HtmlUtils.html5(guidesConfiguration.getTitle(), content);
+
     }
 
     /**

@@ -13,26 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core.html;
+package io.micronaut.guides.core.html.index;
 
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.guides.core.FileGenerator;
 import io.micronaut.guides.core.Guide;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.io.File;
 import java.util.List;
 
 /**
  * Interface for generating an index page for a list of guides.
  */
-public interface IndexGenerator extends FileGenerator {
+@FunctionalInterface
+public interface IndexGenerator {
 
     /**
      * Renders the index page for the given list of guides.
      *
      * @param guides          the list of guides to render the index for
-     * @param outputDirectory the directory to which the index should be written
+     * @return HTML String representing the index page
      */
-    void renderIndex(@NonNull @NotNull List<? extends Guide> guides, File outputDirectory);
+    @NonNull
+    String renderIndex(@NonNull @NotNull @NotEmpty List<? extends Guide> guides);
 }

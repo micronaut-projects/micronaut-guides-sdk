@@ -19,9 +19,11 @@ import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.guides.core.asciidoc.AsciidocConfiguration;
 import io.micronaut.guides.core.html.*;
 import io.micronaut.guides.core.html.categories.CategoriesIndexFileGenerator;
+import io.micronaut.guides.core.html.index.IndexFileGenerator;
 import io.micronaut.guides.core.jsonfeed.JsonFeedFileGenerator;
 import io.micronaut.guides.core.rss.RssFeedFileGenerator;
 import jakarta.inject.Singleton;
@@ -51,7 +53,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final RssFeedFileGenerator rssFeedFileGenerator;
     private final FilesTransferUtility filesTransferUtility;
     private final TestScriptGenerator testScriptGenerator;
-    private final IndexGenerator indexGenerator;
+    private final IndexFileGenerator indexFileGenerator;
     private final GuideMatrixGenerator guideMatrixGenerator;
     private final GuideProjectZipper guideProjectZipper;
     private final GuidesConfiguration guidesConfiguration;
@@ -66,7 +68,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
                                    RssFeedFileGenerator rssFeedFileGenerator,
                                    FilesTransferUtility filesTransferUtility,
                                    TestScriptGenerator testScriptGenerator,
-                                   IndexGenerator indexGenerator,
+                                   IndexFileGenerator indexFileGenerator,
                                    GuideMatrixGenerator guideMatrixGenerator,
                                    GuideProjectZipper guideProjectZipper,
                                    GuidePageGenerator guidePageGenerator,
@@ -79,7 +81,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.rssFeedFileGenerator = rssFeedFileGenerator;
         this.filesTransferUtility = filesTransferUtility;
         this.testScriptGenerator = testScriptGenerator;
-        this.indexGenerator = indexGenerator;
+        this.indexFileGenerator = indexFileGenerator;
         this.guideMatrixGenerator = guideMatrixGenerator;
         this.guideProjectZipper = guideProjectZipper;
         this.guidesConfiguration = guidesConfiguration;
@@ -137,13 +139,12 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
         guides = guides.stream().filter(Guide::isPublish).toList();
 
-        indexGenerator.renderIndex(guides, outputDirectory);
-
-        categoriesIndexFileGenerator.saveCategoryIndex(guides, outputDirectory);
-
-        rssFeedFileGenerator.saveRssFeed(guides, outputDirectory);
-
-        jsonFeedFileGenerator.saveJsonFeed(guides, outputDirectory);
+        if (CollectionUtils.isNotEmpty(guides)) {
+            indexFileGenerator.renderIndex(guides, outputDirectory);
+            categoriesIndexFileGenerator.saveCategoryIndex(guides, outputDirectory);
+            rssFeedFileGenerator.saveRssFeed(guides, outputDirectory);
+            jsonFeedFileGenerator.saveJsonFeed(guides, outputDirectory);
+        }
 
         File imagesFolder = new File(inputDirectory, asciidocConfiguration.getImagesdir());
         if (imagesFolder.exists()) {

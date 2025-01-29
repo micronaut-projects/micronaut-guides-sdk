@@ -51,6 +51,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private static final List<Language> JAVA_KOTLIN_GROOVY = List.of(Language.JAVA, Language.GROOVY, Language.KOTLIN);
     private static final List<String> DEFAULT_ZIP_INCLUDES_EXTENSIONS = List.of(".sh", ".bat");
     private static final String DEFAULT_CATEGORIES_INDEX_FILE_NAME = "categories.html";
+    private static final String DEFAULT_INDEX_FILE_NAME = "index.html";
     private final boolean DEFAULT_VALIDATE_METADATA = true;
     private String guidesDir = DEFAULT_GUIDES_DIR;
     private String title = "Micronaut Guides";
@@ -70,6 +71,20 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private String defaultAppName = DEFAULT_APP_NAME;
     private List<String> zipIncludesExtensions = DEFAULT_ZIP_INCLUDES_EXTENSIONS;
     private String categoryIndexFileName = DEFAULT_CATEGORIES_INDEX_FILE_NAME;
+    private String indexFileName = DEFAULT_INDEX_FILE_NAME;
+
+    /**
+     * @param indexFileName index file name
+     */
+    public void setIndexFileName(String indexFileName) {
+        this.indexFileName = indexFileName;
+    }
+
+    @Override
+    @NonNull
+    public String getIndexFileName() {
+        return indexFileName;
+    }
 
     /**
      * @param categoryIndexFileName Category index file name
