@@ -1,0 +1,10 @@
+io.micronaut.guides.core
+io.micronaut.guides.core.asciidoc
+io.micronaut.guides.core.html
+io.micronaut.guides.core.html.categories
+io.micronaut.guides.core.html.index
+io.micronaut.guides.core.html.matrix
+io.micronaut.guides.core.jsonfeed
+io.micronaut.guides.core.rss
+io.micronaut.guides.core.test
+io.micronaut.guides.core.zip
