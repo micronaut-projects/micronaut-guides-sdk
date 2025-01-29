@@ -136,7 +136,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
                 }
             }
             if (publish) {
-                guidePageGenerator.generatePage(guide, inputDirectory, outputDirectory, guideOutput);
+                guidePageGenerator.generatePage(guide, inputDirectory, outputDirectory);
             }
         }
 
