@@ -21,6 +21,7 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.guides.core.asciidoc.AsciidocConfiguration;
 import io.micronaut.guides.core.html.*;
+import io.micronaut.guides.core.html.categories.CategoriesIndexFileGenerator;
 import io.micronaut.guides.core.jsonfeed.JsonFeedFileGenerator;
 import io.micronaut.guides.core.rss.RssFeedFileGenerator;
 import jakarta.inject.Singleton;

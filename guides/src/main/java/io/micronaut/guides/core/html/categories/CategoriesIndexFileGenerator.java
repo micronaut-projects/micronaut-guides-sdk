@@ -13,24 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core.html;
+package io.micronaut.guides.core.html.categories;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.FileGenerator;
 import io.micronaut.guides.core.Guide;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.File;
 import java.util.List;
 
 /**
- * Generates a category index.
+ * Save a category index HTML file into an output directory.
  */
-public interface CategoriesIndexGenerator {
+public interface CategoriesIndexFileGenerator extends FileGenerator {
     /**
-     *
+     * Save a category index HTML file into an output directory.
      * @param guides Guides
-     * @return HTML content for the Guides categories
+     * @param outputDirectory Output directory
      */
-    @NonNull
-    String renderIndex(@NonNull @NotNull @NotEmpty List<? extends Guide> guides);
+    void saveCategoryIndex(@NonNull @NotNull @NotEmpty List<? extends Guide> guides,
+                     @NonNull @NotNull File outputDirectory);
 }
