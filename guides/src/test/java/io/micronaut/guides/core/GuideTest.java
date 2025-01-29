@@ -14,20 +14,11 @@ import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.micronaut.validation.validator.Validator;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintViolation;
-import org.json.JSONException;
 import org.junit.jupiter.api.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.skyscreamer.jsonassert.JSONCompareMode;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -193,9 +184,9 @@ class GuideTest {
         assertNull(guide.getMinimumJavaVersion());
         assertNull(guide.getMaximumJavaVersion());
         assertNull(guide.getCloud());
-        assertNull(guide.getAsciidoctor());
+        assertNull(guide.getAsciidoc());
         assertTrue(guide.isPublish());
-        assertNull(guide.getAsciidoctor());
+        assertNull(guide.getAsciidoc());
         assertNull(guide.getSlug());
         assertTrue(guide.getZipIncludes().isEmpty());
         assertNull(guide.getBase());
