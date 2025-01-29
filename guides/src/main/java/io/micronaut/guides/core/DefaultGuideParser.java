@@ -174,8 +174,8 @@ public class DefaultGuideParser implements GuideParser {
         if (guide.getSlug() == null) {
             guide.setSlug(guidesDir.getName());
         }
-        if (guide.getAsciidoctor() == null) {
-            guide.setAsciidoctor(guide.isPublish() ? guide.getSlug() + ".adoc" : null);
+        if (guide.getAsciidoc() == null) {
+            guide.setAsciidoc(guide.isPublish() ? guide.getSlug() + ".adoc" : null);
         }
         for (App app : guide.getApps()) {
             if (StringUtils.isEmpty(app.getName())) {

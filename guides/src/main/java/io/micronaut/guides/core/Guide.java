@@ -96,7 +96,7 @@ public class Guide {
 
     @JsonPropertyDescription("The guide asciidoc file. If not specified, the guide slug followed by the .adoc suffix is used")
     @Nullable
-    private String asciidoctor;
+    private String asciidoc;
 
     @JsonPropertyDescription("The guide supported languages")
     @Nullable
@@ -330,17 +330,17 @@ public class Guide {
      *
      * @return The Asciidoctor file, or null if not specified.
      */
-    public @Nullable String getAsciidoctor() {
-        return asciidoctor;
+    public @Nullable String getAsciidoc() {
+        return asciidoc;
     }
 
     /**
      * Sets the Asciidoctor file for the guide.
      *
-     * @param asciidoctor The Asciidoctor file to set.
+     * @param asciidoc The Asciidoctor file to set.
      */
-    public void setAsciidoctor(@Nullable String asciidoctor) {
-        this.asciidoctor = asciidoctor;
+    public void setAsciidoc(@Nullable String asciidoc) {
+        this.asciidoc = asciidoc;
     }
 
     /**

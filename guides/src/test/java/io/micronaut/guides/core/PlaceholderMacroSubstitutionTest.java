@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +32,7 @@ public class PlaceholderMacroSubstitutionTest {
         guide.setCategories(List.of("Boot to Micronaut Building a REST API"));
         guide.setPublicationDate(LocalDate.of(2024,4,24));
         guide.setSlug("building-a-rest-api-spring-boot-vs-micronaut-data");
-        guide.setAsciidoctor("building-a-rest-api-spring-boot-vs-micronaut-data.adoc");
+        guide.setAsciidoc("building-a-rest-api-spring-boot-vs-micronaut-data.adoc");
         guide.setLanguages(List.of(Language.JAVA));
         guide.setBuildTools(List.of(BuildTool.GRADLE));
         guide.setTestFramework(TestFramework.JUNIT);

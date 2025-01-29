@@ -118,7 +118,7 @@ public class GuideParserTest {
         assertNull(guide.getMaximumJavaVersion());
         assertNull(guide.getCloud());
         assertTrue(guide.isPublish());
-        assertEquals("test.adoc", guide.getAsciidoctor());
+        assertEquals("test.adoc", guide.getAsciidoc());
         assertEquals("test", guide.getSlug());
         assertTrue(guide.getZipIncludes().isEmpty());
         assertNull(guide.getBase());

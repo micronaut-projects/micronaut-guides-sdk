@@ -90,7 +90,7 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
         GuideRender guideRender = new GuideRender(guide, option);
 
         File guideInputDirectory = guide.getFolder();
-        File asciidocFile = new File(guideInputDirectory, guide.getAsciidoctor());
+        File asciidocFile = new File(guideInputDirectory, guide.getAsciidoc());
 
         String asciidoc = readFile(asciidocFile);
 
