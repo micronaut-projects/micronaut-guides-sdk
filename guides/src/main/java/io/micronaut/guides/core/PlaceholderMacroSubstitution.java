@@ -32,16 +32,21 @@ public class PlaceholderMacroSubstitution implements MacroSubstitution {
 
     private final GuidesConfiguration guidesConfiguration;
     private final CoordinatesProvider coordinatesProvider;
+    private final GuideSourceService guideSourceService;
 
     /**
      * Constructs a new PlaceholderMacroSubstitution.
      *
      * @param guidesConfiguration the guides configuration
      * @param coordinatesProvider the coordinates provider
+     * @param guideSourceService Guide Source Service
      */
-    public PlaceholderMacroSubstitution(GuidesConfiguration guidesConfiguration, CoordinatesProvider coordinatesProvider) {
+    public PlaceholderMacroSubstitution(GuidesConfiguration guidesConfiguration,
+                                        CoordinatesProvider coordinatesProvider,
+                                        GuideSourceService guideSourceService) {
         this.guidesConfiguration = guidesConfiguration;
         this.coordinatesProvider = coordinatesProvider;
+        this.guideSourceService = guideSourceService;
     }
 
     /**
@@ -63,7 +68,7 @@ public class PlaceholderMacroSubstitution implements MacroSubstitution {
             str = str.replace("@testFramework@", option.getTestFramework().toString());
             str = str.replace("@languageextension@", option.getLanguage().getExtension());
             str = str.replace("@testsuffix@", option.getTestFramework() == SPOCK ? "Spec" : "Test");
-            str = str.replace("@sourceDir@", MacroUtils.getSourceDir(guide.getSlug(), option));
+            str = str.replace("@sourceDir@", guideSourceService.guideSourceFolder(guide, option));
         }
         str = str.replace("@guideTitle@", guide.getTitle());
         str = str.replace("@guideIntro@", guide.getIntro());

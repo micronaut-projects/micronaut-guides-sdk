@@ -22,6 +22,9 @@ import io.micronaut.guides.core.Guide;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Guide Page generator.
+ */
 @FunctionalInterface
 public interface GuidePageGenerator extends FileGenerator {
     /**

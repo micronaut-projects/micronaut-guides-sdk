@@ -46,16 +46,21 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
 
     private final LicenseLoader licenseLoader;
     private final GuidesConfiguration guidesConfiguration;
+    private final GuideSourceService guideSourceService;
 
     /**
      * Constructs a new DefaultFilesTransferUtility.
      *
      * @param licenseLoader       the license loader
      * @param guidesConfiguration the guides configuration
+     * @param guideSourceService Guide Source Service
      */
-    DefaultFilesTransferUtility(LicenseLoader licenseLoader, GuidesConfiguration guidesConfiguration) {
+    DefaultFilesTransferUtility(LicenseLoader licenseLoader,
+                                GuidesConfiguration guidesConfiguration,
+                                GuideSourceService guideSourceService) {
         this.licenseLoader = licenseLoader;
         this.guidesConfiguration = guidesConfiguration;
+        this.guideSourceService = guideSourceService;
     }
 
     /**
@@ -162,7 +167,7 @@ class DefaultFilesTransferUtility implements FilesTransferUtility {
         for (GuidesOption guidesOption : guidesOptionList) {
             for (App app : guide.getApps()) {
                 String appName = guide.getApps().size() > 1 ? app.getName() : EMPTY_STRING;
-                String folder = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
+                String folder = guideSourceService.guideSourceFolder(guide, guidesOption);
                 String module = guide.getSourceModule() != null ? guide.getSourceModule() : "";
                 Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder, appName, module);
                 File destination = destinationPath.toFile();

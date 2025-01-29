@@ -58,10 +58,14 @@ public class DefaultGuideProjectGenerator implements GuideProjectGenerator {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGuideProjectGenerator.class);
     private final GuidesConfiguration guidesConfiguration;
     private final ProjectGenerator projectGenerator;
+    private final GuideSourceService guideService;
 
-    DefaultGuideProjectGenerator(GuidesConfiguration guidesConfiguration, ProjectGenerator projectGenerator) {
+    DefaultGuideProjectGenerator(GuidesConfiguration guidesConfiguration,
+                                 ProjectGenerator projectGenerator,
+                                 GuideSourceService guideService) {
         this.guidesConfiguration = guidesConfiguration;
         this.projectGenerator = projectGenerator;
+        this.guideService = guideService;
     }
 
     /**
@@ -127,11 +131,7 @@ public class DefaultGuideProjectGenerator implements GuideProjectGenerator {
         }
 
         // typical guides use 'default' as name, multi-project guides have different modules
-        String folder = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
-
-        Path destinationPath = Paths.get(outputDirectory.getAbsolutePath(), folder,
-                guide.getApps().size() > 1 ? app.getName() : EMPTY_STRING);
-        File destination = destinationPath.toFile();
+        File destination = destination(outputDirectory, guide, guidesOption, app);
         destination.mkdir();
 
         String packageAndName = app.getPackageName() + '.' + app.getName();
@@ -152,6 +152,20 @@ public class DefaultGuideProjectGenerator implements GuideProjectGenerator {
             LOG.error("Error generating application: " + e.getMessage(), e);
             throw new IOException(e.getMessage(), e);
         }
+    }
+
+    /**
+     *
+     * @param outputDirectory Output directory
+     * @param guide Guide
+     * @param guidesOption Guide Option
+     * @param app App
+     * @return a destination folder
+     */
+    protected File destination(File outputDirectory, Guide guide, GuidesOption guidesOption, @NonNull App app) {
+        File file = guideService.guideSource(outputDirectory, guide, guidesOption);
+        Path destinationPath = Paths.get(file.getAbsolutePath(), guide.getApps().size() > 1 ? app.getName() : EMPTY_STRING);
+        return destinationPath.toFile();
     }
 
     private GeneratorContext createProjectGeneratorContext(ApplicationType type, @Pattern(regexp = "[\\w\\d-_\\.]+") String packageAndName, @Nullable String framework, @Nullable List<String> features, @Nullable BuildTool buildTool, @Nullable TestFramework testFramework, @Nullable Language lang, @Nullable JdkVersion javaVersion) throws IllegalArgumentException {

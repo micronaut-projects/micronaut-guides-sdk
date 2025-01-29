@@ -31,9 +31,12 @@ public class SourceMacroSubstitution extends SourceBlockMacroSubstitution {
      *
      * @param guidesConfiguration the guides configuration
      * @param licenseLoader       the license loader
+     * @param guideSourceService Guide Source Service
      */
-    public SourceMacroSubstitution(GuidesConfiguration guidesConfiguration, LicenseLoader licenseLoader) {
-        super(licenseLoader, guidesConfiguration);
+    public SourceMacroSubstitution(GuidesConfiguration guidesConfiguration,
+                                   LicenseLoader licenseLoader,
+                                   GuideSourceService guideSourceService) {
+        super(licenseLoader, guidesConfiguration, guideSourceService);
     }
 
     /**

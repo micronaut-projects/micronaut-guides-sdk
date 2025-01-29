@@ -34,18 +34,6 @@ public final class MacroUtils {
     private MacroUtils() { }
 
     /**
-     * Returns the source directory name based on the provided slug and GuidesOption.
-     *
-     * @param slug   the slug
-     * @param option the guides option
-     * @return the source directory name
-     */
-    @NonNull
-    public static String getSourceDir(@NonNull String slug, @NonNull GuidesOption option) {
-        return slug + "-" + option.getBuildTool() + "-" + option.getLanguage();
-    }
-
-    /**
      * Finds lines in the provided string that start with the specified macro.
      *
      * @param str   the string to search

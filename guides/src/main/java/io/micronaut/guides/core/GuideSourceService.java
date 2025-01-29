@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core.zip;
+package io.micronaut.guides.core;
 
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.guides.core.Guide;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
- * Interface for zipping a directory into a single output file.
+ * Guide Source API. Provides methods to define the output folder of a guide.
  */
-public interface GuideProjectZipper {
+public interface GuideSourceService {
+    @NonNull
+    File guideSource(@NonNull File guideOutput,
+                     @NonNull Guide guide,
+                     @NonNull GuidesOption guidesOption);
 
-    /**
-     * Zips the contents of the specified source directory into the specified output file.
-     *
-     * @param guide           the guide to zip
-     * @param guideOutput     the guide output directory
-     * @param outputDirectory the output directory
-     * @throws IOException if an I/O error occurs during zipping
-     */
-    void zipGuide(@NonNull Guide guide, @NonNull File guideOutput, @NonNull File outputDirectory) throws IOException;
+    @NonNull
+    String guideSourceFolder(@NonNull Guide guide,
+                             @NonNull GuidesOption guidesOption);
 }

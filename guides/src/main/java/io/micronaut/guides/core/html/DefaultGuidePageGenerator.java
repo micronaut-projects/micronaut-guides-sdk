@@ -46,17 +46,20 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
     private final MacroSubstitution macroSubstitution;
     private final AsciidocConverter asciidocConverter;
     private final AsciidocConfiguration asciidocConfiguration;
+    private final GuideSourceService guideService;
 
     protected DefaultGuidePageGenerator(GuidesConfiguration guidesConfiguration,
                                         MacroSubstitution macroSubstitution,
                                         AsciidocConverter asciidocConverter,
                                         AsciidocConfiguration asciidocConfiguration,
-                                        GuideRenderAttributesProvider guideRenderAttributesProvider) {
+                                        GuideRenderAttributesProvider guideRenderAttributesProvider,
+                                        GuideSourceService guideService) {
         this.guidesConfiguration = guidesConfiguration;
         this.guideRenderAttributesProvider = guideRenderAttributesProvider;
         this.macroSubstitution = macroSubstitution;
         this.asciidocConverter = asciidocConverter;
         this.asciidocConfiguration = asciidocConfiguration;
+        this.guideService = guideService;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
         } else {
             List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
             for (GuidesOption guidesOption : guideOptions) {
-                String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
+                String name = guideService.guideSourceFolder(guide, guidesOption);
                 renderHtml(guide, guidesOption, inputDirectory, outputDirectory, name, guideOutput);
             }
         }
@@ -103,7 +106,7 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("sourcedir", outputDirectory.getAbsolutePath());
         if (option != null) {
-            attributes.put("guidesourcedir", new File(guideOutput, MacroUtils.getSourceDir(guide.getSlug(), option)).getAbsolutePath());
+            attributes.put("guidesourcedir", guideService.guideSource(guideOutput, guide, option).getAbsolutePath());
         }
         attributes.putAll(guideRenderAttributesProvider.attributes(guideRender));
         String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, () -> attributes);
