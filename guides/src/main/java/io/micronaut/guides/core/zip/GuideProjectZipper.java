@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.zip;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.guides.core.Guide;
+import io.micronaut.guides.core.GuidesOption;
 
 import java.io.File;
 import java.io.IOException;

@@ -76,6 +76,7 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private String indexFileName = DEFAULT_INDEX_FILE_NAME;
     private String testFileName = DEFAULT_TEST_FILENAME;
     private String nativeTestFileName = DEFAULT_NATIVE_TEST_FILENAME;
+
     /**
      *
      * @return Default Test File Name

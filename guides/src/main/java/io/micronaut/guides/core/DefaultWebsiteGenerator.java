@@ -28,6 +28,7 @@ import io.micronaut.guides.core.html.matrix.GuideMatrixFileGenerator;
 import io.micronaut.guides.core.jsonfeed.JsonFeedFileGenerator;
 import io.micronaut.guides.core.rss.RssFeedFileGenerator;
 import io.micronaut.guides.core.test.TestScriptGenerator;
+import io.micronaut.guides.core.zip.GuideProjectZipper;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -119,6 +120,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         }
 
         for (Guide guide : guides) {
+            boolean publish = guide.isPublish();
             File guideInputDirectory = guide.getFolder();
             File guideOutput = new File(outputDirectory, guide.getSlug());
 
@@ -129,14 +131,13 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
             if (CollectionUtils.isNotEmpty(guide.getApps())) {
                 testScriptGenerator.generateTestScript(outputDirectory, guide);
                 testScriptGenerator.generateNativeTestScript(outputDirectory, guide);
+                if (publish) {
+                    guideProjectZipper.zipGuide(guide, guideOutput, outputDirectory);
+                    guideMatrixFileGenerator.saveMatrix(guide, outputDirectory);
+                }
             }
-
-            guideProjectZipper.zipGuide(guide, guideOutput, outputDirectory);
-
-            guidePageGenerator.generatePage(guide, inputDirectory, outputDirectory, guideOutput);
-
-            if (guide.isPublish() && CollectionUtils.isNotEmpty(guide.getApps())) {
-                guideMatrixFileGenerator.saveMatrix(guide, outputDirectory);
+            if (publish) {
+                guidePageGenerator.generatePage(guide, inputDirectory, outputDirectory, guideOutput);
             }
         }
 

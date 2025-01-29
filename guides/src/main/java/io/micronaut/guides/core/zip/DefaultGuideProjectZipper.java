@@ -13,8 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core;
+package io.micronaut.guides.core.zip;
 
+import io.micronaut.guides.core.Guide;
+import io.micronaut.guides.core.GuideGenerationUtils;
+import io.micronaut.guides.core.GuidesOption;
+import io.micronaut.guides.core.MacroUtils;
 import jakarta.inject.Singleton;
 import org.apache.commons.compress.archivers.zip.UnixStat;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -77,11 +81,6 @@ public class DefaultGuideProjectZipper implements GuideProjectZipper {
 
     @Override
     public void zipGuide(Guide guide, File guideOutput, File outputDirectory) throws IOException {
-        //skip for text-only guides
-        if (guide.getApps().isEmpty() || !guide.isPublish()) {
-            return;
-        }
-
         List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
         for (GuidesOption guidesOption : guideOptions) {
             String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);

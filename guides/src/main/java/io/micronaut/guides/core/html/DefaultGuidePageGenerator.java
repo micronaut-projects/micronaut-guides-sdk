@@ -61,10 +61,6 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
 
     @Override
     public void generatePage(Guide guide, File inputDirectory, File outputDirectory, File guideOutput) throws IOException {
-        if (!guide.isPublish()) {
-            return;
-        }
-
         if (guide.getApps().isEmpty()) {
             renderHtml(guide, null, inputDirectory, outputDirectory, guide.getSlug(), guideOutput);
         } else {
