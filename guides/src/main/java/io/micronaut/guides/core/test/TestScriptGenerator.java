@@ -59,28 +59,12 @@ public interface TestScriptGenerator extends FileGenerator {
     boolean supportsNativeTest(@NonNull @NotNull Language language);
 
     /**
-     * Generates a script for running native tests for the given guides.
-     *
-     * @param outputDirectory the output directory
-     * @param metadatas       the list of guides metadata
-     */
-    void generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas);
-
-    /**
      * Generates a script for running native tests for the given guide.
      *
      * @param outputDirectory the output directory
      * @param guide           the guide metadata
      */
     void generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
-
-    /**
-     * Generates a script for running tests for the given guides.
-     *
-     * @param outputDirectory the output directory
-     * @param metadatas       the list of guides metadata
-     */
-    void generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas);
 
     /**
      * Generates a script for running tests for the given guides.

@@ -205,21 +205,6 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
     }
 
     /**
-     * Generates a script for running native tests for the given guides metadata.
-     *
-     * @param metadatas the list of guides metadata
-     */
-    @Override
-    public void generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas) {
-        String script = generateScript(outputDirectory, metadatas, false, true);
-        try {
-            saveFile(script, outputDirectory, guidesConfiguration.getNativeTestFileName(), true);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * Generates a script for running native tests for the given guide.
      *
      * @param outputDirectory the output directory
@@ -230,21 +215,6 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
         String script = generateScript(outputDirectory, new ArrayList<>(List.of(guide)), false, true);
         try {
             saveFile(script, new File(outputDirectory, guide.getSlug()), guidesConfiguration.getNativeTestFileName(), true);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Generates a script for running tests for the given guides metadata.
-     *
-     * @param metadatas the list of guides metadata
-     */
-    @Override
-    public void generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull List<? extends Guide> metadatas) {
-        String script = generateScript(outputDirectory, metadatas, false, false);
-        try {
-            saveFile(script, outputDirectory, guidesConfiguration.getTestFileName());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
