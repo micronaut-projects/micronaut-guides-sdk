@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -268,10 +267,10 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
         StringBuilder bashScript = new StringBuilder("""
                 #!/usr/bin/env bash
                 set -e
-
+                
                 FAILED_PROJECTS=()
                 EXIT_STATUS=0
-
+                
                 kill_kotlin_daemon () {
                   echo "Killing KotlinCompile daemon to pick up fresh properties (due to kapt and java > 17)"
                   for daemon in $(jps | grep KotlinCompile | cut -d' ' -f1); do
@@ -336,7 +335,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
                     else
                       exit 0
                     fi
-
+                    
                     """);
         }
 
