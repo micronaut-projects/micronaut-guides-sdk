@@ -16,6 +16,8 @@
 package io.micronaut.guides.core;
 
 import io.micronaut.core.annotation.NonNull;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,5 +34,6 @@ public interface JsonFeedGenerator {
      * @throws IOException if an I/O error occurs during the generation of the JSON feed
      * @return JSON Feed
      */
-    String jsonFeedString(@NonNull List<? extends Guide> metadatas) throws IOException;
+    @NonNull
+    String jsonFeedString(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas) throws IOException;
 }

@@ -23,6 +23,8 @@ import io.micronaut.rss.jsonfeed.JsonFeedAuthor;
 import io.micronaut.rss.jsonfeed.JsonFeedItem;
 import io.micronaut.rss.language.RssLanguage;
 import jakarta.inject.Singleton;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,7 +63,8 @@ class DefaultJsonFeedGenerator implements JsonFeedFileGenerator, JsonFeedGenerat
      * @throws IOException if an I/O error occurs during JSON serialization
      */
     @Override
-    public String jsonFeedString(@NonNull List<? extends Guide> metadatas) throws IOException {
+    @NonNull
+    public String jsonFeedString(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas) throws IOException {
         JsonFeed jsonFeed = jsonFeed(metadatas);
         return jsonMapper.writeValueAsString(jsonFeed);
     }
@@ -74,7 +77,8 @@ class DefaultJsonFeedGenerator implements JsonFeedFileGenerator, JsonFeedGenerat
      * @throws IOException if an I/O error occurs during JSON serialization
      */
     @Override
-    public void saveJsonFeed(@NonNull List<? extends Guide> metadatas, File outputDirectory) throws IOException {
+    public void saveJsonFeed(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas,
+                      @NonNull @NotNull File outputDirectory) throws IOException {
         String json = jsonFeedString(metadatas);
         try {
             saveFile(json, outputDirectory, jsonFeedConfiguration.getFilename());
