@@ -83,7 +83,7 @@ public class DefaultGuideProjectZipper implements GuideProjectZipper {
     public void zipGuide(Guide guide, File guideOutput, File outputDirectory) throws IOException {
         List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
         for (GuidesOption guidesOption : guideOptions) {
-            String name = MacroUtils.getSourceDir(guide.getSlug(), guidesOption);
+            String name = getZipFileName(guide, guidesOption);
             File zipFile = new File(outputDirectory, getZipFileName(guide, guidesOption) + ".zip");
             File folderFile = new File(guideOutput, name);
             ZipArchiveOutputStream zipOutputStream = new ZipArchiveOutputStream(new FileOutputStream(zipFile));
