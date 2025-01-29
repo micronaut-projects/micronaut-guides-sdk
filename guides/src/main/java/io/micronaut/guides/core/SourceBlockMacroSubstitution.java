@@ -28,11 +28,14 @@ abstract class SourceBlockMacroSubstitution implements MacroSubstitution {
 
     private final LicenseLoader licenseLoader;
     private final GuidesConfiguration guidesConfiguration;
+    private final GuideSourceService guideSourceService;
 
     SourceBlockMacroSubstitution(LicenseLoader licenseLoader,
-                                 GuidesConfiguration guidesConfiguration) {
+                                 GuidesConfiguration guidesConfiguration,
+                                 GuideSourceService guideSourceService) {
         this.licenseLoader = licenseLoader;
         this.guidesConfiguration = guidesConfiguration;
+        this.guideSourceService = guideSourceService;
     }
 
     /**
@@ -77,13 +80,14 @@ abstract class SourceBlockMacroSubstitution implements MacroSubstitution {
     @Override
     public String substitute(String str, GuideRender guideRender) {
         GuidesOption option = guideRender.option();
-        String slug = guideRender.guide().getSlug();
+        Guide guide = guideRender.guide();
+        String slug = guide.getSlug();
         for (String line : findMacroLines(str, getMacroName())) {
             Optional<AsciidocMacro> asciidocMacroOptional = AsciidocMacro.of(getMacroName(), line);
             if (asciidocMacroOptional.isPresent()) {
                 AsciidocMacro asciidocMacro = asciidocMacroOptional.get();
                 String appName = appName(asciidocMacro);
-                App app = guideRender.guide().getApps().stream()
+                App app = guide.getApps().stream()
                         .filter(a -> a.getName().equals(appName))
                         .findFirst()
                         .orElse(null);
@@ -108,8 +112,8 @@ abstract class SourceBlockMacroSubstitution implements MacroSubstitution {
                     condensedTarget = condensedTarget + "." + extension;
                 }
 
-                String target = sourceInclude(slug, appName, condensedTarget, getClasspath(), option, language, app != null ? app.getPackageName() : "");
-                String title = Path.of(target).normalize().toString().replace("{sourceDir}/" + slug + "/", "").replace(getSourceDir(slug, option) + "/", "");
+                String target = sourceInclude(guide, appName, condensedTarget, getClasspath(), option, language, app != null ? app.getPackageName() : "");
+                String title = Path.of(target).normalize().toString().replace("{sourceDir}/" + slug + "/", "").replace(guideSourceService.guideSourceFolder(guide, option) + "/", "");
 
                 IncludeDirective.Builder includeDirectiveBuilder = IncludeDirective.builder().attributes(asciidocMacro.attributes())
                         .target(target);
@@ -175,7 +179,7 @@ abstract class SourceBlockMacroSubstitution implements MacroSubstitution {
     /**
      * Constructs the source include path based on the provided parameters.
      *
-     * @param slug            The slug of the guide.
+     * @param guide           The guide
      * @param appName         The name of the application.
      * @param condensedTarget The condensed target path.
      * @param classpath       The classpath for the source.
@@ -185,14 +189,14 @@ abstract class SourceBlockMacroSubstitution implements MacroSubstitution {
      * @return The constructed source include path as a String.
      */
     protected String sourceInclude(
-            String slug,
+            Guide guide,
             String appName,
             String condensedTarget,
             Classpath classpath,
             GuidesOption option,
             String language,
             String packageName) {
-        return "{sourceDir}/" + slug + "/" + getSourceDir(slug, option) + "/" +
+        return "{sourceDir}/" + guide.getSlug() + "/" + guideSourceService.guideSourceFolder(guide, option) + "/" +
                 sourceTitle(appName, condensedTarget, classpath, language, packageName);
     }
 

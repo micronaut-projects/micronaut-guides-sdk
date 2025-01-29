@@ -30,9 +30,12 @@ public class RawTestMacroSubstitution extends TestMacroSubstitution {
      *
      * @param guidesConfiguration the guides configuration
      * @param licenseLoader       the license loader
+     * @param guideSourceService Guide Source Service
      */
-    public RawTestMacroSubstitution(GuidesConfiguration guidesConfiguration, LicenseLoader licenseLoader) {
-        super(guidesConfiguration, licenseLoader);
+    public RawTestMacroSubstitution(GuidesConfiguration guidesConfiguration,
+                                    LicenseLoader licenseLoader,
+                                    GuideSourceService guideSourceService) {
+        super(guidesConfiguration, licenseLoader, guideSourceService);
     }
 
     /**

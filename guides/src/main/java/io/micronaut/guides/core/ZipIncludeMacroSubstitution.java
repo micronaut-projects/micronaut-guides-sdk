@@ -31,9 +31,12 @@ public class ZipIncludeMacroSubstitution extends SourceBlockMacroSubstitution {
      *
      * @param guidesConfiguration the guides configuration
      * @param licenseLoader       the license loader
+     * @param guideSourceService Guide Source Service
      */
-    public ZipIncludeMacroSubstitution(GuidesConfiguration guidesConfiguration, LicenseLoader licenseLoader) {
-        super(licenseLoader, guidesConfiguration);
+    public ZipIncludeMacroSubstitution(GuidesConfiguration guidesConfiguration,
+                                       LicenseLoader licenseLoader,
+                                       GuideSourceService guideSourceService) {
+        super(licenseLoader, guidesConfiguration, guideSourceService);
     }
 
     /**

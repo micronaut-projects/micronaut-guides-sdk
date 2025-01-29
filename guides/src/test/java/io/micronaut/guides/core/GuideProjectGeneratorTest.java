@@ -21,13 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @MicronautTest(startApplication = false)
-public class GuideProjectGeneratorTest {
+class GuideProjectGeneratorTest {
 
     @Inject
     GuideParser guideParser;
 
     @Inject
     GuideProjectGenerator guideProjectGenerator;
+
+    @Inject
+    GuideSourceService guideSourceService;
 
     @Test
     void testGenerate() throws IOException {
@@ -53,7 +56,7 @@ public class GuideProjectGeneratorTest {
 
         assertDoesNotThrow(() -> guideProjectGenerator.generate(outputDirectory, guide));
 
-        File dest = Paths.get(outputDirectory.getAbsolutePath(), MacroUtils.getSourceDir(guide.getSlug(), new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT))).toFile();
+        File dest = Paths.get(outputDirectory.getAbsolutePath(), guideSourceService.guideSourceFolder(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT))).toFile();
 
         assertTrue(new File(dest, "build.gradle").exists());
         assertTrue(new File(dest, "gradlew.bat").exists());
@@ -126,7 +129,7 @@ public class GuideProjectGeneratorTest {
         assertDoesNotThrow(() -> guideProjectGenerator.generate(outputDirectory, guide));
 
         for (App app : guide.getApps()) {
-            File dest = Paths.get(outputDirectory.getAbsolutePath(), MacroUtils.getSourceDir(guide.getSlug(), new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)), app.getName()).toFile();
+            File dest = Paths.get(outputDirectory.getAbsolutePath(), guideSourceService.guideSourceFolder(guide, new GuidesOption(BuildTool.GRADLE, Language.JAVA, TestFramework.JUNIT)), app.getName()).toFile();
             assertTrue(new File(dest, "build.gradle").exists());
             assertTrue(new File(dest, "gradlew.bat").exists());
             assertTrue(new File(dest, "gradlew").exists());

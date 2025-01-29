@@ -47,10 +47,14 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
 
     private final GuidesConfiguration guidesConfiguration;
     private final GuideParser guideParser;
+    private final GuideSourceService guideService;
 
-    DefaultTestScriptGenerator(GuidesConfiguration guidesConfiguration, GuideParser guideParser) {
+    DefaultTestScriptGenerator(GuidesConfiguration guidesConfiguration,
+                               GuideParser guideParser,
+                               GuideSourceService guideService) {
         this.guidesConfiguration = guidesConfiguration;
         this.guideParser = guideParser;
+        this.guideService = guideService;
     }
 
     private static List<String> guidesChanged(List<String> changedFiles) {
@@ -61,7 +65,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
                     return guideFolder.substring(0, guideFolder.indexOf('/'));
                 })
                 .distinct()
-                .collect(Collectors.toList());
+            .toList();
     }
 
     private static boolean changesMicronautVersion(List<String> changedFiles) {
@@ -287,7 +291,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
             List<GuidesOption> guidesOptionList = GuideGenerationUtils.guidesOptions(metadata, LOG);
             bashScript.append("\n");
             for (GuidesOption guidesOption : guidesOptionList) {
-                String folder = MacroUtils.getSourceDir(metadata.getSlug(), guidesOption);
+                String folder = guideService.guideSourceFolder(metadata, guidesOption);
                 BuildTool buildTool = folder.contains(MAVEN.toString()) ? MAVEN : GRADLE;
                 if (metadata.getApps().size() == 1) {
                     if (metadata.shouldSkip(buildTool)) {

@@ -33,6 +33,9 @@ public class GuideProjectZipperTest {
     @Inject
     GuideProjectGenerator guideProjectGenerator;
 
+    @Inject
+    GuideSourceService guideService;
+
     @Test
     void testZip() throws IOException {
         File outputDirectory = Files.createTempDirectory("micronaut-guides").toFile();
@@ -67,7 +70,7 @@ public class GuideProjectZipperTest {
         );
         List<String> result = new LinkedList<>();
 
-        try (ZipInputStream zis = new ZipInputStream(new FileInputStream(new File(outputDirectory, guideProjectZipper.getZipFileName(metadatas.get(0), guidesOption) + ".zip")))) {
+        try (ZipInputStream zis = new ZipInputStream(new FileInputStream(new File(outputDirectory, guideService.guideSourceFolder(metadatas.get(0), guidesOption) + ".zip")))) {
             ZipEntry zipEntry = zis.getNextEntry();
             while (zipEntry != null) {
                 result.add(zipEntry.getName());
