@@ -24,6 +24,7 @@ import io.micronaut.guides.core.asciidoc.AsciidocConfiguration;
 import io.micronaut.guides.core.html.*;
 import io.micronaut.guides.core.html.categories.CategoriesIndexFileGenerator;
 import io.micronaut.guides.core.html.index.IndexFileGenerator;
+import io.micronaut.guides.core.html.matrix.GuideMatrixFileGenerator;
 import io.micronaut.guides.core.jsonfeed.JsonFeedFileGenerator;
 import io.micronaut.guides.core.rss.RssFeedFileGenerator;
 import jakarta.inject.Singleton;
@@ -54,7 +55,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final FilesTransferUtility filesTransferUtility;
     private final TestScriptGenerator testScriptGenerator;
     private final IndexFileGenerator indexFileGenerator;
-    private final GuideMatrixGenerator guideMatrixGenerator;
+    private final GuideMatrixFileGenerator guideMatrixFileGenerator;
     private final GuideProjectZipper guideProjectZipper;
     private final GuidesConfiguration guidesConfiguration;
     private final GuidePageGenerator guidePageGenerator;
@@ -69,7 +70,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
                                    FilesTransferUtility filesTransferUtility,
                                    TestScriptGenerator testScriptGenerator,
                                    IndexFileGenerator indexFileGenerator,
-                                   GuideMatrixGenerator guideMatrixGenerator,
+                                   GuideMatrixFileGenerator guideMatrixFileGenerator,
                                    GuideProjectZipper guideProjectZipper,
                                    GuidePageGenerator guidePageGenerator,
                                    AsciidocConfiguration asciidocConfiguration,
@@ -82,7 +83,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.filesTransferUtility = filesTransferUtility;
         this.testScriptGenerator = testScriptGenerator;
         this.indexFileGenerator = indexFileGenerator;
-        this.guideMatrixGenerator = guideMatrixGenerator;
+        this.guideMatrixFileGenerator = guideMatrixFileGenerator;
         this.guideProjectZipper = guideProjectZipper;
         this.guidesConfiguration = guidesConfiguration;
         this.guidePageGenerator = guidePageGenerator;
@@ -134,7 +135,9 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
             guidePageGenerator.generatePage(guide, inputDirectory, outputDirectory, guideOutput);
 
-            guideMatrixGenerator.renderIndex(guide, outputDirectory);
+            if (guide.isPublish() && CollectionUtils.isNotEmpty(guide.getApps())) {
+                guideMatrixFileGenerator.saveMatrix(guide, outputDirectory);
+            }
         }
 
         guides = guides.stream().filter(Guide::isPublish).toList();

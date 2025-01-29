@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2025 original authors
+ * Copyright 2017-2024 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core.html;
+package io.micronaut.guides.core.html.matrix;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.guides.core.FileGenerator;
 import io.micronaut.guides.core.Guide;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 
+/**
+ * Save a matrix html file for a guide.
+ */
 @FunctionalInterface
-public interface GuidePageGenerator extends FileGenerator {
+public interface GuideMatrixFileGenerator extends FileGenerator {
     /**
+     * Renders the index for the given guide.
      *
-     * @param guide Guide
-     * @param inputDirectory Input Directory
-     * @param outputDirectory Output Directory
-     * @param guideOutput Guide output
-     * @throws IOException If an I/O error occurs reading from the file.
+     * @param guide           the guide to render the index for
+     * @param outputDirectory the directory to which the index should be written
      */
-    void generatePage(@NonNull Guide guide,
-                      @NonNull File inputDirectory,
-                      @NonNull File outputDirectory,
-                      @NonNull File guideOutput) throws IOException;
+    void saveMatrix(@NonNull @NotNull @Valid Guide guide,
+                    @NonNull @NotNull File outputDirectory);
 }

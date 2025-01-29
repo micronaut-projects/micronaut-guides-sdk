@@ -13,24 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.guides.core.html;
+package io.micronaut.guides.core.html.matrix;
 
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.guides.core.FileGenerator;
 import io.micronaut.guides.core.Guide;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-
-import java.io.File;
 
 /**
  * Interface for generating a matrix for guides.
  */
-public interface GuideMatrixGenerator extends FileGenerator {
+@FunctionalInterface
+public interface GuideMatrixGenerator {
     /**
      * Renders the index for the given guide.
      *
-     * @param guide           the guide to render the index for
-     * @param outputDirectory the directory to which the index should be written
+     * @param guide the guide to render the index for
+     * @return HTML String representing the matrix
      */
-    void renderIndex(@NonNull @NotNull Guide guide, @NonNull @NotNull File outputDirectory);
+    @NonNull
+    String renderMatrix(@NonNull @NotNull @Valid Guide guide);
 }
