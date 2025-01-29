@@ -19,18 +19,20 @@ import io.micronaut.core.annotation.NonNull;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.File;
 import java.util.List;
 
 /**
- * RssFeedGenerator is an interface that defines a method to generate an RSS feed from a list of guides.
+ * API to save an RSS File into an output directory. The RSS feed will be generated based on a list of guides.
+ * To generate the RSS Feed {@link RssFeedGenerator} can be used.
  */
-public interface RssFeedGenerator {
+public interface RssFeedFileGenerator extends FileGenerator {
     /**
-     * Generates an RSS feed from the given list of guide metadata.
+     * Saves an RSS feed, based on a list of guides, into an output directory.
      *
      * @param metadatas       the list of guide metadata
-     * @return RSS Feed
+     * @param outputDirectory the directory to which the RSS feed should be written
      */
-    @NonNull
-    String rssFeed(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas);
+    void saveRssFeed(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas,
+                     @NotNull File outputDirectory);
 }

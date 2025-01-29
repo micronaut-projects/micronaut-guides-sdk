@@ -48,7 +48,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final GuideParser guideParser;
     private final GuideProjectGenerator guideProjectGenerator;
     private final JsonFeedFileGenerator jsonFeedFileGenerator;
-    private final RssFeedGenerator rssFeedGenerator;
+    private final RssFeedFileGenerator rssFeedFileGenerator;
     private final FilesTransferUtility filesTransferUtility;
     private final TestScriptGenerator testScriptGenerator;
     private final IndexGenerator indexGenerator;
@@ -63,7 +63,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     public DefaultWebsiteGenerator(GuideParser guideParser,
                                    GuideProjectGenerator guideProjectGenerator,
                                    JsonFeedFileGenerator jsonFeedFileGenerator,
-                                   RssFeedGenerator rssFeedGenerator,
+                                   RssFeedFileGenerator rssFeedFileGenerator,
                                    FilesTransferUtility filesTransferUtility,
                                    TestScriptGenerator testScriptGenerator,
                                    IndexGenerator indexGenerator,
@@ -76,7 +76,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
         this.jsonFeedFileGenerator = jsonFeedFileGenerator;
-        this.rssFeedGenerator = rssFeedGenerator;
+        this.rssFeedFileGenerator = rssFeedFileGenerator;
         this.filesTransferUtility = filesTransferUtility;
         this.testScriptGenerator = testScriptGenerator;
         this.indexGenerator = indexGenerator;
@@ -141,7 +141,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
         categoriesIndexGenerator.renderIndex(guides, outputDirectory);
 
-        rssFeedGenerator.rssFeed(guides, outputDirectory);
+        rssFeedFileGenerator.saveRssFeed(guides, outputDirectory);
 
         jsonFeedFileGenerator.saveJsonFeed(guides, outputDirectory);
 

@@ -15,12 +15,15 @@
  */
 package io.micronaut.guides.core;
 
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.rss.DefaultRssFeedRenderer;
 import io.micronaut.rss.RssChannel;
 import io.micronaut.rss.RssItem;
 import io.micronaut.rss.language.RssLanguage;
 import jakarta.inject.Singleton;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -33,7 +36,8 @@ import java.util.List;
  * Class that provides RSS feed generation functionality.
  */
 @Singleton
-public class DefaultRssFeedGenerator implements RssFeedGenerator {
+@Internal
+class DefaultRssFeedGenerator implements RssFeedGenerator, RssFeedFileGenerator {
     private final GuidesConfiguration guidesConfiguration;
     private final RssFeedConfiguration rssFeedConfiguration;
 
@@ -43,19 +47,15 @@ public class DefaultRssFeedGenerator implements RssFeedGenerator {
      * @param guidesConfiguration  the configuration for guides
      * @param rssFeedConfiguration the configuration for RSS feed
      */
-    public DefaultRssFeedGenerator(GuidesConfiguration guidesConfiguration, RssFeedConfiguration rssFeedConfiguration) {
+    DefaultRssFeedGenerator(GuidesConfiguration guidesConfiguration,
+                            RssFeedConfiguration rssFeedConfiguration) {
         this.guidesConfiguration = guidesConfiguration;
         this.rssFeedConfiguration = rssFeedConfiguration;
     }
 
-    /**
-     * Generates an RSS feed from the provided list of guide metadata.
-     *
-     * @param metadatas       the list of guide metadata
-     * @param outputDirectory the directory to which the RSS feed should be written
-     */
+    @Override
     @NonNull
-    public void rssFeed(@NonNull List<? extends Guide> metadatas, File outputDirectory) {
+    public String rssFeed(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas) {
         RssChannel.Builder rssBuilder = rssBuilder();
         for (Guide metadata : metadatas) {
             rssBuilder.item(rssFeedElement(metadata));
@@ -63,8 +63,15 @@ public class DefaultRssFeedGenerator implements RssFeedGenerator {
         DefaultRssFeedRenderer rssFeedRenderer = new DefaultRssFeedRenderer();
         StringWriter writer = new StringWriter();
         rssFeedRenderer.render(writer, rssBuilder.build());
-        String rss = writer.toString();
+        return writer.toString();
+    }
+
+    @Override
+    @NonNull
+    public void saveRssFeed(@NonNull @NotNull @NotEmpty List<? extends Guide> metadatas,
+                            @NonNull @NotNull File outputDirectory) {
         try {
+            String rss = rssFeed(metadatas);
             saveFile(rss, outputDirectory, rssFeedConfiguration.getFilename());
         } catch (Exception e) {
             throw new RuntimeException(e);
