@@ -27,7 +27,7 @@ import io.micronaut.guides.core.html.index.IndexFileGenerator;
 import io.micronaut.guides.core.html.matrix.GuideMatrixFileGenerator;
 import io.micronaut.guides.core.jsonfeed.JsonFeedFileGenerator;
 import io.micronaut.guides.core.rss.RssFeedFileGenerator;
-import io.micronaut.guides.core.test.TestScriptGenerator;
+import io.micronaut.guides.core.test.TestScriptFileGenerator;
 import io.micronaut.guides.core.zip.GuideProjectZipper;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
@@ -55,7 +55,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     private final JsonFeedFileGenerator jsonFeedFileGenerator;
     private final RssFeedFileGenerator rssFeedFileGenerator;
     private final FilesTransferUtility filesTransferUtility;
-    private final TestScriptGenerator testScriptGenerator;
+    private final TestScriptFileGenerator testScriptFileGenerator;
     private final IndexFileGenerator indexFileGenerator;
     private final GuideMatrixFileGenerator guideMatrixFileGenerator;
     private final GuideProjectZipper guideProjectZipper;
@@ -70,7 +70,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
                                    JsonFeedFileGenerator jsonFeedFileGenerator,
                                    RssFeedFileGenerator rssFeedFileGenerator,
                                    FilesTransferUtility filesTransferUtility,
-                                   TestScriptGenerator testScriptGenerator,
+                                   TestScriptFileGenerator testScriptFileGenerator,
                                    IndexFileGenerator indexFileGenerator,
                                    GuideMatrixFileGenerator guideMatrixFileGenerator,
                                    GuideProjectZipper guideProjectZipper,
@@ -83,7 +83,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         this.jsonFeedFileGenerator = jsonFeedFileGenerator;
         this.rssFeedFileGenerator = rssFeedFileGenerator;
         this.filesTransferUtility = filesTransferUtility;
-        this.testScriptGenerator = testScriptGenerator;
+        this.testScriptFileGenerator = testScriptFileGenerator;
         this.indexFileGenerator = indexFileGenerator;
         this.guideMatrixFileGenerator = guideMatrixFileGenerator;
         this.guideProjectZipper = guideProjectZipper;
@@ -129,8 +129,8 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
             filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
 
             if (CollectionUtils.isNotEmpty(guide.getApps())) {
-                testScriptGenerator.generateTestScript(outputDirectory, guide);
-                testScriptGenerator.generateNativeTestScript(outputDirectory, guide);
+                testScriptFileGenerator.saveTestScript(outputDirectory, guide);
+                testScriptFileGenerator.saveNativeTestScript(outputDirectory, guide);
                 if (publish) {
                     guideProjectZipper.zipGuide(guide, guideOutput, outputDirectory);
                     guideMatrixFileGenerator.saveMatrix(guide, outputDirectory);

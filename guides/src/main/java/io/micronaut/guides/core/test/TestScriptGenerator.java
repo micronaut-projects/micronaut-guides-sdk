@@ -17,21 +17,19 @@ package io.micronaut.guides.core.test;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.guides.core.App;
-import io.micronaut.guides.core.FileGenerator;
 import io.micronaut.guides.core.Guide;
 import io.micronaut.guides.core.GuidesOption;
 import io.micronaut.starter.options.Language;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * Interface for generating test scripts for guides.
  * This interface provides methods to check if an app or language supports native tests,
  * if an app uses the Micronaut framework, and to generate scripts for running tests.
  */
-public interface TestScriptGenerator extends FileGenerator {
+public interface TestScriptGenerator {
 
     /**
      * Checks if the given app supports native tests.
@@ -63,15 +61,17 @@ public interface TestScriptGenerator extends FileGenerator {
      *
      * @param outputDirectory the output directory
      * @param guide           the guide metadata
+     * @return the generated script
      */
-    void generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
+    String generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
 
     /**
      * Generates a script for running tests for the given guides.
      *
      * @param outputDirectory the output directory
      * @param guide           the guide metadata
+     * @return the generated script
      */
-    void generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
+    String generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide);
 
 }
