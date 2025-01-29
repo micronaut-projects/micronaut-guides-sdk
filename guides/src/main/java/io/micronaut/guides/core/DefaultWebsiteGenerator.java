@@ -21,7 +21,7 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.guides.core.asciidoc.AsciidocConfiguration;
-import io.micronaut.guides.core.html.*;
+import io.micronaut.guides.core.html.GuidePageGenerator;
 import io.micronaut.guides.core.html.categories.CategoriesIndexFileGenerator;
 import io.micronaut.guides.core.html.index.IndexFileGenerator;
 import io.micronaut.guides.core.html.matrix.GuideMatrixFileGenerator;
@@ -122,15 +122,16 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         for (Guide guide : guides) {
             boolean publish = guide.isPublish();
             File guideInputDirectory = guide.getFolder();
-            File guideOutput = new File(outputDirectory, guide.getSlug());
+            File guideOutput = guide.getOutputDirectory(outputDirectory);
             guideOutput.mkdir();
+
             if (CollectionUtils.isNotEmpty(guide.getApps())) {
-                guideProjectGenerator.generate(guideOutput, guide);
-                filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
+                guideProjectGenerator.generate(outputDirectory, guide);
+                filesTransferUtility.transferFiles(guideInputDirectory, outputDirectory, guide, guides);
                 testScriptFileGenerator.saveTestScript(outputDirectory, guide);
                 testScriptFileGenerator.saveNativeTestScript(outputDirectory, guide);
                 if (publish) {
-                    guideProjectZipper.zipGuide(guide, guideOutput, outputDirectory);
+                    guideProjectZipper.zipGuide(guide, outputDirectory);
                     guideMatrixFileGenerator.saveMatrix(guide, outputDirectory);
                 }
             }
