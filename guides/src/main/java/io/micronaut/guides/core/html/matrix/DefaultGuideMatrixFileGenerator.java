@@ -21,7 +21,6 @@ import jakarta.inject.Singleton;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 
 @Internal
 @Singleton
@@ -36,7 +35,7 @@ class DefaultGuideMatrixFileGenerator implements GuideMatrixFileGenerator {
     public void saveMatrix(Guide guide, File outputDirectory) {
         try {
             String html = guideMatrixGenerator.renderMatrix(guide);
-            saveFile(html, new File(outputDirectory, Path.of(guide.getUrl()).toString()), guide.getSlug() + ".html");
+            saveFile(html, outputDirectory, guide.getSlug() + ".html");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

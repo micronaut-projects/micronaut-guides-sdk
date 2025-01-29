@@ -136,7 +136,7 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
             }
         }
 
-        saveFile(optionHtml, new File(outputDirectory, Path.of(guide.getUrl()).toString()), fileName + ".html");
+        saveFile(optionHtml, outputDirectory, fileName + ".html");
 
     }
 
