@@ -103,7 +103,6 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
             @NonNull @NotNull File inputDirectory,
             @NonNull @NotNull File outputDirectory,
             @Nullable Predicate<Guide> condition) throws IOException {
-
         File guidesInputDirectory = new File(inputDirectory, guidesConfiguration.getGuidesDir());
         if (!guidesInputDirectory.exists()) {
             throw new ConfigurationException("Guides directory " + guidesInputDirectory.getAbsolutePath() + " not found");
@@ -113,49 +112,110 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
         }
 
         List<? extends Guide> guides = guideParser.parseGuidesMetadata(guidesInputDirectory);
+        guides = filter(guides, condition);
+        generate(inputDirectory, guides, outputDirectory);
+    }
 
-        if (condition != null) {
-            List<String> bases = guides.stream().filter(condition).map(Guide::getBase).toList();
-            guides = guides.stream().filter(guide -> bases.contains(guide.getSlug()) || condition.test(guide)).toList();
+    /**
+     *
+     * @param guides Guides
+     * @param condition Condition to filter the guides against
+     * @return List of filtered guides
+     */
+    protected List<? extends Guide> filter(List<? extends Guide> guides, @Nullable Predicate<Guide> condition) {
+        if (condition == null) {
+            return guides;
         }
+        List<String> bases = guides.stream().filter(condition).map(Guide::getBase).toList();
+        return guides.stream().filter(guide -> bases.contains(guide.getSlug()) || condition.test(guide)).toList();
+    }
 
+    /**
+     *
+     * @param outputDirectory Output directory
+     * @param guide Guide
+     * @return The folder where the guides projects will be generated into.
+     */
+    protected File guideOutput(File outputDirectory, Guide guide) {
+        return new File(outputDirectory, guide.getSlug());
+    }
+
+    /**
+     *
+     * @param inputDirectory Input directory
+     * @param guides Guides
+     * @param outputDirectory Output directory
+     * @throws IOException If an I/O error occurs reading from the file.
+     */
+    protected void generate(
+        @NonNull File inputDirectory,
+        @NonNull List<? extends Guide> guides,
+        @NonNull File outputDirectory) throws IOException {
         for (Guide guide : guides) {
-            boolean publish = guide.isPublish();
-            File guideInputDirectory = guide.getFolder();
-            File guideOutput = new File(outputDirectory, guide.getSlug());
-            guideOutput.mkdir();
-            if (CollectionUtils.isNotEmpty(guide.getApps())) {
-                guideProjectGenerator.generate(guideOutput, guide);
-                filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
-                testScriptFileGenerator.saveTestScript(outputDirectory, guide);
-                testScriptFileGenerator.saveNativeTestScript(outputDirectory, guide);
-                if (publish) {
-                    guideProjectZipper.zipGuide(guide, guideOutput, outputDirectory);
-                    guideMatrixFileGenerator.saveMatrix(guide, outputDirectory);
-                }
-            }
-            if (publish) {
-                guidePageGenerator.generatePage(guide, inputDirectory, outputDirectory, guideOutput);
-            }
+            generate(inputDirectory, guides, outputDirectory, guide);
         }
+        generateIndexesAndFeeds(guides, outputDirectory);
+        copyImages(inputDirectory, outputDirectory);
+    }
 
-        guides = guides.stream().filter(Guide::isPublish).toList();
-
+    /**
+     *
+     * @param allGuides All Guides
+     * @param outputDirectory Output Directory
+     * @throws IOException If an I/O error occurs while generating the indexes and feeds
+     */
+    protected void generateIndexesAndFeeds(List<? extends Guide> allGuides, File outputDirectory) throws IOException {
+        List<? extends Guide> guides = allGuides.stream().filter(Guide::isPublish).toList();
         if (CollectionUtils.isNotEmpty(guides)) {
             indexFileGenerator.renderIndex(guides, outputDirectory);
             categoriesIndexFileGenerator.saveCategoryIndex(guides, outputDirectory);
             rssFeedFileGenerator.saveRssFeed(guides, outputDirectory);
             jsonFeedFileGenerator.saveJsonFeed(guides, outputDirectory);
         }
+    }
 
+    /**
+     *
+     * @param inputDirectory Input directory
+     * @param outputDirectory Output directory
+     * @throws IOException If an I/O error occurs while copying the folder
+     */
+    protected void copyImages(File inputDirectory, File outputDirectory) throws IOException {
         File imagesFolder = new File(inputDirectory, asciidocConfiguration.getImagesdir());
         if (imagesFolder.exists()) {
             File outputImagesFolder = new File(outputDirectory, asciidocConfiguration.getImagesdir());
             if (!outputImagesFolder.exists()) {
                 outputImagesFolder.mkdir();
             }
-
             copyFolder(imagesFolder.toPath(), outputImagesFolder.toPath());
+        }
+    }
+
+    /**
+     * Generate a Guide.
+     * @param inputDirectory Input Directroy
+     * @param guides Guides
+     * @param outputDirectory Output Directory
+     * @param guide Guide Being Generated
+     * @throws IOException If an I/O error occurs reading from the file.
+     */
+    protected void generate(File inputDirectory, List<? extends Guide> guides, File outputDirectory, Guide guide) throws IOException {
+        boolean publish = guide.isPublish();
+        File guideInputDirectory = guide.getFolder();
+        File guideOutput = guideOutput(outputDirectory, guide);
+        guideOutput.mkdir();
+        if (CollectionUtils.isNotEmpty(guide.getApps())) {
+            guideProjectGenerator.generate(guideOutput, guide);
+            filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
+            testScriptFileGenerator.saveTestScript(outputDirectory, guide);
+            testScriptFileGenerator.saveNativeTestScript(outputDirectory, guide);
+            if (publish) {
+                guideProjectZipper.zipGuide(guide, guideOutput, outputDirectory);
+                guideMatrixFileGenerator.saveMatrix(guide, outputDirectory);
+            }
+        }
+        if (publish) {
+            guidePageGenerator.generatePage(guide, inputDirectory, outputDirectory, guideOutput);
         }
     }
 

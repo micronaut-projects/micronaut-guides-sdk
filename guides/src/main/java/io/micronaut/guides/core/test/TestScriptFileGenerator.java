@@ -22,6 +22,9 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.File;
 
+/**
+ * saves a bash script to test the guide.
+ */
 public interface TestScriptFileGenerator extends FileGenerator {
     /**
      * Save a script for running native tests for the given guide.

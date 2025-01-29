@@ -35,5 +35,4 @@ public interface FileGenerator {
             filePath.toFile().setExecutable(true);
         }
     }
-
 }
