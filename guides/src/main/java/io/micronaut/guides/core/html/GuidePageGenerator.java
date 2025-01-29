@@ -25,15 +25,12 @@ import java.io.IOException;
 @FunctionalInterface
 public interface GuidePageGenerator extends FileGenerator {
     /**
-     *
-     * @param guide Guide
-     * @param inputDirectory Input Directory
+     * @param guide           Guide
+     * @param inputDirectory  Input Directory
      * @param outputDirectory Output Directory
-     * @param guideOutput Guide output
      * @throws IOException If an I/O error occurs reading from the file.
      */
     void generatePage(@NonNull Guide guide,
                       @NonNull File inputDirectory,
-                      @NonNull File outputDirectory,
-                      @NonNull File guideOutput) throws IOException;
+                      @NonNull File outputDirectory) throws IOException;
 }
