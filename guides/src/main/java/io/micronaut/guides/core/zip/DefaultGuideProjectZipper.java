@@ -86,10 +86,14 @@ public class DefaultGuideProjectZipper implements GuideProjectZipper {
             String name = getZipFileName(guide, guidesOption);
             File zipFile = new File(outputDirectory, getZipFileName(guide, guidesOption) + ".zip");
             File folderFile = new File(guideOutput, name);
-            ZipArchiveOutputStream zipOutputStream = new ZipArchiveOutputStream(new FileOutputStream(zipFile));
-            compressDirectoryToZipfile(folderFile.getAbsolutePath(), folderFile.getAbsolutePath(), zipOutputStream);
-            IOUtils.closeQuietly(zipOutputStream);
+            zipDirectory(zipFile, folderFile);
         }
+    }
+
+    private void zipDirectory(File zipFile, File folderFile) throws IOException {
+        ZipArchiveOutputStream zipOutputStream = new ZipArchiveOutputStream(new FileOutputStream(zipFile));
+        compressDirectoryToZipfile(folderFile.getAbsolutePath(), folderFile.getAbsolutePath(), zipOutputStream);
+        IOUtils.closeQuietly(zipOutputStream);
     }
 
     @Override
