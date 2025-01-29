@@ -15,6 +15,7 @@
  */
 package io.micronaut.guides.core;
 
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.json.JsonMapper;
 import io.micronaut.rss.jsonfeed.JsonFeed;
@@ -34,7 +35,8 @@ import java.util.List;
  * Class that implements the JsonFeedGenerator interface.
  */
 @Singleton
-public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
+@Internal
+class DefaultJsonFeedGenerator implements JsonFeedFileGenerator, JsonFeedGenerator {
     private final GuidesConfiguration guidesConfiguration;
     private final JsonFeedConfiguration jsonFeedConfiguration;
     private final JsonMapper jsonMapper;
@@ -46,24 +48,10 @@ public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
      * @param jsonFeedConfiguration the configuration for JSON feed
      * @param jsonMapper            the JSON mapper
      */
-    public DefaultJsonFeedGenerator(GuidesConfiguration guidesConfiguration, JsonFeedConfiguration jsonFeedConfiguration, JsonMapper jsonMapper) {
+    DefaultJsonFeedGenerator(GuidesConfiguration guidesConfiguration, JsonFeedConfiguration jsonFeedConfiguration, JsonMapper jsonMapper) {
         this.guidesConfiguration = guidesConfiguration;
         this.jsonFeedConfiguration = jsonFeedConfiguration;
         this.jsonMapper = jsonMapper;
-    }
-
-    /**
-     * Generates a JsonFeed from the provided list of guide metadata.
-     *
-     * @param metadatas the list of guide metadata
-     * @return the generated JsonFeed
-     */
-    public JsonFeed jsonFeed(List<? extends Guide> metadatas) {
-        JsonFeed.Builder jsonFeedBuilder = jsonFeedBuilder();
-        for (Guide metadata : metadatas) {
-            jsonFeedBuilder.item(jsonFeedItem(metadata));
-        }
-        return jsonFeedBuilder.build();
     }
 
     /**
@@ -73,14 +61,40 @@ public class DefaultJsonFeedGenerator implements JsonFeedGenerator {
      * @throws IOException if an I/O error occurs during JSON serialization
      */
     @Override
-    public void jsonFeedString(@NonNull List<? extends Guide> metadatas, File outputDirectory) throws IOException {
+    public String jsonFeedString(@NonNull List<? extends Guide> metadatas) throws IOException {
         JsonFeed jsonFeed = jsonFeed(metadatas);
-        String json = jsonMapper.writeValueAsString(jsonFeed);
+        return jsonMapper.writeValueAsString(jsonFeed);
+    }
+
+    /**
+     * Generates a JSON string representation of the JsonFeed from the provided list of guide metadata.
+     *
+     * @param metadatas the list of guide metadata
+     * @param outputDirectory Output directory
+     * @throws IOException if an I/O error occurs during JSON serialization
+     */
+    @Override
+    public void saveJsonFeed(@NonNull List<? extends Guide> metadatas, File outputDirectory) throws IOException {
+        String json = jsonFeedString(metadatas);
         try {
             saveFile(json, outputDirectory, jsonFeedConfiguration.getFilename());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Generates a JsonFeed from the provided list of guide metadata.
+     *
+     * @param metadatas the list of guide metadata
+     * @return the generated JsonFeed
+     */
+    private JsonFeed jsonFeed(List<? extends Guide> metadatas) {
+        JsonFeed.Builder jsonFeedBuilder = jsonFeedBuilder();
+        for (Guide metadata : metadatas) {
+            jsonFeedBuilder.item(jsonFeedItem(metadata));
+        }
+        return jsonFeedBuilder.build();
     }
 
     private JsonFeed.Builder jsonFeedBuilder() {

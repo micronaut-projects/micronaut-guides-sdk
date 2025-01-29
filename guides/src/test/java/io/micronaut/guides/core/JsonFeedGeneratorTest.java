@@ -23,7 +23,7 @@ class JsonFeedGeneratorTest {
     JsonSchemaProvider jsonSchemaProvider;
 
     @Inject
-    JsonFeedGenerator jsonFeedGenerator;
+    JsonFeedFileGenerator jsonFeedFileGenerator;
 
     @Inject
     JsonFeedConfiguration jsonFeedConfiguration;
@@ -49,7 +49,7 @@ class JsonFeedGeneratorTest {
 
     @Test
     public void testJsonFeed() throws IOException, JSONException {
-        jsonFeedGenerator.jsonFeedString(guides, tempDir);
+        jsonFeedFileGenerator.saveJsonFeed(guides, tempDir);
         String feed = TestUtils.readFile(new File(tempDir, jsonFeedConfiguration.getFilename()));
         String expected = """
                 {

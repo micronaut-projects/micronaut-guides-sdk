@@ -47,7 +47,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
     private final GuideParser guideParser;
     private final GuideProjectGenerator guideProjectGenerator;
-    private final JsonFeedGenerator jsonFeedGenerator;
+    private final JsonFeedFileGenerator jsonFeedFileGenerator;
     private final RssFeedGenerator rssFeedGenerator;
     private final FilesTransferUtility filesTransferUtility;
     private final TestScriptGenerator testScriptGenerator;
@@ -62,7 +62,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     @SuppressWarnings("checkstyle:ParameterNumber")
     public DefaultWebsiteGenerator(GuideParser guideParser,
                                    GuideProjectGenerator guideProjectGenerator,
-                                   JsonFeedGenerator jsonFeedGenerator,
+                                   JsonFeedFileGenerator jsonFeedFileGenerator,
                                    RssFeedGenerator rssFeedGenerator,
                                    FilesTransferUtility filesTransferUtility,
                                    TestScriptGenerator testScriptGenerator,
@@ -75,7 +75,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
                                    CategoriesIndexGenerator categoriesIndexGenerator) {
         this.guideParser = guideParser;
         this.guideProjectGenerator = guideProjectGenerator;
-        this.jsonFeedGenerator = jsonFeedGenerator;
+        this.jsonFeedFileGenerator = jsonFeedFileGenerator;
         this.rssFeedGenerator = rssFeedGenerator;
         this.filesTransferUtility = filesTransferUtility;
         this.testScriptGenerator = testScriptGenerator;
@@ -143,7 +143,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
         rssFeedGenerator.rssFeed(guides, outputDirectory);
 
-        jsonFeedGenerator.jsonFeedString(guides, outputDirectory);
+        jsonFeedFileGenerator.saveJsonFeed(guides, outputDirectory);
 
         File imagesFolder = new File(inputDirectory, asciidocConfiguration.getImagesdir());
         if (imagesFolder.exists()) {

@@ -17,6 +17,7 @@ package io.micronaut.guides.core;
 
 import io.micronaut.core.annotation.NonNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -24,13 +25,13 @@ import java.util.List;
  * JsonFeedGenerator is an interface that defines a method for generating a JSON feed string
  * from a list of Guide metadata objects.
  */
-public interface JsonFeedGenerator {
+public interface JsonFeedFileGenerator extends FileGenerator {
     /**
      * Generates a JSON feed string from the provided list of Guide metadata objects.
      *
      * @param metadatas       the list of Guide metadata objects
+     * @param outputDirectory the directory to which the JSON feed should be written
      * @throws IOException if an I/O error occurs during the generation of the JSON feed
-     * @return JSON Feed
      */
-    String jsonFeedString(@NonNull List<? extends Guide> metadatas) throws IOException;
+    void saveJsonFeed(@NonNull List<? extends Guide> metadatas, File outputDirectory) throws IOException;
 }
