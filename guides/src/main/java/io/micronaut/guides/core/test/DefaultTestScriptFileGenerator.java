@@ -18,11 +18,13 @@ package io.micronaut.guides.core.test;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.guides.core.Guide;
 import io.micronaut.guides.core.GuidesConfiguration;
+import jakarta.inject.Singleton;
 
 import java.io.File;
 import java.io.IOException;
 
 @Internal
+@Singleton
 class DefaultTestScriptFileGenerator implements TestScriptFileGenerator {
     private final TestScriptGenerator testScriptGenerator;
     private final GuidesConfiguration guidesConfiguration;

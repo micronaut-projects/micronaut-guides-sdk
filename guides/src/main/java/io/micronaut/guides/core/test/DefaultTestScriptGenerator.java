@@ -210,7 +210,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
      */
     @Override
     public String generateNativeTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide) {
-        return generateScript(outputDirectory, List.of(guide), false, true);
+        return generateScript(outputDirectory, new ArrayList<>(List.of(guide)), false, true);
     }
 
     /**
@@ -221,7 +221,7 @@ class DefaultTestScriptGenerator implements TestScriptGenerator {
      */
     @Override
     public String generateTestScript(@NotNull @NonNull File outputDirectory, @NonNull @NotNull Guide guide) {
-        return generateScript(outputDirectory, List.of(guide), false, false);
+        return generateScript(outputDirectory, new ArrayList<>(List.of(guide)), false, false);
     }
 
     /**
