@@ -37,7 +37,7 @@ class DefaultTestScriptFileGenerator implements TestScriptFileGenerator {
     public void saveNativeTestScript(File outputDirectory, Guide guide) {
         String script = testScriptGenerator.generateNativeTestScript(outputDirectory, guide);
         try {
-            saveFile(script, new File(outputDirectory, guide.getSlug()), guidesConfiguration.getNativeTestFileName());
+            saveFile(script, guide.getOutputDirectory(outputDirectory), guidesConfiguration.getNativeTestFileName());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -47,7 +47,7 @@ class DefaultTestScriptFileGenerator implements TestScriptFileGenerator {
     public void saveTestScript(File outputDirectory, Guide guide) {
         String script = testScriptGenerator.generateTestScript(outputDirectory, guide);
         try {
-            saveFile(script, new File(outputDirectory, guide.getSlug()), guidesConfiguration.getTestFileName());
+            saveFile(script, guide.getOutputDirectory(outputDirectory), guidesConfiguration.getTestFileName());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
