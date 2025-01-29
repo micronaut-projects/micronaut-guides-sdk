@@ -298,7 +298,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Default implementation of the <a href="io/micronaut/guides/core/html/GuidePageGenerator.html" title="interface in io.micronaut.guides.core.html"><code>GuidePageGenerator</code></a> interface.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.MacroSubstitution,io.micronaut.guides.core.asciidoc.AsciidocConverter,io.micronaut.guides.core.asciidoc.AsciidocConfiguration,io.micronaut.guides.core.asciidoc.GuideRenderAttributesProvider)" class="member-name-link">DefaultGuidePageGenerator(GuidesConfiguration, MacroSubstitution, AsciidocConverter, AsciidocConfiguration, GuideRenderAttributesProvider)</a> - Constructor for class io.micronaut.guides.core.html.<a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html" title="class in io.micronaut.guides.core.html">DefaultGuidePageGenerator</a></dt>
+<dt><a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.MacroSubstitution,io.micronaut.guides.core.asciidoc.AsciidocConverter,io.micronaut.guides.core.asciidoc.AsciidocConfiguration,io.micronaut.guides.core.asciidoc.GuideRenderAttributesProvider,io.micronaut.guides.core.GuideSourceService)" class="member-name-link">DefaultGuidePageGenerator(GuidesConfiguration, MacroSubstitution, AsciidocConverter, AsciidocConfiguration, GuideRenderAttributesProvider, GuideSourceService)</a> - Constructor for class io.micronaut.guides.core.html.<a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html" title="class in io.micronaut.guides.core.html">DefaultGuidePageGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/guides/core/DefaultGuideParser.html" class="type-name-link" title="class in io.micronaut.guides.core">DefaultGuideParser</a> - Class in <a href="io/micronaut/guides/core/package-summary.html">io.micronaut.guides.core</a></dt>
 <dd>
@@ -316,7 +316,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Default implementation of the <a href="io/micronaut/guides/core/zip/GuideProjectZipper.html" title="interface in io.micronaut.guides.core.zip"><code>GuideProjectZipper</code></a> interface.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/zip/DefaultGuideProjectZipper.html#%3Cinit%3E()" class="member-name-link">DefaultGuideProjectZipper()</a> - Constructor for class io.micronaut.guides.core.zip.<a href="io/micronaut/guides/core/zip/DefaultGuideProjectZipper.html" title="class in io.micronaut.guides.core.zip">DefaultGuideProjectZipper</a></dt>
+<dt><a href="io/micronaut/guides/core/zip/DefaultGuideProjectZipper.html#%3Cinit%3E(io.micronaut.guides.core.GuideSourceService)" class="member-name-link">DefaultGuideProjectZipper(GuideSourceService)</a> - Constructor for class io.micronaut.guides.core.zip.<a href="io/micronaut/guides/core/zip/DefaultGuideProjectZipper.html" title="class in io.micronaut.guides.core.zip">DefaultGuideProjectZipper</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/guides/core/html/index/DefaultIndexGenerator.html" class="type-name-link" title="class in io.micronaut.guides.core.html.index">DefaultIndexGenerator</a> - Class in <a href="io/micronaut/guides/core/html/index/package-summary.html">io.micronaut.guides.core.html.index</a></dt>
 <dd>
@@ -353,6 +353,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Class that provides macro substitution functionality for dependency placeholders in guide templates.</div>
 </dd>
 <dt><a href="io/micronaut/guides/core/DependencyMacroSubstitution.html#%3Cinit%3E()" class="member-name-link">DependencyMacroSubstitution()</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/DependencyMacroSubstitution.html" title="class in io.micronaut.guides.core">DependencyMacroSubstitution</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/guides/core/DefaultGuideProjectGenerator.html#destination(java.io.File,io.micronaut.guides.core.Guide,io.micronaut.guides.core.GuidesOption,io.micronaut.guides.core.App)" class="member-name-link">destination(File, Guide, GuidesOption, App)</a> - Method in class io.micronaut.guides.core.<a href="io/micronaut/guides/core/DefaultGuideProjectGenerator.html" title="class in io.micronaut.guides.core">DefaultGuideProjectGenerator</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:E">E</h2>
@@ -1099,10 +1101,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Gets the slug for the guide.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/MacroUtils.html#getSourceDir(java.lang.String,io.micronaut.guides.core.GuidesOption)" class="member-name-link">getSourceDir(String, GuidesOption)</a> - Static method in class io.micronaut.guides.core.<a href="io/micronaut/guides/core/MacroUtils.html" title="class in io.micronaut.guides.core">MacroUtils</a></dt>
-<dd>
-<div class="block">Returns the source directory name based on the provided slug and GuidesOption.</div>
-</dd>
 <dt><a href="io/micronaut/guides/core/asciidoc/AsciidocConfiguration.html#getSourceHighlighter()" class="member-name-link">getSourceHighlighter()</a> - Method in interface io.micronaut.guides.core.asciidoc.<a href="io/micronaut/guides/core/asciidoc/AsciidocConfiguration.html" title="interface in io.micronaut.guides.core.asciidoc">AsciidocConfiguration</a></dt>
 <dd>
 <div class="block">Returns the source highlighter.</div>
@@ -1209,12 +1207,6 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Gets the version path.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/zip/GuideProjectZipper.html#getZipFileName(io.micronaut.guides.core.Guide,io.micronaut.guides.core.GuidesOption)" class="member-name-link">getZipFileName(Guide, GuidesOption)</a> - Method in interface io.micronaut.guides.core.zip.<a href="io/micronaut/guides/core/zip/GuideProjectZipper.html" title="interface in io.micronaut.guides.core.zip">GuideProjectZipper</a></dt>
-<dd>
-<div class="block">Returns the name of the zip file for the given guide.</div>
-</dd>
-<dt><a href="io/micronaut/guides/core/zip/DefaultGuideProjectZipper.html#getZipFileName(io.micronaut.guides.core.Guide,io.micronaut.guides.core.GuidesOption)" class="member-name-link">getZipFileName(Guide, GuidesOption)</a> - Method in class io.micronaut.guides.core.zip.<a href="io/micronaut/guides/core/zip/DefaultGuideProjectZipper.html" title="class in io.micronaut.guides.core.zip">DefaultGuideProjectZipper</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/guides/core/Guide.html#getZipIncludes()" class="member-name-link">getZipIncludes()</a> - Method in class io.micronaut.guides.core.<a href="io/micronaut/guides/core/Guide.html" title="class in io.micronaut.guides.core">Guide</a></dt>
 <dd>
 <div class="block">Gets the additional files to include in the generated zip file for the guide.</div>
@@ -1262,7 +1254,9 @@ loadScripts(document, 'script');</script>
 <dt><a href="io/micronaut/guides/core/DefaultWebsiteGenerator.html#guideOutput(java.io.File,io.micronaut.guides.core.Guide)" class="member-name-link">guideOutput(File, Guide)</a> - Method in class io.micronaut.guides.core.<a href="io/micronaut/guides/core/DefaultWebsiteGenerator.html" title="class in io.micronaut.guides.core">DefaultWebsiteGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/guides/core/html/GuidePageGenerator.html" class="type-name-link" title="interface in io.micronaut.guides.core.html">GuidePageGenerator</a> - Interface in <a href="io/micronaut/guides/core/html/package-summary.html">io.micronaut.guides.core.html</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Guide Page generator.</div>
+</dd>
 <dt><a href="io/micronaut/guides/core/GuideParser.html" class="type-name-link" title="interface in io.micronaut.guides.core">GuideParser</a> - Interface in <a href="io/micronaut/guides/core/package-summary.html">io.micronaut.guides.core</a></dt>
 <dd>
 <div class="block">GuideParser is an interface that defines methods for parsing metadata of guides.</div>
@@ -1315,6 +1309,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="io/micronaut/guides/core/GuideGenerationUtils.html#guidesOptions(io.micronaut.guides.core.Guide,org.slf4j.Logger)" class="member-name-link">guidesOptions(Guide, Logger)</a> - Static method in class io.micronaut.guides.core.<a href="io/micronaut/guides/core/GuideGenerationUtils.html" title="class in io.micronaut.guides.core">GuideGenerationUtils</a></dt>
 <dd>
 <div class="block">Generates a list of GuidesOption based on the given guide metadata and logger.</div>
+</dd>
+<dt><a href="io/micronaut/guides/core/GuideSourceService.html#guideSource(java.io.File,io.micronaut.guides.core.Guide,io.micronaut.guides.core.GuidesOption)" class="member-name-link">guideSource(File, Guide, GuidesOption)</a> - Method in interface io.micronaut.guides.core.<a href="io/micronaut/guides/core/GuideSourceService.html" title="interface in io.micronaut.guides.core">GuideSourceService</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/guides/core/GuideSourceService.html#guideSourceFolder(io.micronaut.guides.core.Guide,io.micronaut.guides.core.GuidesOption)" class="member-name-link">guideSourceFolder(Guide, GuidesOption)</a> - Method in interface io.micronaut.guides.core.<a href="io/micronaut/guides/core/GuideSourceService.html" title="interface in io.micronaut.guides.core">GuideSourceService</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/guides/core/GuideSourceService.html" class="type-name-link" title="interface in io.micronaut.guides.core">GuideSourceService</a> - Interface in <a href="io/micronaut/guides/core/package-summary.html">io.micronaut.guides.core</a></dt>
+<dd>
+<div class="block">Guide Source API.</div>
 </dd>
 <dt><a href="io/micronaut/guides/core/GuidesTemplatesConfiguration.html" class="type-name-link" title="interface in io.micronaut.guides.core">GuidesTemplatesConfiguration</a> - Interface in <a href="io/micronaut/guides/core/package-summary.html">io.micronaut.guides.core</a></dt>
 <dd>
@@ -1646,7 +1648,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Class that provides macro substitution functionality for placeholders in guide templates.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/PlaceholderMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.CoordinatesProvider)" class="member-name-link">PlaceholderMacroSubstitution(GuidesConfiguration, CoordinatesProvider)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/PlaceholderMacroSubstitution.html" title="class in io.micronaut.guides.core">PlaceholderMacroSubstitution</a></dt>
+<dt><a href="io/micronaut/guides/core/PlaceholderMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.CoordinatesProvider,io.micronaut.guides.core.GuideSourceService)" class="member-name-link">PlaceholderMacroSubstitution(GuidesConfiguration, CoordinatesProvider, GuideSourceService)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/PlaceholderMacroSubstitution.html" title="class in io.micronaut.guides.core">PlaceholderMacroSubstitution</a></dt>
 <dd>
 <div class="block">Constructs a new PlaceholderMacroSubstitution.</div>
 </dd>
@@ -1691,7 +1693,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">RawTestMacroSubstitution is a singleton class that extends TestMacroSubstitution.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/RawTestMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.LicenseLoader)" class="member-name-link">RawTestMacroSubstitution(GuidesConfiguration, LicenseLoader)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/RawTestMacroSubstitution.html" title="class in io.micronaut.guides.core">RawTestMacroSubstitution</a></dt>
+<dt><a href="io/micronaut/guides/core/RawTestMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.LicenseLoader,io.micronaut.guides.core.GuideSourceService)" class="member-name-link">RawTestMacroSubstitution(GuidesConfiguration, LicenseLoader, GuideSourceService)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/RawTestMacroSubstitution.html" title="class in io.micronaut.guides.core">RawTestMacroSubstitution</a></dt>
 <dd>
 <div class="block">Constructs a new RawTestMacroSubstitution with the specified GuidesConfiguration and LicenseLoader.</div>
 </dd>
@@ -1733,7 +1735,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Class that provides macro substitution functionality for resource placeholders in guide templates.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/ResourceMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.LicenseLoader)" class="member-name-link">ResourceMacroSubstitution(GuidesConfiguration, LicenseLoader)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/ResourceMacroSubstitution.html" title="class in io.micronaut.guides.core">ResourceMacroSubstitution</a></dt>
+<dt><a href="io/micronaut/guides/core/ResourceMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.LicenseLoader,io.micronaut.guides.core.GuideSourceService)" class="member-name-link">ResourceMacroSubstitution(GuidesConfiguration, LicenseLoader, GuideSourceService)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/ResourceMacroSubstitution.html" title="class in io.micronaut.guides.core">ResourceMacroSubstitution</a></dt>
 <dd>
 <div class="block">Constructs a new ResourceMacroSubstitution.</div>
 </dd>
@@ -2132,7 +2134,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Builder class for constructing SourceBlock instances.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/TestResourceMacroSubstitution.html#sourceInclude(java.lang.String,java.lang.String,java.lang.String,io.micronaut.guides.core.asciidoc.Classpath,io.micronaut.guides.core.GuidesOption,java.lang.String,java.lang.String)" class="member-name-link">sourceInclude(String, String, String, Classpath, GuidesOption, String, String)</a> - Method in class io.micronaut.guides.core.<a href="io/micronaut/guides/core/TestResourceMacroSubstitution.html" title="class in io.micronaut.guides.core">TestResourceMacroSubstitution</a></dt>
+<dt><a href="io/micronaut/guides/core/TestResourceMacroSubstitution.html#sourceInclude(io.micronaut.guides.core.Guide,java.lang.String,java.lang.String,io.micronaut.guides.core.asciidoc.Classpath,io.micronaut.guides.core.GuidesOption,java.lang.String,java.lang.String)" class="member-name-link">sourceInclude(Guide, String, String, Classpath, GuidesOption, String, String)</a> - Method in class io.micronaut.guides.core.<a href="io/micronaut/guides/core/TestResourceMacroSubstitution.html" title="class in io.micronaut.guides.core">TestResourceMacroSubstitution</a></dt>
 <dd>
 <div class="block">Constructs the source include path based on the provided parameters.</div>
 </dd>
@@ -2140,7 +2142,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">SourceMacroSubstitution is a singleton class that extends SourceBlockMacroSubstitution.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/SourceMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.LicenseLoader)" class="member-name-link">SourceMacroSubstitution(GuidesConfiguration, LicenseLoader)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/SourceMacroSubstitution.html" title="class in io.micronaut.guides.core">SourceMacroSubstitution</a></dt>
+<dt><a href="io/micronaut/guides/core/SourceMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.LicenseLoader,io.micronaut.guides.core.GuideSourceService)" class="member-name-link">SourceMacroSubstitution(GuidesConfiguration, LicenseLoader, GuideSourceService)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/SourceMacroSubstitution.html" title="class in io.micronaut.guides.core">SourceMacroSubstitution</a></dt>
 <dd>
 <div class="block">Constructs a new SourceMacroSubstitution with the specified GuidesConfiguration and LicenseLoader.</div>
 </dd>
@@ -2229,7 +2231,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">TestMacroSubstitution is a singleton class that extends SourceBlockMacroSubstitution.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/TestMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.LicenseLoader)" class="member-name-link">TestMacroSubstitution(GuidesConfiguration, LicenseLoader)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/TestMacroSubstitution.html" title="class in io.micronaut.guides.core">TestMacroSubstitution</a></dt>
+<dt><a href="io/micronaut/guides/core/TestMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.LicenseLoader,io.micronaut.guides.core.GuideSourceService)" class="member-name-link">TestMacroSubstitution(GuidesConfiguration, LicenseLoader, GuideSourceService)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/TestMacroSubstitution.html" title="class in io.micronaut.guides.core">TestMacroSubstitution</a></dt>
 <dd>
 <div class="block">Constructs a new TestMacroSubstitution with the specified guides configuration and license loader.</div>
 </dd>
@@ -2237,7 +2239,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Class that provides macro substitution functionality for test resource placeholders in guide templates.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/TestResourceMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.LicenseLoader)" class="member-name-link">TestResourceMacroSubstitution(GuidesConfiguration, LicenseLoader)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/TestResourceMacroSubstitution.html" title="class in io.micronaut.guides.core">TestResourceMacroSubstitution</a></dt>
+<dt><a href="io/micronaut/guides/core/TestResourceMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.LicenseLoader,io.micronaut.guides.core.GuideSourceService)" class="member-name-link">TestResourceMacroSubstitution(GuidesConfiguration, LicenseLoader, GuideSourceService)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/TestResourceMacroSubstitution.html" title="class in io.micronaut.guides.core">TestResourceMacroSubstitution</a></dt>
 <dd>
 <div class="block">Constructs a new TestResourceMacroSubstitution.</div>
 </dd>
@@ -2369,7 +2371,7 @@ the order they are declared.</div>
 <dd>
 <div class="block">ZipIncludeMacroSubstitution is a singleton class that extends SourceBlockMacroSubstitution.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/ZipIncludeMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.LicenseLoader)" class="member-name-link">ZipIncludeMacroSubstitution(GuidesConfiguration, LicenseLoader)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/ZipIncludeMacroSubstitution.html" title="class in io.micronaut.guides.core">ZipIncludeMacroSubstitution</a></dt>
+<dt><a href="io/micronaut/guides/core/ZipIncludeMacroSubstitution.html#%3Cinit%3E(io.micronaut.guides.core.GuidesConfiguration,io.micronaut.guides.core.LicenseLoader,io.micronaut.guides.core.GuideSourceService)" class="member-name-link">ZipIncludeMacroSubstitution(GuidesConfiguration, LicenseLoader, GuideSourceService)</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/ZipIncludeMacroSubstitution.html" title="class in io.micronaut.guides.core">ZipIncludeMacroSubstitution</a></dt>
 <dd>
 <div class="block">Constructs a new ZipIncludeMacroSubstitution with the specified guides configuration and license loader.</div>
 </dd>
