@@ -126,11 +126,10 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
             guideProjectGenerator.generate(guideOutput, guide);
             filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
 
-            // Test script generation
-            testScriptGenerator.generateTestScript(outputDirectory, guide);
-
-            // Native Test script generation
-            testScriptGenerator.generateNativeTestScript(outputDirectory, guide);
+            if (CollectionUtils.isNotEmpty(guide.getApps())) {
+                testScriptGenerator.generateTestScript(outputDirectory, guide);
+                testScriptGenerator.generateNativeTestScript(outputDirectory, guide);
+            }
 
             guideProjectZipper.zipGuide(guide, guideOutput, outputDirectory);
 
