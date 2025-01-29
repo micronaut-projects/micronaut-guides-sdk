@@ -126,9 +126,9 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
             guideOutput.mkdir();
             guideProjectGenerator.generate(guideOutput, guide);
-            filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
 
             if (CollectionUtils.isNotEmpty(guide.getApps())) {
+                filesTransferUtility.transferFiles(guideInputDirectory, guideOutput, guide, guides);
                 testScriptFileGenerator.saveTestScript(outputDirectory, guide);
                 testScriptFileGenerator.saveNativeTestScript(outputDirectory, guide);
                 if (publish) {
