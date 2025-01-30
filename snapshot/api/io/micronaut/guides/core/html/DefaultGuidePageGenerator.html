@@ -126,12 +126,15 @@ implements <a href="GuidePageGenerator.html" title="interface in io.micronaut.gu
 <div class="block">Applies the HTML template to the given table of contents (TOC) and HTML content.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#extractToc(java.lang.String)" class="member-name-link">extractToc</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;html)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#extractToc(io.micronaut.guides.core.Guide,java.util.List,java.lang.String)" class="member-name-link">extractToc</a><wbr>(<a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&nbsp;guide,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;guides,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;html)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Extracts the table of contents (TOC) from the given HTML content.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#generatePage(io.micronaut.guides.core.Guide,java.io.File,java.io.File,java.io.File)" class="member-name-link">generatePage</a><wbr>(<a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&nbsp;guide,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#generatePage(io.micronaut.guides.core.Guide,java.util.List,java.io.File,java.io.File,java.io.File)" class="member-name-link">generatePage</a><wbr>(<a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&nbsp;guide,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;guides,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;inputDirectory,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputDirectory,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;guideOutput)</code></div>
@@ -142,7 +145,8 @@ implements <a href="GuidePageGenerator.html" title="interface in io.micronaut.gu
 <div class="block">Reads the content of a file and returns it as a string.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#renderHtml(io.micronaut.guides.core.Guide,io.micronaut.guides.core.GuidesOption,java.io.File,java.io.File,java.lang.String,java.io.File)" class="member-name-link">renderHtml</a><wbr>(<a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&nbsp;guide,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#renderHtml(io.micronaut.guides.core.Guide,java.util.List,io.micronaut.guides.core.GuidesOption,java.io.File,java.io.File,java.lang.String,java.io.File)" class="member-name-link">renderHtml</a><wbr>(<a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&nbsp;guide,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;guides,
  <a href="../GuidesOption.html" title="class in io.micronaut.guides.core">GuidesOption</a>&nbsp;option,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;inputDirectory,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputDirectory,
@@ -191,18 +195,20 @@ implements <a href="GuidePageGenerator.html" title="interface in io.micronaut.gu
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="generatePage(io.micronaut.guides.core.Guide,java.io.File,java.io.File,java.io.File)">
+<section class="detail" id="generatePage(io.micronaut.guides.core.Guide,java.util.List,java.io.File,java.io.File,java.io.File)">
 <h3>generatePage</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">generatePage</span><wbr><span class="parameters">(<a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&nbsp;guide,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;guides,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;inputDirectory,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputDirectory,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;guideOutput)</span>
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="GuidePageGenerator.html#generatePage(io.micronaut.guides.core.Guide,java.io.File,java.io.File,java.io.File)">generatePage</a></code>&nbsp;in interface&nbsp;<code><a href="GuidePageGenerator.html" title="interface in io.micronaut.guides.core.html">GuidePageGenerator</a></code></dd>
+<dd><code><a href="GuidePageGenerator.html#generatePage(io.micronaut.guides.core.Guide,java.util.List,java.io.File,java.io.File,java.io.File)">generatePage</a></code>&nbsp;in interface&nbsp;<code><a href="GuidePageGenerator.html" title="interface in io.micronaut.guides.core.html">GuidePageGenerator</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>guide</code> - Guide</dd>
+<dd><code>guides</code> - The list of guides</dd>
 <dd><code>inputDirectory</code> - Input Directory</dd>
 <dd><code>outputDirectory</code> - Output Directory</dd>
 <dd><code>guideOutput</code> - Guide output</dd>
@@ -212,9 +218,10 @@ implements <a href="GuidePageGenerator.html" title="interface in io.micronaut.gu
 </section>
 </li>
 <li>
-<section class="detail" id="renderHtml(io.micronaut.guides.core.Guide,io.micronaut.guides.core.GuidesOption,java.io.File,java.io.File,java.lang.String,java.io.File)">
+<section class="detail" id="renderHtml(io.micronaut.guides.core.Guide,java.util.List,io.micronaut.guides.core.GuidesOption,java.io.File,java.io.File,java.lang.String,java.io.File)">
 <h3>renderHtml</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">renderHtml</span><wbr><span class="parameters">(<a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&nbsp;guide,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;guides,
  <a href="../GuidesOption.html" title="class in io.micronaut.guides.core">GuidesOption</a>&nbsp;option,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;inputDirectory,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;outputDirectory,
@@ -225,6 +232,7 @@ implements <a href="GuidePageGenerator.html" title="interface in io.micronaut.gu
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>guide</code> - The guide</dd>
+<dd><code>guides</code> - The list of guides</dd>
 <dd><code>option</code> - The option</dd>
 <dd><code>inputDirectory</code> - The input directory</dd>
 <dd><code>outputDirectory</code> - The output directory</dd>
@@ -251,12 +259,16 @@ implements <a href="GuidePageGenerator.html" title="interface in io.micronaut.gu
 </section>
 </li>
 <li>
-<section class="detail" id="extractToc(java.lang.String)">
+<section class="detail" id="extractToc(io.micronaut.guides.core.Guide,java.util.List,java.lang.String)">
 <h3>extractToc</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">extractToc</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;html)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">extractToc</span><wbr><span class="parameters">(<a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&nbsp;guide,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="../Guide.html" title="class in io.micronaut.guides.core">Guide</a>&gt;&nbsp;guides,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;html)</span></div>
 <div class="block">Extracts the table of contents (TOC) from the given HTML content.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
+<dd><code>guide</code> - The guide</dd>
+<dd><code>guides</code> - The list of guides</dd>
 <dd><code>html</code> - The HTML content as a string.</dd>
 <dt>Returns:</dt>
 <dd>A list of strings representing the TOC div elements found in the HTML.</dd>

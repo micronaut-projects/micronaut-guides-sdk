@@ -399,7 +399,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="io/micronaut/guides/core/ExternalTemplateMacroSubstitution.html#%3Cinit%3E()" class="member-name-link">ExternalTemplateMacroSubstitution()</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/ExternalTemplateMacroSubstitution.html" title="class in io.micronaut.guides.core">ExternalTemplateMacroSubstitution</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html#extractToc(java.lang.String)" class="member-name-link">extractToc(String)</a> - Method in class io.micronaut.guides.core.html.<a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html" title="class in io.micronaut.guides.core.html">DefaultGuidePageGenerator</a></dt>
+<dt><a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html#extractToc(io.micronaut.guides.core.Guide,java.util.List,java.lang.String)" class="member-name-link">extractToc(Guide, List&lt;? extends Guide&gt;, String)</a> - Method in class io.micronaut.guides.core.html.<a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html" title="class in io.micronaut.guides.core.html">DefaultGuidePageGenerator</a></dt>
 <dd>
 <div class="block">Extracts the table of contents (TOC) from the given HTML content.</div>
 </dd>
@@ -425,7 +425,9 @@ loadScripts(document, 'script');</script>
 <dt><a href="io/micronaut/guides/core/FeaturesWordsMacroSubstitution.html#%3Cinit%3E()" class="member-name-link">FeaturesWordsMacroSubstitution()</a> - Constructor for class io.micronaut.guides.core.<a href="io/micronaut/guides/core/FeaturesWordsMacroSubstitution.html" title="class in io.micronaut.guides.core">FeaturesWordsMacroSubstitution</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/guides/core/FileGenerator.html" class="type-name-link" title="interface in io.micronaut.guides.core">FileGenerator</a> - Interface in <a href="io/micronaut/guides/core/package-summary.html">io.micronaut.guides.core</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Interface for generating files.</div>
+</dd>
 <dt><a href="io/micronaut/guides/core/FilesTransferUtility.html" class="type-name-link" title="interface in io.micronaut.guides.core">FilesTransferUtility</a> - Interface in <a href="io/micronaut/guides/core/package-summary.html">io.micronaut.guides.core</a></dt>
 <dd>
 <div class="block">FilesTransferUtility is an interface that defines a method to transfer files from an input directory to an output directory.</div>
@@ -489,9 +491,9 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Generates a script for running native tests for the given guide.</div>
 </dd>
-<dt><a href="io/micronaut/guides/core/html/GuidePageGenerator.html#generatePage(io.micronaut.guides.core.Guide,java.io.File,java.io.File,java.io.File)" class="member-name-link">generatePage(Guide, File, File, File)</a> - Method in interface io.micronaut.guides.core.html.<a href="io/micronaut/guides/core/html/GuidePageGenerator.html" title="interface in io.micronaut.guides.core.html">GuidePageGenerator</a></dt>
+<dt><a href="io/micronaut/guides/core/html/GuidePageGenerator.html#generatePage(io.micronaut.guides.core.Guide,java.util.List,java.io.File,java.io.File,java.io.File)" class="member-name-link">generatePage(Guide, List&lt;? extends Guide&gt;, File, File, File)</a> - Method in interface io.micronaut.guides.core.html.<a href="io/micronaut/guides/core/html/GuidePageGenerator.html" title="interface in io.micronaut.guides.core.html">GuidePageGenerator</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html#generatePage(io.micronaut.guides.core.Guide,java.io.File,java.io.File,java.io.File)" class="member-name-link">generatePage(Guide, File, File, File)</a> - Method in class io.micronaut.guides.core.html.<a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html" title="class in io.micronaut.guides.core.html">DefaultGuidePageGenerator</a></dt>
+<dt><a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html#generatePage(io.micronaut.guides.core.Guide,java.util.List,java.io.File,java.io.File,java.io.File)" class="member-name-link">generatePage(Guide, List&lt;? extends Guide&gt;, File, File, File)</a> - Method in class io.micronaut.guides.core.html.<a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html" title="class in io.micronaut.guides.core.html">DefaultGuidePageGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/guides/core/test/TestScriptGenerator.html#generateTestScript(java.io.File,io.micronaut.guides.core.Guide)" class="member-name-link">generateTestScript(File, Guide)</a> - Method in interface io.micronaut.guides.core.test.<a href="io/micronaut/guides/core/test/TestScriptGenerator.html" title="interface in io.micronaut.guides.core.test">TestScriptGenerator</a></dt>
 <dd>
@@ -1703,7 +1705,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="io/micronaut/guides/core/DefaultGuideParser.html#readGuide(java.io.File,java.lang.String,java.io.File)" class="member-name-link">readGuide(File, String, File)</a> - Method in class io.micronaut.guides.core.<a href="io/micronaut/guides/core/DefaultGuideParser.html" title="class in io.micronaut.guides.core">DefaultGuideParser</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html#renderHtml(io.micronaut.guides.core.Guide,io.micronaut.guides.core.GuidesOption,java.io.File,java.io.File,java.lang.String,java.io.File)" class="member-name-link">renderHtml(Guide, GuidesOption, File, File, String, File)</a> - Method in class io.micronaut.guides.core.html.<a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html" title="class in io.micronaut.guides.core.html">DefaultGuidePageGenerator</a></dt>
+<dt><a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html#renderHtml(io.micronaut.guides.core.Guide,java.util.List,io.micronaut.guides.core.GuidesOption,java.io.File,java.io.File,java.lang.String,java.io.File)" class="member-name-link">renderHtml(Guide, List&lt;? extends Guide&gt;, GuidesOption, File, File, String, File)</a> - Method in class io.micronaut.guides.core.html.<a href="io/micronaut/guides/core/html/DefaultGuidePageGenerator.html" title="class in io.micronaut.guides.core.html">DefaultGuidePageGenerator</a></dt>
 <dd>
 <div class="block">Renders the HTML for the given guide.</div>
 </dd>
