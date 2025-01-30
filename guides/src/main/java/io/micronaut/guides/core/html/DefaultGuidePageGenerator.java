@@ -63,14 +63,14 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
     }
 
     @Override
-    public void generatePage(Guide guide, File inputDirectory, File outputDirectory, File guideOutput) throws IOException {
+    public void generatePage(Guide guide, List<? extends Guide> guides, File inputDirectory, File outputDirectory, File guideOutput) throws IOException {
         if (guide.getApps().isEmpty()) {
-            renderHtml(guide, null, inputDirectory, outputDirectory, guide.getSlug(), guideOutput);
+            renderHtml(guide, guides, null, inputDirectory, outputDirectory, guide.getSlug(), guideOutput);
         } else {
             List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
             for (GuidesOption guidesOption : guideOptions) {
                 String name = guideService.guideSourceFolder(guide, guidesOption);
-                renderHtml(guide, guidesOption, inputDirectory, outputDirectory, name, guideOutput);
+                renderHtml(guide, guides, guidesOption, inputDirectory, outputDirectory, name, guideOutput);
             }
         }
     }
@@ -86,7 +86,7 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
      * @param guideOutput     The guide output
      * @throws IOException If an error occurs
      */
-    protected void renderHtml(Guide guide, GuidesOption option, File inputDirectory, File outputDirectory, String fileName, File guideOutput) throws IOException {
+    protected void renderHtml(Guide guide, List<? extends Guide> guides, GuidesOption option, File inputDirectory, File outputDirectory, String fileName, File guideOutput) throws IOException {
         GuideRender guideRender = new GuideRender(guide, option);
 
         File guideInputDirectory = guide.getFolder();
@@ -111,7 +111,7 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
         attributes.putAll(guideRenderAttributesProvider.attributes(guideRender));
         String optionHtml = asciidocConverter.convert(optionAsciidoc, inputDirectory, () -> attributes);
         if (!asciidocConfiguration.isHeaderFooter()) {
-            List<String> extractedToc = extractToc(optionHtml);
+            List<String> extractedToc = extractToc(guide, guides, optionHtml);
             String tocHtml;
 
             if (extractedToc.isEmpty()) {
@@ -125,18 +125,9 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
 
             optionHtml = applyTemplate(tocHtml, optionHtml);
             optionHtml = optionHtml.replace("{title}", guide.getTitle());
-            if (guide.getCategories().isEmpty()) {
-                optionHtml = optionHtml.replace("{section}", "");
-                optionHtml = optionHtml.replace("{section-link}", "");
-
-            } else {
-                optionHtml = optionHtml.replace("{section}", guide.getCategories().get(0));
-                optionHtml = optionHtml.replace("{section-link}", "https://graal.cloud/gdk/docs/gdk-modules/" + guide.getCategories().get(0).toLowerCase() + "/");
-            }
         }
 
         saveFile(optionHtml, outputDirectory, fileName + ".html");
-
     }
 
     /**
@@ -156,7 +147,7 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
      * @param html The HTML content as a string.
      * @return A list of strings representing the TOC div elements found in the HTML.
      */
-    protected List<String> extractToc(String html) {
+    protected List<String> extractToc(Guide guide, List<? extends Guide> guides, String html) {
         List<String> tocDivs = new ArrayList<>();
         String openDivPattern = "<div";
         String closeDivPattern = "</div>";

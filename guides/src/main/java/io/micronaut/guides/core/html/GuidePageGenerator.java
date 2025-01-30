@@ -21,6 +21,7 @@ import io.micronaut.guides.core.Guide;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Guide Page generator.
@@ -28,14 +29,14 @@ import java.io.IOException;
 @FunctionalInterface
 public interface GuidePageGenerator extends FileGenerator {
     /**
-     *
-     * @param guide Guide
-     * @param inputDirectory Input Directory
+     * @param guide           Guide
+     * @param inputDirectory  Input Directory
      * @param outputDirectory Output Directory
-     * @param guideOutput Guide output
+     * @param guideOutput     Guide output
      * @throws IOException If an I/O error occurs reading from the file.
      */
     void generatePage(@NonNull Guide guide,
+                      @NonNull List<? extends Guide> guides,
                       @NonNull File inputDirectory,
                       @NonNull File outputDirectory,
                       @NonNull File guideOutput) throws IOException;

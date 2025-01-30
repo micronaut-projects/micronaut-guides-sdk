@@ -21,7 +21,7 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.guides.core.asciidoc.AsciidocConfiguration;
-import io.micronaut.guides.core.html.*;
+import io.micronaut.guides.core.html.GuidePageGenerator;
 import io.micronaut.guides.core.html.categories.CategoriesIndexFileGenerator;
 import io.micronaut.guides.core.html.index.IndexFileGenerator;
 import io.micronaut.guides.core.html.matrix.GuideMatrixFileGenerator;
@@ -31,8 +31,6 @@ import io.micronaut.guides.core.test.TestScriptFileGenerator;
 import io.micronaut.guides.core.zip.GuideProjectZipper;
 import jakarta.inject.Singleton;
 import jakarta.validation.constraints.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,8 +46,6 @@ import java.util.function.Predicate;
 @Internal
 @Singleton
 public class DefaultWebsiteGenerator implements WebsiteGenerator {
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultWebsiteGenerator.class);
-
     private final GuideParser guideParser;
     private final GuideProjectGenerator guideProjectGenerator;
     private final JsonFeedFileGenerator jsonFeedFileGenerator;
@@ -117,8 +113,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     }
 
     /**
-     *
-     * @param guides Guides
+     * @param guides    Guides
      * @param condition Condition to filter the guides against
      * @return List of filtered guides
      */
@@ -131,9 +126,8 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     }
 
     /**
-     *
      * @param outputDirectory Output directory
-     * @param guide Guide
+     * @param guide           Guide
      * @return The folder where the guides projects will be generated into.
      */
     protected File guideOutput(File outputDirectory, Guide guide) {
@@ -141,16 +135,15 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     }
 
     /**
-     *
-     * @param inputDirectory Input directory
-     * @param guides Guides
+     * @param inputDirectory  Input directory
+     * @param guides          Guides
      * @param outputDirectory Output directory
      * @throws IOException If an I/O error occurs reading from the file.
      */
     protected void generate(
-        @NonNull File inputDirectory,
-        @NonNull List<? extends Guide> guides,
-        @NonNull File outputDirectory) throws IOException {
+            @NonNull File inputDirectory,
+            @NonNull List<? extends Guide> guides,
+            @NonNull File outputDirectory) throws IOException {
         for (Guide guide : guides) {
             generate(inputDirectory, guides, outputDirectory, guide);
         }
@@ -159,8 +152,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     }
 
     /**
-     *
-     * @param allGuides All Guides
+     * @param allGuides       All Guides
      * @param outputDirectory Output Directory
      * @throws IOException If an I/O error occurs while generating the indexes and feeds
      */
@@ -175,8 +167,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
     }
 
     /**
-     *
-     * @param inputDirectory Input directory
+     * @param inputDirectory  Input directory
      * @param outputDirectory Output directory
      * @throws IOException If an I/O error occurs while copying the folder
      */
@@ -193,10 +184,11 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
 
     /**
      * Generate a Guide.
-     * @param inputDirectory Input Directroy
-     * @param guides Guides
+     *
+     * @param inputDirectory  Input Directroy
+     * @param guides          Guides
      * @param outputDirectory Output Directory
-     * @param guide Guide Being Generated
+     * @param guide           Guide Being Generated
      * @throws IOException If an I/O error occurs reading from the file.
      */
     protected void generate(File inputDirectory, List<? extends Guide> guides, File outputDirectory, Guide guide) throws IOException {
@@ -215,7 +207,7 @@ public class DefaultWebsiteGenerator implements WebsiteGenerator {
             }
         }
         if (publish) {
-            guidePageGenerator.generatePage(guide, inputDirectory, outputDirectory, guideOutput);
+            guidePageGenerator.generatePage(guide, guides, inputDirectory, outputDirectory, guideOutput);
         }
     }
 
