@@ -30,6 +30,7 @@ import java.util.List;
 public interface GuidePageGenerator extends FileGenerator {
     /**
      * @param guide           Guide
+     * @param guides          The list of guides
      * @param inputDirectory  Input Directory
      * @param outputDirectory Output Directory
      * @param guideOutput     Guide output

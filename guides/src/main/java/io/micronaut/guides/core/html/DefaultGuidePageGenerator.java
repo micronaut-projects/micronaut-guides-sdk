@@ -79,6 +79,7 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
      * Renders the HTML for the given guide.
      *
      * @param guide           The guide
+     * @param guides          The list of guides
      * @param option          The option
      * @param inputDirectory  The input directory
      * @param outputDirectory The output directory
@@ -144,7 +145,9 @@ public class DefaultGuidePageGenerator implements GuidePageGenerator {
     /**
      * Extracts the table of contents (TOC) from the given HTML content.
      *
-     * @param html The HTML content as a string.
+     * @param guide  The guide
+     * @param guides The list of guides
+     * @param html   The HTML content as a string.
      * @return A list of strings representing the TOC div elements found in the HTML.
      */
     protected List<String> extractToc(Guide guide, List<? extends Guide> guides, String html) {

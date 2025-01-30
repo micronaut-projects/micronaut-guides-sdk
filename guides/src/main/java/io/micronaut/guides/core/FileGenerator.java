@@ -21,6 +21,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Interface for generating files.
+ */
 public interface FileGenerator {
 
     default void saveFile(String content, File outputDirectory, String filename) throws IOException {
