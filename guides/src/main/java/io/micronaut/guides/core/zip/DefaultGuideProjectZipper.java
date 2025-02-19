@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Default implementation of the {@link GuideProjectZipper} interface.
@@ -54,49 +55,58 @@ public class DefaultGuideProjectZipper implements GuideProjectZipper {
      * @param rootDir   the root directory of the source files
      * @param sourceDir the source directory to be compressed
      * @param out       the {@link ZipArchiveOutputStream} to write the compressed data
+     * @param evaluatePath Evaluate path for inclusion in the ZIP file
      * @throws IOException if an I/O error occurs during compression
      */
-    private static void compressDirectoryToZipfile(String rootDir, String sourceDir, ZipArchiveOutputStream out) throws IOException {
+    private static void compressDirectoryToZipfile(String rootDir,
+                                                   String sourceDir,
+                                                   ZipArchiveOutputStream out,
+                                                   Function<String, Boolean> evaluatePath) throws IOException {
         for (File file : new File(sourceDir).listFiles()) {
             if (EXCLUDED_FILES.contains(file.getName())) {
                 continue;
             }
             if (file.isDirectory()) {
-                compressDirectoryToZipfile(rootDir, sourceDir + File.separatorChar + file.getName(), out);
+                compressDirectoryToZipfile(rootDir, sourceDir + File.separatorChar + file.getName(), out, evaluatePath);
             } else {
                 String zipPath = sourceDir.replace(rootDir, "") + '/' + file.getName();
                 if (zipPath.charAt(0) == '/') {
                     zipPath = zipPath.substring(1);
                 }
-                ZipArchiveEntry entry = new ZipArchiveEntry(zipPath);
-                if (EXECUTABLES.contains(file.getName())) {
-                    entry.setUnixMode(UnixStat.FILE_FLAG | 0755);
+                if (evaluatePath.apply(zipPath)) {
+                    ZipArchiveEntry entry = new ZipArchiveEntry(zipPath);
+                    if (EXECUTABLES.contains(file.getName())) {
+                        entry.setUnixMode(UnixStat.FILE_FLAG | 0755);
+                    }
+                    out.putArchiveEntry(entry);
+                    Path p = Paths.get(sourceDir, file.getName());
+                    FileInputStream in = new FileInputStream(p.toFile());
+                    IOUtils.copy(in, out);
+                    IOUtils.closeQuietly(in);
+                    out.closeArchiveEntry();
                 }
-                out.putArchiveEntry(entry);
-                Path p = Paths.get(sourceDir, file.getName());
-                FileInputStream in = new FileInputStream(p.toFile());
-                IOUtils.copy(in, out);
-                IOUtils.closeQuietly(in);
-                out.closeArchiveEntry();
             }
         }
     }
 
     @Override
-    public void zipGuide(Guide guide, File guideOutput, File outputDirectory) throws IOException {
+    public void zipGuide(Guide guide,
+                         File guideOutput,
+                         File outputDirectory,
+                         Function<String, Boolean> evaluatePath) throws IOException {
         List<GuidesOption> guideOptions = GuideGenerationUtils.guidesOptions(guide, LOG);
         for (GuidesOption guidesOption : guideOptions) {
             String name = guideService.guideSourceFolder(guide, guidesOption);
             String zipName = name + DOT_ZIP;
             File zipFile = new File(outputDirectory, zipName);
             File folderFile = new File(guideOutput, name);
-            zipDirectory(zipFile, folderFile);
+            zipDirectory(zipFile, folderFile, evaluatePath);
         }
     }
 
-    private void zipDirectory(File zipFile, File folderFile) throws IOException {
+    private void zipDirectory(File zipFile, File folderFile, Function<String, Boolean> evaluatePath) throws IOException {
         ZipArchiveOutputStream zipOutputStream = new ZipArchiveOutputStream(new FileOutputStream(zipFile));
-        compressDirectoryToZipfile(folderFile.getAbsolutePath(), folderFile.getAbsolutePath(), zipOutputStream);
+        compressDirectoryToZipfile(folderFile.getAbsolutePath(), folderFile.getAbsolutePath(), zipOutputStream, evaluatePath);
         IOUtils.closeQuietly(zipOutputStream);
     }
 }

@@ -20,6 +20,7 @@ import io.micronaut.guides.core.Guide;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.function.Function;
 
 /**
  * Interface for zipping a directory into a single output file.
@@ -34,5 +35,23 @@ public interface GuideProjectZipper {
      * @param outputDirectory the output directory
      * @throws IOException if an I/O error occurs during zipping
      */
-    void zipGuide(@NonNull Guide guide, @NonNull File guideOutput, @NonNull File outputDirectory) throws IOException;
+    default void zipGuide(@NonNull Guide guide,
+                  @NonNull File guideOutput,
+                  @NonNull File outputDirectory) throws IOException {
+        zipGuide(guide, guideOutput, outputDirectory, path -> true);
+    }
+
+    /**
+     * Zips the contents of the specified source directory into the specified output file.
+     *
+     * @param guide           the guide to zip
+     * @param guideOutput     the guide output directory
+     * @param outputDirectory the output directory
+     * @param evaluatePath Evaluate path for inclusion in the ZIP file
+     * @throws IOException if an I/O error occurs during zipping
+     */
+    void zipGuide(@NonNull Guide guide,
+                  @NonNull File guideOutput,
+                  @NonNull File outputDirectory,
+                  Function<String, Boolean> evaluatePath) throws IOException;
 }
