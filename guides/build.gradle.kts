@@ -1,3 +1,5 @@
+import io.micronaut.build.TestFramework
+
 plugins {
     id("io.micronaut.build.internal.guides-module")
 }
@@ -27,13 +29,11 @@ dependencies {
     annotationProcessor(mnSerde.micronaut.serde.processor)
     implementation(mnSerde.micronaut.serde.jackson)
     api(mnJsonSchema.json.schema.validator)
-
     testAnnotationProcessor(mn.micronaut.inject.java)
-    testImplementation(mnTest.micronaut.test.junit5)
-    testImplementation(mnTest.junit.jupiter.api)
-    testRuntimeOnly(mnTest.junit.jupiter.engine)
-
     testImplementation(libs.jsonassert)
+}
+micronautBuild {
+    testFramework = TestFramework.JUNIT5
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("17")
@@ -50,10 +50,5 @@ tasks.withType<Test> {
 
 tasks.withType<JavaCompile>().configureEach {
     options.compilerArgs.add("-Amicronaut.jsonschema.baseUri=https://guides.micronaut.io/schemas")
-}
-micronautBuild {
-    binaryCompatibility {
-        enabled = false
-    }
 }
 
