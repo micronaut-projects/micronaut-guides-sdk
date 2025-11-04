@@ -59,7 +59,7 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": ["java","groovy","kotlin"]
+        "enum": ["JAVA","GROOVY","KOTLIN"]
       }
     },
     "tags": {
@@ -74,13 +74,13 @@
       "type": "array",
       "items": {
         "type": "string",
-        "enum": ["maven","gradle", "gradle_kotlin"]
+        "enum": ["MAVEN","GRADLE", "GRADLE_KOTLIN"]
       }
     },
     "testFramework": {
       "description": "The guide's test framework. By default Java and Kotlin applications are tested with JUnit5 and Groovy applications with Spock",
       "type": "string",
-      "enum": ["spock","junit"]
+      "enum": ["SPOCK","JUNIT"]
     },
     "zipIncludes": {
       "description": "List of additional files with a relative path to include in the generated zip file for the guide",
