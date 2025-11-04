@@ -13,7 +13,7 @@ micronaut-json-schema = "1.7.3"
 jsonassert = "1.5.3"
 # Managed versions appear in the BOM
 managed-asciidoctorj = "3.0.0"
-managed-apache-compress = "1.26.0"
+managed-apache-compress = "1.28.0"
 
 [libraries]
 # Managed dependencies appear in the BOM
