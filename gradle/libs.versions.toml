@@ -9,7 +9,7 @@ micronaut-starter = "4.9.4"
 micronaut-validation = "4.12.0"
 micronaut-serde = "2.16.2"
 micronaut-rss = "4.8.1"
-micronaut-json-schema = "1.7.3"
+micronaut-json-schema = "1.7.4"
 jsonassert = "1.5.3"
 # Managed versions appear in the BOM
 managed-asciidoctorj = "3.0.1"
