@@ -15,7 +15,7 @@
  */
 package io.micronaut.guides.core;
 
-import com.networknt.schema.JsonSchema;
+import com.networknt.schema.Schema;
 import io.micronaut.core.annotation.NonNull;
 
 /**
@@ -30,5 +30,5 @@ public interface JsonSchemaProvider {
      * @return the JSON Schema
      */
     @NonNull
-    JsonSchema getSchema();
+    Schema getSchema();
 }

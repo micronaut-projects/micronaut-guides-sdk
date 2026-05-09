@@ -33,7 +33,7 @@ dependencies {
     testImplementation(libs.jsonassert)
 }
 micronautBuild {
-    testFramework = TestFramework.JUNIT5
+    testFramework = TestFramework.JUNIT6
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("25")

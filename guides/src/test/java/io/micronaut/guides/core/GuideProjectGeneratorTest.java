@@ -84,6 +84,7 @@ class GuideProjectGeneratorTest {
                     implementation("io.micronaut.serde:micronaut-serde-jackson")
                     runtimeOnly("ch.qos.logback:logback-classic")
                     runtimeOnly("org.yaml:snakeyaml")
+                    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
                 }"""));
         assertTrue(result.contains("""
                 micronaut {
@@ -94,23 +95,22 @@ class GuideProjectGeneratorTest {
                     }
                     testResources {
                         sharedServer = true
+                        version = "4.0.0-M1"
                     }
                 }"""));
         assertTrue(result.contains("""
                 application {
                     mainClass = "example.micronaut.CliCommand"
-                }
-                java {
-                    sourceCompatibility = JavaVersion.toVersion("17")
-                    targetCompatibility = JavaVersion.toVersion("17")
-                }""") ||
-                result.contains("""
-                application {
-                    mainClass = "example.micronaut.CliCommand"
-                }
+                }"""));
+        assertTrue(result.contains("""
                 java {
                     sourceCompatibility = JavaVersion.toVersion("21")
                     targetCompatibility = JavaVersion.toVersion("21")
+                }""") ||
+                result.contains("""
+                java {
+                    sourceCompatibility = JavaVersion.toVersion("25")
+                    targetCompatibility = JavaVersion.toVersion("25")
                 }"""));
 
     }

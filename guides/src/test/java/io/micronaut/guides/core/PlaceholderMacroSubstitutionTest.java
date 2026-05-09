@@ -76,7 +76,7 @@ public class PlaceholderMacroSubstitutionTest {
 
                 Test Framework: junit
 
-                Minimum JDK: 17
+                Minimum JDK: 25
 
                 API: https://docs.micronaut.io/latest/api
 

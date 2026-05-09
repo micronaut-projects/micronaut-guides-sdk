@@ -28,9 +28,11 @@ import org.slf4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.micronaut.starter.options.BuildTool.MAVEN;
 import static io.micronaut.starter.api.TestFramework.JUNIT;
 import static io.micronaut.starter.api.TestFramework.SPOCK;
 import static io.micronaut.starter.options.Language.GROOVY;
+import static io.micronaut.starter.options.Language.KOTLIN;
 
 /**
  * Utility class for generating paths and options for guides.
@@ -59,7 +61,7 @@ public final class GuideGenerationUtils {
 
         for (BuildTool buildTool : buildTools) {
             for (Language language : Language.values()) {
-                if (languages.contains(language)) {
+                if (languages.contains(language) && !(buildTool == MAVEN && language == KOTLIN)) {
                     guidesOptionList.add(new GuidesOption(buildTool, language, testFrameworkOption(language, testFramework)));
                 }
             }

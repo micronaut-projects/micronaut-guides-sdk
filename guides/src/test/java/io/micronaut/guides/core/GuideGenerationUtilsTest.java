@@ -30,7 +30,7 @@ class GuideGenerationUtilsTest {
         guideMetadata.setTestFramework(TestFramework.JUNIT);
         List<GuidesOption> result = GuideGenerationUtils.guidesOptions(guideMetadata, LOG);
 
-        assertEquals(4, result.size());
+        assertEquals(3, result.size());
     }
 
     @Test

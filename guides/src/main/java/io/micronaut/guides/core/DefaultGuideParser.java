@@ -16,8 +16,7 @@
 package io.micronaut.guides.core;
 
 import com.networknt.schema.InputFormat;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.ValidationMessage;
+import com.networknt.schema.Schema;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.util.ArrayUtils;
 import io.micronaut.core.util.CollectionUtils;
@@ -41,7 +40,7 @@ import java.util.*;
 public class DefaultGuideParser implements GuideParser {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultGuideParser.class);
     protected final GuidesConfiguration guidesConfiguration;
-    protected final JsonSchema jsonSchema;
+    protected final Schema jsonSchema;
     protected final JsonMapper jsonMapper;
     protected final GuideMerger guideMerger;
 
@@ -151,7 +150,7 @@ public class DefaultGuideParser implements GuideParser {
      */
     protected <T extends Guide> boolean validateGuide(T guide, String content, File configFile) {
         if (guidesConfiguration.isValidateMetadata() && guide.isPublish() && jsonSchema != null) {
-            Set<ValidationMessage> assertions = jsonSchema.validate(content, InputFormat.JSON);
+            List<com.networknt.schema.Error> assertions = jsonSchema.validate(content, InputFormat.JSON);
 
             if (!assertions.isEmpty()) {
                 LOG.trace("Guide metadata {} does not validate the JSON Schema. Skipping guide.", configFile);
