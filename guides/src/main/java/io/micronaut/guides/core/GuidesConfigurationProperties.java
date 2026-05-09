@@ -22,8 +22,6 @@ import io.micronaut.starter.options.Language;
 
 import java.util.List;
 
-import static io.micronaut.starter.options.JdkVersion.JDK_17;
-import static io.micronaut.starter.options.JdkVersion.JDK_21;
 import static io.micronaut.starter.options.JdkVersion.JDK_25;
 
 /**
