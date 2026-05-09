@@ -33,7 +33,7 @@ Create an application using the GDK Launcher.
 ** *Language*: _Java_ (Default)
 ** *Build Tool*: _Gradle (Groovy)_ or _Maven_
 ** *Test Framework*: _JUnit_ (Default)
-** *Java Version*: _17_ (Default)
+** *Java Version*: _25_ (Default)
 ** *Micronaut Version*: (Default)
 ** *Cloud Services*: _Database_
 ** *Features*: _GraalVM Native Image_ (Default)

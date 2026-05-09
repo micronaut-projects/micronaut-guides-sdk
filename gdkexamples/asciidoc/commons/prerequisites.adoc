@@ -1,6 +1,6 @@
 [discrete]
 === Prerequisites
 
-* JDK 17 or higher. See link:/gdk/get-started/setting-up-desktop/[Setting up Your Desktop].
+* JDK 25 or higher. See link:/gdk/get-started/setting-up-desktop/[Setting up Your Desktop].
 * A Docker-API compatible container runtime such as https://docs.rancherdesktop.io/getting-started/installation/[Rancher Desktop] or https://www.docker.io/gettingstarted/[Docker] installed to run MySQL and to run tests using https://www.testcontainers.org[Testcontainers].
 * The GDK CLI. See link:/gdk/get-started/setting-up-desktop/[Setting up Your Desktop]. (Optional.)

@@ -24,6 +24,7 @@ import java.util.List;
 
 import static io.micronaut.starter.options.JdkVersion.JDK_17;
 import static io.micronaut.starter.options.JdkVersion.JDK_21;
+import static io.micronaut.starter.options.JdkVersion.JDK_25;
 
 /**
  * GuidesConfigurationProperties is a class that implements the GuidesConfiguration interface.
@@ -38,12 +39,12 @@ public class GuidesConfigurationProperties implements GuidesConfiguration {
     private static final String DEFAULT_APP_NAME = "default";
     private static final String HOMEPAGE_URL = "https://micronaut.io";
     private static final String LAUNCHER_URL = HOMEPAGE_URL + "/launch";
-    private static final int DEFAULT_MIN_JDK = 17;
+    private static final int DEFAULT_MIN_JDK = 25;
     private static final String API_URL = "https://docs.micronaut.io/latest/api";
     private static final String DEFAULT_VERSION = "0.0.0";
     private static final String DEFAULT_ENV_JDK_VERSION = "JDK_VERSION";
-    private static final JdkVersion DEFAULT_JAVA_VERSION = JDK_17;
-    private static final List<JdkVersion> DEFAULT_JDK_VERSIONS_SUPPORTED_BY_GRAALVM = List.of(JDK_17, JDK_21);
+    private static final JdkVersion DEFAULT_JAVA_VERSION = JDK_25;
+    private static final List<JdkVersion> DEFAULT_JDK_VERSIONS_SUPPORTED_BY_GRAALVM = List.of(JDK_25);
     private static final String GITHUB_WORKFLOW_JAVA_CI = "Java CI";
     private static final String ENV_GITHUB_WORKFLOW = "GITHUB_WORKFLOW";
     private static final String SYS_PROP_MICRONAUT_GUIDE = "micronaut.guide";
